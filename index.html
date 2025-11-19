@@ -89,16 +89,15 @@
             display: none; position: relative; background: black; overflow: hidden;
         }
 
-        /* PİKSEL EFEKTİ (CSS TRICK) */
-        /* Mantık: Resmi çok küçültüp (%10), pixelated modunda 10 kat büyütüyoruz (%1000) */
+        /* YENİ PİKSEL EFEKTİ (daha fazla piksel) */
         #game-poster, #game-snapshot { 
             width: 10%; 
             height: 10%; 
             object-fit: contain; 
             image-rendering: pixelated; 
-            transform: scale(10); 
+            transform: scale(20); /* Bu değeri artırarak daha fazla piksel elde edebilirsiniz. */
             transform-origin: top left;
-            transition: none; /* Geçiş efekti yok, direkt netleşsin */
+            transition: none;
         }
         
         /* Netleşince */
