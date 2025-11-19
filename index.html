@@ -71,15 +71,15 @@
             width: 100%; background: #000; border: 1px solid #333; border-radius: 12px;
             overflow: hidden; margin-bottom: 20px; position: relative;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
-            min-height: 300px; /* Yükseklik garanti olsun */
+            min-height: 400px; /* Dikey posterler için alan */
         }
         
-        #poster-view, #snapshot-view { width: 100%; height: auto; max-height: 500px; display: none; position: relative; background: black; }
+        #poster-view, #snapshot-view { width: 100%; height: auto; max-height: 550px; display: none; position: relative; background: black; }
         #game-poster, #game-snapshot { width: 100%; height: 100%; object-fit: contain; filter: blur(20px); transform: scale(1.0); transition: 1.5s ease; }
-        #game-poster.revealed { filter: blur(0); }
+        #game-poster.revealed, #game-snapshot.revealed { filter: blur(0); }
         
         /* Snapshot Başlangıçta Gri ve Karanlık Olsun */
-        #game-snapshot { filter: grayscale(100%) brightness(0.4) blur(5px); } 
+        #game-snapshot { filter: grayscale(100%) brightness(0.4) blur(8px); } 
         #game-snapshot.revealed { filter: grayscale(0%) brightness(1) blur(0); }
 
         #palette-view { width: 100%; height: 80px; display: none; }
@@ -92,6 +92,7 @@
         .timer-display { font-family: 'Bebas Neue'; font-size: 3.5rem; line-height: 1; }
         .timer-display.danger { color: #ff0000; animation: pulse 0.5s infinite; }
         .hint-btn { background: #e5c1001a; color: var(--text-gold); border: 1px solid var(--text-gold); width: auto; padding: 8px 15px; font-size: 0.8rem; }
+        .hint-text { color: #aaa; font-size: 0.8rem; font-style: italic; margin-top: 5px; text-align: right; height: 15px; }
         
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
         .opt-btn { padding: 20px; background: #181818; border: 1px solid #333; color: #ccc; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; text-align: center; }
@@ -186,41 +187,38 @@
     </div>
 
     <script>
-        // 1. FIREBASE AYARLARI
-        // Burası senin verdiğin config. Çalışması için console.firebase.google.com adresinde
-        // Authentication ve Realtime Database'in açık olduğundan emin ol.
         const firebaseConfig = {
-            apiKey: "AIzaSyCKXuqXEtQ_dr1FNw-8NZj0BpeoSDl_mRY",
-            authDomain: "cinepalette-e7a2b.firebaseapp.com",
-            databaseURL: "https://cinepalette-e7a2b-default-rtdb.firebaseio.com",
-            projectId: "cinepalette-e7a2b",
-            storageBucket: "cinepalette-e7a2b.firebasestorage.app",
-            messagingSenderId: "933599264840",
-            appId: "1:933599264840:web:667563470c4ea338f7187d"
-        };
+  apiKey: "AIzaSyCKXuqXEtQ_dr1FNw-8NZj0BpeoSDl_mRY",
+  authDomain: "cinepalette-e7a2b.firebaseapp.com",
+  databaseURL: "https://cinepalette-e7a2b-default-rtdb.firebaseio.com",
+  projectId: "cinepalette-e7a2b",
+  storageBucket: "cinepalette-e7a2b.firebasestorage.app",
+  messagingSenderId: "933599264840",
+  appId: "1:933599264840:web:667563470c4ea338f7187d"
+};
 
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // 2. VERİTABANI (DÜZELTİLMİŞ VE KAPATILMIŞ)
+        // 2. VERİTABANI (IMDb/Amazon Görselleri ile Güncellendi)
         const database = [
-            // --- SNAPSHOT MODU İÇİN ÖRNEKLER (ZOR KARELER) ---
-            { type: "movie", genre: "snapshot", hint: "Güney Kore, İntikam", correct: "Oldboy", snapshot: "https://image.tmdb.org/t/p/original/r3pPehX4ik8pOR1E8UPNDafuuE4.jpg", colors: ["#000","#111"], options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
-            { type: "movie", genre: "snapshot", hint: "Uzay, Monolit", correct: "2001: A Space Odyssey", snapshot: "https://image.tmdb.org/t/p/original/w7eOQ0y3jW05a1b25z8P0z6.jpg", colors: ["#000","#222"], options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Moon"] },
-            { type: "movie", genre: "snapshot", hint: "Jim Carrey, Gerçeklik", correct: "The Truman Show", snapshot: "https://image.tmdb.org/t/p/original/e3P1d3x2x6x7.jpg", colors: ["#444","#555"], options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Yes Man"] },
+            // --- SNAPSHOT MODU İÇİN ÖRNEKLER (ZOR KARELER - IMDb/Amazon) ---
+            { type: "movie", genre: "snapshot", hint: "Güney Kore, İntikam", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", colors: ["#000","#111"], options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
+            { type: "movie", genre: "snapshot", hint: "Uzay, Monolit", correct: "2001: A Space Odyssey", snapshot: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", colors: ["#000","#222"], options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Moon"] },
+            { type: "movie", genre: "snapshot", hint: "Jim Carrey, Gerçeklik", correct: "The Truman Show", snapshot: "https://m.media-amazon.com/images/M/MV5BMDIzODcyY2EtMmY2MC00ZWVlLTgwMzAtMjQwOWUyNmJjNTYyXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_.jpg", colors: ["#444","#555"], options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Yes Man"] },
 
             // --- REPLİKLER ---
             { type: "quote", text: "I drink your milkshake!", hint: "Daniel Day-Lewis", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "The Master", "Gangs of New York"] },
             { type: "quote", text: "Like tears in rain.", hint: "Blade Runner", correct: "Blade Runner", options: ["Blade Runner", "Dune", "Alien", "Star Wars"] },
             { type: "quote", text: "Keep your friends close, but your enemies closer.", hint: "Baba 2", correct: "The Godfather Part II", options: ["The Godfather Part II", "Goodfellas", "Casino", "Scarface"] },
             
-            // --- FİLMLER & RENKLER ---
-            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://image.tmdb.org/t/p/w500/ykRPzwJ7MSClPFR33fG6T2t16S8.jpg", colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
-            { type: "movie", genre: "scifi", hint: "Kara Delik", correct: "Interstellar", poster: "https://image.tmdb.org/t/p/w500/gEU2QniL6C971PN668mgz8QAqQ.jpg", colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "First Man"] },
-            { type: "movie", genre: "cult", hint: "Miami, Büyüme", correct: "Moonlight", poster: "https://image.tmdb.org/t/p/w500/49U1d7XJ93b0Qeb1v6s57d6l8Z.jpg", colors: ["#000000", "#0B0B3B", "#101050", "#1A237E", "#303F9F", "#3F51B5", "#283593", "#C5CAE9"], options: ["Moonlight", "If Beale Street Could Talk", "Pariah", "Boyz n the Hood"] },
-            { type: "movie", genre: "palettes", hint: "Çöl, Meteor", correct: "Asteroid City", poster: "https://image.tmdb.org/t/p/w500/qfcJJJZ276yK1x2Q2v6b3w.jpg", colors: ["#FAD7A0", "#F8C471", "#F5B041", "#F39C12", "#5DADE2", "#3498DB", "#2E86C1", "#D6EAF8"], options: ["Asteroid City", "Moonrise Kingdom", "The Royal Tenenbaums", "Nope"] },
-            { type: "movie", genre: "horror", hint: "Gündüz Korkusu", correct: "Midsommar", poster: "https://image.tmdb.org/t/p/w500/7LEI8ulZzO5gy9JwyMcP8P52lpa.jpg", colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Witch"] }
-        ]; 
+            // --- FİLMLER & RENKLER (IMDb/Amazon Kaynaklı) ---
+            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://m.media-amazon.com/images/M/MV5BMjA1Nzk0OTM2OF5BMl5BanBnXkFtZTgwNjU2NjEwMDE@._V1_.jpg", colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
+            { type: "movie", genre: "scifi", hint: "Kara Delik", correct: "Interstellar", poster: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "First Man"] },
+            { type: "movie", genre: "cult", hint: "Miami, Büyüme", correct: "Moonlight", poster: "https://m.media-amazon.com/images/M/MV5BNzQxNTIyODAxMV5BMl5BanBnXkFtZTgwNzQyMDA3OTE@._V1_.jpg", colors: ["#000000", "#0B0B3B", "#101050", "#1A237E", "#303F9F", "#3F51B5", "#283593", "#C5CAE9"], options: ["Moonlight", "If Beale Street Could Talk", "Pariah", "Boyz n the Hood"] },
+            { type: "movie", genre: "palettes", hint: "Çöl, Meteor", correct: "Asteroid City", poster: "https://m.media-amazon.com/images/M/MV5BNDJjZTZhOXEtZSEyYi00MzJlLWEwNTAtM2JjOTg5ODg0NDExXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg", colors: ["#FAD7A0", "#F8C471", "#F5B041", "#F39C12", "#5DADE2", "#3498DB", "#2E86C1", "#D6EAF8"], options: ["Asteroid City", "Moonrise Kingdom", "The Royal Tenenbaums", "Nope"] },
+            { type: "movie", genre: "horror", hint: "Gündüz Korkusu", correct: "Midsommar", poster: "https://m.media-amazon.com/images/M/MV5BM2Q1ZWUxZjItM2YxZC00NTQxLTgzNmQtYTAxZWM3YjU5NDY2XkEyXkFqcGdeQXVyMTAxNzQ1NzI@._V1_.jpg", colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Witch"] }
+        ];
 
         // --- GLOBAL DEĞİŞKENLER ---
         let myName="", myRoomCode="", myId="", isHost=false;
