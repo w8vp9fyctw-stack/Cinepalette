@@ -242,29 +242,142 @@
         let isMultiplayer = false;
 
         // --- VERİTABANI (AMAZON / IMDB LİNKLERİ - TÜRKİYE DOSTU) ---
+        // ==============================================
+        // 🎬 CINEPALETTE: DEVASA VERİTABANI (AMAZON/IMDb GÖRSELLERİ)
+        // ==============================================
         const database = [
-            // SNAPSHOTS (TEK KARE)
-            { type: "movie", genre: "snapshot", hint: "Kore, Çekiç", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
+            // ============================================================
+            // 💬 KATEGORİ: REPLİKLER (QUOTES) - SADECE METİN
+            // ============================================================
+            { type: "quote", text: "I'm going to make him an offer he can't refuse.", hint: "Mafya, 1972", correct: "The Godfather", options: ["The Godfather", "Scarface", "Goodfellas", "Casino"] },
+            { type: "quote", text: "May the Force be with you.", hint: "Uzay Operası", correct: "Star Wars", options: ["Star Trek", "Star Wars", "Guardians of the Galaxy", "Dune"] },
+            { type: "quote", text: "You talkin' to me?", hint: "Ayna Karşısında, Taksi", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Joker", "King of Comedy"] },
+            { type: "quote", text: "I see dead people.", hint: "Bruce Willis, 1999", correct: "The Sixth Sense", options: ["The Sixth Sense", "The Others", "Signs", "Poltergeist"] },
+            { type: "quote", text: "Here's Johnny!", hint: "Balta, Otel", correct: "The Shining", options: ["The Shining", "It", "Misery", "Psycho"] },
+            { type: "quote", text: "I drink your milkshake!", hint: "Petrol, Hırs", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "The Master", "Gangs of New York"] },
+            { type: "quote", text: "Why so serious?", hint: "Palyaço Makyajı", correct: "The Dark Knight", options: ["The Dark Knight", "Joker", "Batman Begins", "Suicide Squad"] },
+            { type: "quote", text: "The first rule of Fight Club is: You do not talk about Fight Club.", hint: "Sabun, Bodrum Katı", correct: "Fight Club", options: ["Fight Club", "Se7en", "Snatch", "The Game"] },
+            { type: "quote", text: "Say hello to my little friend!", hint: "Makineli Tüfek, Küba", correct: "Scarface", options: ["Scarface", "The Godfather", "Carlito's Way", "Heat"] },
+            { type: "quote", text: "Toto, I've a feeling we're not in Kansas anymore.", hint: "Kırmızı Pabuçlar", correct: "The Wizard of Oz", options: ["The Wizard of Oz", "Alice in Wonderland", "Peter Pan", "Narnia"] },
+            { type: "quote", text: "Hasta la vista, baby.", hint: "Robot, Gelecek", correct: "Terminator 2", options: ["Terminator 2", "RoboCop", "Total Recall", "Predator"] },
+            { type: "quote", text: "You can't handle the truth!", hint: "Askeri Mahkeme", correct: "A Few Good Men", options: ["A Few Good Men", "Top Gun", "Crimson Tide", "Gladiator"] },
+            { type: "quote", text: "I'll be back.", hint: "Arnold Schwarzenegger", correct: "The Terminator", options: ["The Terminator", "Predator", "Commando", "Alien"] },
+            { type: "quote", text: "My precious.", hint: "Yüzük", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "The Hobbit", "Harry Potter", "Willow"] },
+            { type: "quote", text: "Houston, we have a problem.", hint: "Uzay Mekiği", correct: "Apollo 13", options: ["Apollo 13", "Gravity", "First Man", "Interstellar"] },
+            { type: "quote", text: "There's no place like home.", hint: "Sarı Tuğlalı Yol", correct: "The Wizard of Oz", options: ["The Wizard of Oz", "Mary Poppins", "Sound of Music", "E.T."] },
+            { type: "quote", text: "I am your father.", hint: "Karanlık Taraf", correct: "Star Wars: Empire Strikes Back", options: ["Star Wars: Empire Strikes Back", "Star Trek", "Dune", "Avatar"] },
+            { type: "quote", text: "Just keep swimming.", hint: "Mavi Balık", correct: "Finding Nemo", options: ["Finding Nemo", "Shark Tale", "Luca", "Moana"] },
+            { type: "quote", text: "What's in the box?", hint: "Çöl, Kutu, Brad Pitt", correct: "Se7en", options: ["Se7en", "Zodiac", "Prisoners", "Saw"] },
+            { type: "quote", text: "Keep your friends close, but your enemies closer.", hint: "Baba Tavsiyesi", correct: "The Godfather Part II", options: ["The Godfather Part II", "Goodfellas", "Casino", "The Irishman"] },
+            { type: "quote", text: "Elementary, my dear Watson.", hint: "Dedektif, Londra", correct: "Sherlock Holmes", options: ["Sherlock Holmes", "Knives Out", "Murder on the Orient Express", "Enola Holmes"] },
+            { type: "quote", text: "Carpe diem. Seize the day, boys.", hint: "Ölü Ozanlar", correct: "Dead Poets Society", options: ["Dead Poets Society", "Good Will Hunting", "Patch Adams", "Scent of a Woman"] },
+            { type: "quote", text: "It's alive! It's alive!", hint: "Canavar Yaratmak", correct: "Frankenstein", options: ["Frankenstein", "Dracula", "The Mummy", "The Invisible Man"] },
+            { type: "quote", text: "You had me at 'hello'.", hint: "Romantik, Tom Cruise", correct: "Jerry Maguire", options: ["Jerry Maguire", "Top Gun", "Rain Man", "Notting Hill"] },
+            { type: "quote", text: "A martini. Shaken, not stirred.", hint: "Ajan 007", correct: "Goldfinger", options: ["Goldfinger", "Casino Royale", "Skyfall", "Dr. No"] },
+            { type: "quote", text: "I feel the need... the need for speed!", hint: "Uçaklar, Pilot", correct: "Top Gun", options: ["Top Gun", "Days of Thunder", "Mission Impossible", "Speed"] },
+            { type: "quote", text: "Nobody puts Baby in a corner.", hint: "Dans", correct: "Dirty Dancing", options: ["Dirty Dancing", "Grease", "Footloose", "Flashdance"] },
+            { type: "quote", text: "I'm the king of the world!", hint: "Gemi, Okyanus", correct: "Titanic", options: ["Titanic", "Avatar", "Life of Pi", "Pearl Harbor"] },
+            { type: "quote", text: "They may take our lives, but they'll never take our freedom!", hint: "İskoçya, Savaş", correct: "Braveheart", options: ["Braveheart", "Gladiator", "300", "Troy"] },
+            { type: "quote", text: "Why so serious?", hint: "Joker", correct: "The Dark Knight", options: ["The Dark Knight", "Joker", "Batman", "Suicide Squad"] },
+            { type: "quote", text: "Magic Mirror on the wall, who is the fairest one of all?", hint: "Prenses, Elma", correct: "Snow White", options: ["Snow White", "Cinderella", "Sleeping Beauty", "Frozen"] },
+            { type: "quote", text: "Of all the gin joints in all the towns in all the world, she walks into mine.", hint: "Fas, Piyano", correct: "Casablanca", options: ["Casablanca", "Citizen Kane", "Gone with the Wind", "The Maltese Falcon"] },
+            { type: "quote", text: "I'm walking here! I'm walking here!", hint: "New York Taksi", correct: "Midnight Cowboy", options: ["Midnight Cowboy", "Taxi Driver", "Mean Streets", "Serpico"] },
+            { type: "quote", text: "Show me the money!", hint: "Spor Menajeri", correct: "Jerry Maguire", options: ["Jerry Maguire", "Wall Street", "Moneyball", "The Wolf of Wall Street"] },
+            { type: "quote", text: "You're gonna need a bigger boat.", hint: "Köpekbalığı", correct: "Jaws", options: ["Jaws", "The Meg", "Deep Blue Sea", "Piranha"] },
+            { type: "quote", text: "All work and no play makes Jack a dull boy.", hint: "Daktilo", correct: "The Shining", options: ["The Shining", "Misery", "Secret Window", "1408"] },
+            { type: "quote", text: "Life is like a box of chocolates.", hint: "Bank, Koşmak", correct: "Forrest Gump", options: ["Forrest Gump", "Big", "Cast Away", "Rain Man"] },
+            { type: "quote", text: "I see dead people.", hint: "Çocuk, Hayaletler", correct: "The Sixth Sense", options: ["The Sixth Sense", "Signs", "The Others", "Unbreakable"] },
+            { type: "quote", text: "Good morning, and in case I don't see you, good afternoon, good evening, and good night!", hint: "Sahte Dünya", correct: "The Truman Show", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Bruce Almighty"] },
+            { type: "quote", text: "Look at me. Look at me. I am the captain now.", hint: "Korsanlar", correct: "Captain Phillips", options: ["Captain Phillips", "Cast Away", "Sully", "Flight"] },
+
+            // ============================================================
+            // 🖼️ KATEGORİ: SNAPSHOT (TEK KARE) - ZORLU GÖRSELLER (AMAZON LINK)
+            // ============================================================
+            { type: "movie", genre: "snapshot", hint: "Güney Kore, Çekiç", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "Memories of Murder"] },
+            { type: "movie", genre: "snapshot", hint: "Jim Carrey, Merdivenler", correct: "The Truman Show", snapshot: "https://m.media-amazon.com/images/M/MV5BMDIzODcyY2EtMmY2MC00ZWVlLTgwMzAtMjQwOWUyNmJjNTYyXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_.jpg", options: ["The Truman Show", "Eternal Sunshine", "Yes Man", "Liar Liar"] },
             { type: "movie", genre: "snapshot", hint: "Uzay, Monolit", correct: "2001: A Space Odyssey", snapshot: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Gravity"] },
-            { type: "movie", genre: "snapshot", hint: "Reality Show, Merdiven", correct: "The Truman Show", snapshot: "https://m.media-amazon.com/images/M/MV5BMDIzODcyY2EtMmY2MC00ZWVlLTgwMzAtMjQwOWUyNmJjNTYyXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_.jpg", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Yes Man"] },
-            { type: "movie", genre: "snapshot", hint: "Western, Düello", correct: "The Good, the Bad and the Ugly", snapshot: "https://m.media-amazon.com/images/M/MV5BNjgyMTM1YjAtOGMxYS00NWRlLTk4ZmItY2Q2M2RkOTY3MTQ2XkEyXkFqcGdeQXVyMTA3MDExNDEw._V1_.jpg", options: ["The Good, the Bad and the Ugly", "Django", "Unforgiven", "Once Upon a Time in the West"] },
-            { type: "movie", genre: "snapshot", hint: "Sarı Eşofman, Motor", correct: "Kill Bill: Vol. 1", snapshot: "https://m.media-amazon.com/images/M/MV5BNzM3NDFhYTAtYmU5Mi00NGRmLTljYjgtMDkyODQ4MjNkMGY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Death Proof", "Sin City"] },
+            { type: "movie", genre: "snapshot", hint: "Sarı Eşofman, Motorsiklet", correct: "Kill Bill: Vol. 1", snapshot: "https://m.media-amazon.com/images/M/MV5BNzM3NDFhYTAtYmU5Mi00NGRmLTljYjgtMDkyODQ4MjNkMGY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Death Proof", "Sin City"] },
+            { type: "movie", genre: "snapshot", hint: "Kırmızı Balon, Yağmurluk", correct: "It", snapshot: "https://m.media-amazon.com/images/M/MV5BM2Q1ZWUxZjItM2YxZC00NTQxLTgzNmQtYTAxZWM3YjU5NDY2XkEyXkFqcGdeQXVyMTAxNzQ1NzI@._V1_.jpg", options: ["It", "Stranger Things", "Dark", "Poltergeist"] },
+            { type: "movie", genre: "snapshot", hint: "Piyon, Satranç, Ölüm", correct: "The Seventh Seal", snapshot: "https://m.media-amazon.com/images/M/MV5BNjYzYWRjNDYtNDMwOS00MTVkLTgzMWMtNWZkODlmNmFjMTQ2XkEyXkFqcGdeQXVyMDc2NTEzMw@@._V1_.jpg", options: ["The Seventh Seal", "Persona", "Wild Strawberries", "8½"] },
+            { type: "movie", genre: "snapshot", hint: "Çöl, Baharat", correct: "Dune: Part One", snapshot: "https://m.media-amazon.com/images/M/MV5BODkzMjhjYTQtYmQyOS00NmZlLTg3Y2UtYjkzN2JkNmRkY2FhXkEyXkFqcGdeQXVyNTM0NTU5Mg@@._V1_.jpg", options: ["Dune: Part One", "Star Wars", "Mad Max: Fury Road", "Blade Runner 2049"] },
+            { type: "movie", genre: "snapshot", hint: "Dans, Lise", correct: "Grease", snapshot: "https://m.media-amazon.com/images/M/MV5BZWJlNzkyZmEtZjQxYi00OTExLWE4MTQtM2I1ZTIxNDRhODQzXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", options: ["Grease", "Dirty Dancing", "Footloose", "Hairspray"] },
+            { type: "movie", genre: "snapshot", hint: "Banyo, Kan, Hitchcock", correct: "Psycho", snapshot: "https://m.media-amazon.com/images/M/MV5BNTQwNDM1YzItNDAxZC00NWY2LTk0M2UtNDIwNWI5OGUyNWUxXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Psycho", "Birds", "Vertigo", "Rear Window"] },
+            { type: "movie", genre: "snapshot", hint: "Gemi Batıyor", correct: "Titanic", snapshot: "https://m.media-amazon.com/images/M/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
+            { type: "movie", genre: "snapshot", hint: "Yüzük, Yanardağ", correct: "The Lord of the Rings: The Return of the King", snapshot: "https://m.media-amazon.com/images/M/MV5BNzA5ZDNlZWMtM2NhNS00NDJjLTk4NDItYTRmY2EwMWZlMTY3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["LOTR: Return of the King", "The Hobbit", "Game of Thrones", "Warcraft"] },
+            { type: "movie", genre: "snapshot", hint: "Keanu Reeves, Mermi", correct: "The Matrix", snapshot: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg", options: ["The Matrix", "John Wick", "Constantine", "Equilibrium"] },
+            { type: "movie", genre: "snapshot", hint: "Aslan, Kaya", correct: "The Lion King", snapshot: "https://m.media-amazon.com/images/M/MV5BMjIwMjE1Nzc4NV5BMl5BanBnXkFtZTgwNDg4OTA1NzM@._V1_.jpg", options: ["The Lion King", "Madagascar", "Jungle Book", "Tarzan"] },
+            { type: "movie", genre: "snapshot", hint: "Mavi İnsanlar", correct: "Avatar", snapshot: "https://m.media-amazon.com/images/M/MV5BMTYwOTEwNjAzMl5BMl5BanBnXkFtZTcwODc5MTUwMw@@._V1_.jpg", options: ["Avatar", "Guardians of the Galaxy", "Valerian", "Warcraft"] },
+            { type: "movie", genre: "snapshot", hint: "Oyuncak Kovboy", correct: "Toy Story", snapshot: "https://m.media-amazon.com/images/M/MV5BMDU2ZWJlMjktMTRhMy00ZTA5LWEzNDgtYmNmZTEwZTViZWJkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@._V1_.jpg", options: ["Toy Story", "Small Soldiers", "Cars", "Bug's Life"] },
+
+            // ============================================================
+            // 🎨 KATEGORİ: FİLMLER (POSTER + PALET) - AMAZON LİNKLERİ
+            // ============================================================
             
-            // REPLİKLER
-            { type: "quote", text: "I drink your milkshake!", hint: "Petrol Arayışı", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "Lincoln"] },
-            { type: "quote", text: "Tears in rain.", hint: "Replikant", correct: "Blade Runner", options: ["Blade Runner", "Dune", "Alien", "Total Recall"] },
-            { type: "quote", text: "I'm gonna make him an offer he can't refuse.", hint: "Mafya", correct: "The Godfather", options: ["The Godfather", "Goodfellas", "Scarface", "Casino"] },
-            { type: "quote", text: "Here's looking at you, kid.", hint: "Savaş, Aşk", correct: "Casablanca", options: ["Casablanca", "Citizen Kane", "Gone with the Wind", "Roman Holiday"] },
-            { type: "quote", text: "You talkin' to me?", hint: "Taksi Şoförü", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Joker", "King of Comedy"] },
-            
-            // FİLMLER (Poster + Renk) - Amazon Linkleri
-            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://m.media-amazon.com/images/M/MV5BMjA1Nzk0OTM2OF5BMl5BanBnXkFtZTgwNjU2NjEwMDE@._V1_.jpg", colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
-            { type: "movie", genre: "scifi", hint: "Kara Delik", correct: "Interstellar", poster: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "Arrival"] },
-            { type: "movie", genre: "cult", hint: "Miami, Büyüme", correct: "Moonlight", poster: "https://m.media-amazon.com/images/M/MV5BNzQxNTIyODAxMV5BMl5BanBnXkFtZTgwNzQyMDA3OTE@._V1_.jpg", colors: ["#000000", "#0B0B3B", "#101050", "#1A237E", "#303F9F", "#3F51B5", "#283593", "#C5CAE9"], options: ["Moonlight", "Pariah", "Boyz n the Hood", "Green Book"] },
-            { type: "movie", genre: "palettes", hint: "Çöl, Meteor", correct: "Asteroid City", poster: "https://m.media-amazon.com/images/M/MV5BNDJjZTZhOXEtZSEyYi00MzJlLWEwNTAtM2JjOTg5ODg0NDExXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg", colors: ["#FAD7A0", "#F8C471", "#F5B041", "#F39C12", "#5DADE2", "#3498DB", "#2E86C1", "#D6EAF8"], options: ["Asteroid City", "Moonrise Kingdom", "The Royal Tenenbaums", "Nope"] },
-            { type: "movie", genre: "horror", hint: "Gündüz Korkusu", correct: "Midsommar", poster: "https://m.media-amazon.com/images/M/MV5BM2Q1ZWUxZjItM2YxZC00NTQxLTgzNmQtYTAxZWM3YjU5NDY2XkEyXkFqcGdeQXVyMTAxNzQ1NzI@._V1_.jpg", colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Witch"] },
-            { type: "movie", genre: "scifi", hint: "Neon, Cyberpunk", correct: "Blade Runner 2049", poster: "https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_.jpg", colors: ["#F28C0F", "#D35400", "#E67E22", "#003B59", "#000000", "#A67A53", "#5E6C6F", "#17202A"], options: ["Blade Runner 2049", "Tron: Legacy", "Dune", "Oblivion"] },
-            { type: "movie", genre: "cult", hint: "Dans, Ucuz Roman", correct: "Pulp Fiction", poster: "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", colors: ["#000000", "#17202A", "#B03A2E", "#E74C3C", "#F1C40F", "#F39C12", "#F4D03F", "#FFFFFF"], options: ["Pulp Fiction", "Reservoir Dogs", "Kill Bill", "Jackie Brown"] }
+            // --- SCI-FI & UZAY ---
+            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://m.media-amazon.com/images/M/MV5BMjA1Nzk0OTM2OF5BMl5BanBnXkFtZTgwNjU2NjEwMDE@._V1_.jpg", 
+              colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
+            { type: "movie", genre: "scifi", hint: "Kara Delik, Nolan", correct: "Interstellar", poster: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", 
+              colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "Arrival"] },
+            { type: "movie", genre: "scifi", hint: "Uzaylı Dili, Heptapod", correct: "Arrival", poster: "https://m.media-amazon.com/images/M/MV5BMTExMzU0ODcxNDheQTJeQWpwZ15BbWU4MjI1MTI4MzAy._V1_.jpg", 
+              colors: ["#2E4053", "#5D6D7E", "#AEB6BF", "#17202A", "#000000", "#1C2833", "#85929E", "#D5D8DC"], options: ["Arrival", "Contact", "District 9", "Dune"] },
+            { type: "movie", genre: "scifi", hint: "Neon, Cyberpunk", correct: "Blade Runner 2049", poster: "https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_.jpg", 
+              colors: ["#F28C0F", "#D35400", "#E67E22", "#003B59", "#000000", "#A67A53", "#5E6C6F", "#17202A"], options: ["Blade Runner 2049", "Tron: Legacy", "Dune", "Oblivion"] },
+            { type: "movie", genre: "scifi", hint: "Mars'ta Tek Başına", correct: "The Martian", poster: "https://m.media-amazon.com/images/M/MV5BMTc2MTQ3MTAyMl5BMl5BanBnXkFtZTgwMDA4NDQ3NjE@._V1_.jpg", 
+              colors: ["#D35400", "#E67E22", "#A04000", "#873600", "#FAD7A0", "#FFFFFF", "#1C2833", "#000000"], options: ["The Martian", "Interstellar", "Red Planet", "Prometheus"] },
+            { type: "movie", genre: "scifi", hint: "Rüyalar, Topaç", correct: "Inception", poster: "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg", 
+              colors: ["#2C3E50", "#34495E", "#566573", "#808B96", "#D5D8DC", "#ABB2B9", "#17202A", "#E74C3C"], options: ["Inception", "Tenet", "Memento", "Shutter Island"] },
+            { type: "movie", genre: "scifi", hint: "Maymunlar Cehennemi", correct: "Planet of the Apes", poster: "https://m.media-amazon.com/images/M/MV5BMTY2NzlhNmQtODk4ZC00MzY2LTgwNTItNDUyYzY0NDQ0MGY2XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_.jpg", 
+              colors: ["#4E342E", "#3E2723", "#6D4C41", "#8D6E63", "#A1887F", "#1B5E20", "#33691E", "#000000"], options: ["Planet of the Apes", "King Kong", "Rampage", "Kong: Skull Island"] },
+            { type: "movie", genre: "scifi", hint: "Zaman Döngüsü, Uzaylılar", correct: "Edge of Tomorrow", poster: "https://m.media-amazon.com/images/M/MV5BMTc5OTk4MTM3M15BMl5BanBnXkFtZTgwODcxNjg3MDE@._V1_.jpg", 
+              colors: ["#5D6D7E", "#2E4053", "#17202A", "#85929E", "#AEB6BF", "#F4D03F", "#D4AC0D", "#000000"], options: ["Edge of Tomorrow", "Oblivion", "Source Code", "Looper"] },
+            { type: "movie", genre: "scifi", hint: "Dinazor Parkı", correct: "Jurassic Park", poster: "https://m.media-amazon.com/images/M/MV5BMjM2MDgxMDg0Nl5BMl5BanBnXkFtZTgwNTM2OTM5NDE@._V1_.jpg", 
+              colors: ["#000000", "#F4D03F", "#D35400", "#BA4A00", "#1E8449", "#2ECC71", "#145A32", "#FFFFFF"], options: ["Jurassic Park", "King Kong", "Godzilla", "Indiana Jones"] },
+            { type: "movie", genre: "scifi", hint: "Uzaylı Dostu", correct: "E.T.", poster: "https://m.media-amazon.com/images/M/MV5BMTQ2ODFlMDAtNzdhOC00ZDYzLWE3YTMtNDU4ZGFmZmJmYTczXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", 
+              colors: ["#17202A", "#1B2631", "#283747", "#2E4053", "#F1C40F", "#F39C12", "#D35400", "#FFFFFF"], options: ["E.T.", "Close Encounters", "Super 8", "The Iron Giant"] },
+
+            // --- KÜLT & ARTHOUSE ---
+            { type: "movie", genre: "cult", hint: "Miami, Ay Işığı", correct: "Moonlight", poster: "https://m.media-amazon.com/images/M/MV5BNzQxNTIyODAxMV5BMl5BanBnXkFtZTgwNzQyMDA3OTE@._V1_.jpg", 
+              colors: ["#000000", "#0B0B3B", "#101050", "#1A237E", "#303F9F", "#3F51B5", "#283593", "#C5CAE9"], options: ["Moonlight", "Pariah", "Boyz n the Hood", "Green Book"] },
+            { type: "movie", genre: "cult", hint: "Fransız, Siyah Beyaz", correct: "La Haine", poster: "https://m.media-amazon.com/images/M/MV5BNDNiOTA5YjktY2Q0Ni00ODgzLWE5ZWItMTliOGRlVkMDgwNTkXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg", 
+              colors: ["#000000", "#111111", "#222222", "#333333", "#555555", "#777777", "#999999", "#FFFFFF"], options: ["La Haine", "Roma", "Schindler's List", "Clerks"] },
+            { type: "movie", genre: "cult", hint: "Kore, Zengin/Fakir", correct: "Parasite", poster: "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg", 
+              colors: ["#17202A", "#1B2631", "#212F3C", "#283747", "#2E4053", "#566573", "#145A32", "#196F3D"], options: ["Parasite", "Oldboy", "Memories of Murder", "Snowpiercer"] },
+            { type: "movie", genre: "cult", hint: "Ruhlar Alemi", correct: "Spirited Away", poster: "https://m.media-amazon.com/images/M/MV5BMjlmZmI5MDctNDE2YS00YWE0LWE5ZWItZDBhYWQ0NTcxNWRhXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", 
+              colors: ["#641E16", "#922B21", "#C0392B", "#D98880", "#145A32", "#1E8449", "#2ECC71", "#82E0AA"], options: ["Spirited Away", "Princess Mononoke", "My Neighbor Totoro", "Howl's Moving Castle"] },
+            { type: "movie", genre: "cult", hint: "Tavşan Kostümü", correct: "Donnie Darko", poster: "https://m.media-amazon.com/images/M/MV5BZjZlZDlkYTktZmU3My00MGQ0LWEwNjQtYzQ2YmM1YzMmZjkwXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", 
+              colors: ["#000000", "#17202A", "#2C3E50", "#566573", "#85929E", "#4A235A", "#FFFFFF", "#1B2631"], options: ["Donnie Darko", "Butterfly Effect", "Source Code", "Mr. Nobody"] },
+            { type: "movie", genre: "cult", hint: "Uyuşturucu, Bebek", correct: "Trainspotting", poster: "https://m.media-amazon.com/images/M/MV5BMzA5Zjc3ZTMtMmU5YS00YTMwLWI4MWUtYTUxYTVmNjVmODZhXkEyXkFqcGdeQXVyMTAyOTE2ODg0._V1_.jpg", 
+              colors: ["#D35400", "#E67E22", "#F39C12", "#F8C471", "#2E4053", "#1B2631", "#FFFFFF", "#000000"], options: ["Trainspotting", "Requiem for a Dream", "Snatch", "Fight Club"] },
+            { type: "movie", genre: "cult", hint: "Kırmızı Gül, Banliyö", correct: "American Beauty", poster: "https://m.media-amazon.com/images/M/MV5BNTBmZWJkNjctNDlhNi00MGFhLnJiZWItMWM3YWQ4ZG3NjZiXkEyXkFqcGdeQXVyMTAyOTE2ODg0._V1_.jpg", 
+              colors: ["#922B21", "#C0392B", "#E74C3C", "#EC7063", "#FADBD8", "#FFFFFF", "#17202A", "#212F3C"], options: ["American Beauty", "Magnolia", "Fight Club", "Gone Girl"] },
+            { type: "movie", genre: "cult", hint: "Süt, Şiddet", correct: "A Clockwork Orange", poster: "https://m.media-amazon.com/images/M/MV5BMTY3MjM1Mzc4N15BMl5BanBnXkFtZTgwODM0NzAxMDE@._V1_.jpg", 
+              colors: ["#FFFFFF", "#FDFEFE", "#F4D03F", "#D4AC0D", "#000000", "#17202A", "#212F3C", "#5D6D7E"], options: ["A Clockwork Orange", "The Shining", "Full Metal Jacket", "Taxi Driver"] },
+            { type: "movie", genre: "cult", hint: "Bowling, Halı", correct: "The Big Lebowski", poster: "https://m.media-amazon.com/images/M/MV5BMTQ0NjUzMDMyOF5BMl5BanBnXkFtZTgwODA1OTU0MDE@._V1_.jpg", 
+              colors: ["#D4AC0D", "#B7950B", "#F1C40F", "#F7DC6F", "#7D6608", "#000000", "#5DADE2", "#FFFFFF"], options: ["The Big Lebowski", "Fargo", "No Country for Old Men", "Pulp Fiction"] },
+            { type: "movie", genre: "cult", hint: "Dans, Ucuz Roman", correct: "Pulp Fiction", poster: "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", 
+              colors: ["#000000", "#17202A", "#B03A2E", "#E74C3C", "#F1C40F", "#F39C12", "#F4D03F", "#FFFFFF"], options: ["Pulp Fiction", "Reservoir Dogs", "Kill Bill", "Jackie Brown"] },
+
+            // --- RENK USTALARI (PALETTES) ---
+            { type: "movie", genre: "palettes", hint: "Wes Anderson, Çöl", correct: "Asteroid City", poster: "https://m.media-amazon.com/images/M/MV5BNDJjZTZhOXEtZSEyYi00MzJlLWEwNTAtM2JjOTg5ODg0NDExXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg", 
+              colors: ["#FAD7A0", "#F8C471", "#F5B041", "#F39C12", "#5DADE2", "#3498DB", "#2E86C1", "#D6EAF8"], options: ["Asteroid City", "Moonrise Kingdom", "The Royal Tenenbaums", "Nope"] },
+            { type: "movie", genre: "palettes", hint: "Pembe Otel", correct: "The Grand Budapest Hotel", poster: "https://m.media-amazon.com/images/M/MV5BMzM5NjUxOTEyMl5BMl5BanBnXkFtZTgwNjEyMDM0MDE@._V1_.jpg", 
+              colors: ["#F29FCD", "#E0218A", "#C2185B", "#880E4F", "#FCE4EC", "#4A148C", "#7B1FA2", "#BA68C8"], options: ["The Grand Budapest Hotel", "French Dispatch", "Amélie", "Marie Antoinette"] },
+            { type: "movie", genre: "palettes", hint: "Sarı Eşofman", correct: "Kill Bill: Vol. 1", poster: "https://m.media-amazon.com/images/M/MV5BNzM3NDFhYTAtYmU5Mi00NGRmLTljYjgtMDkyODQ4MjNkMGY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", 
+              colors: ["#F1C40F", "#F4D03F", "#F7DC6F", "#F9E79F", "#922B21", "#C0392B", "#000000", "#17202A"], options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Sin City", "Death Proof"] },
+            { type: "movie", genre: "palettes", hint: "Yeşil Tonlar, Paris", correct: "Amélie", poster: "https://m.media-amazon.com/images/M/MV5BNDg4NjM1YjMtYmNhZC00MjM0LWFiZmYtNGY1YjYzNjMzZmIyXkEyXkFqcGdeQXVyNTIzOTk5NTM@._V1_.jpg", 
+              colors: ["#27AE60", "#2ECC71", "#145A32", "#1E8449", "#C0392B", "#E74C3C", "#F1C40F", "#17202A"], options: ["Amélie", "Midnight in Paris", "Chocolat", "Paddington"] },
+            { type: "movie", genre: "palettes", hint: "Mor ve Mavi, Los Angeles", correct: "La La Land", poster: "https://m.media-amazon.com/images/M/MV5BMzUzNDM2NzM2MV5BMl5BanBnXkFtZTgwNTM3NTg4OTE@._V1_.jpg", 
+              colors: ["#4A235A", "#6C3483", "#8E44AD", "#2E86C1", "#3498DB", "#5DADE2", "#F1C40F", "#F39C12"], options: ["La La Land", "Moonlight", "Singin' in the Rain", "The Greatest Showman"] },
+            { type: "movie", genre: "palettes", hint: "Kırmızı Oda", correct: "2001: A Space Odyssey", poster: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", 
+              colors: ["#B03A2E", "#922B21", "#C0392B", "#E74C3C", "#FFFFFF", "#FDFEFE", "#000000", "#17202A"], options: ["2001: A Space Odyssey", "Her", "Suspiria", "The Shining"] },
+            { type: "movie", genre: "palettes", hint: "Buz Mavisi", correct: "Frozen", poster: "https://m.media-amazon.com/images/M/MV5BMTQ1MjQwMTE5OF5BMl5BanBnXkFtZTgwNjk3MTcyMDE@._V1_.jpg", 
+              colors: ["#D6EAF8", "#AED6F1", "#85C1E9", "#5DADE2", "#3498DB", "#2E86C1", "#2874A6", "#FFFFFF"], options: ["Frozen", "Ice Age", "Rise of the Guardians", "Happy Feet"] },
+            { type: "movie", genre: "palettes", hint: "Çöl Turuncusu", correct: "Mad Max: Fury Road", poster: "https://m.media-amazon.com/images/M/MV5BN2EwM2I5OWMtMGQyMi00Zjg1LWJkNTctZTdjYTA4OGUwZjMyXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", 
+              colors: ["#D35400", "#E67E22", "#F39C12", "#F5B041", "#873600", "#A04000", "#5D6D7E", "#000000"], options: ["Mad Max: Fury Road", "Dune", "The Martian", "Book of Eli"] },
+            { type: "movie", genre: "palettes", hint: "Gotik Siyah Beyaz", correct: "Sin City", poster: "https://m.media-amazon.com/images/M/MV5BODhhN2NhNDItOWM3UV5BMl5BanBnXkFtZTcwODY5MTlhMw@@._V1_.jpg", 
+              colors: ["#000000", "#17202A", "#2C3E50", "#566573", "#FFFFFF", "#FDFEFE", "#C0392B", "#922B21"], options: ["Sin City", "Schindler's List", "The Lighthouse", "Roma"] },
+            { type: "movie", genre: "palettes", hint: "Neon Şehir", correct: "Tron: Legacy", poster: "https://m.media-amazon.com/images/M/MV5BMTk4NTk4MTk1OF5BMl5BanBnXkFtZTcwNTE2MDIwNA@@._V1_.jpg", 
+              colors: ["#000000", "#17202A", "#1B2631", "#212F3C", "#00FFFF", "#00CED1", "#2E86C1", "#FFFFFF"], options: ["Tron: Legacy", "Blade Runner", "Matrix", "Ready Player One"] }
         ];
 
         // --- DEĞİŞKENLER ---
