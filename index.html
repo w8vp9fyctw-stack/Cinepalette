@@ -96,20 +96,29 @@
             display: none; position: relative; background: black; overflow: hidden;
         }
 
-        /* --- BLUR EFEKTİ --- */
+        /* --- BLUR EFEKTİ (DÜZELTİLMİŞ) --- */
         #game-poster, #game-snapshot { 
             width: 100%; 
             height: 100%; 
             object-fit: contain;
-            filter: blur(20px); /* Başlangıçta bulanık */
+            /* Varsayılan hali: Hemen bulanık olsun, geçiş efekti OLMASIN */
+            filter: blur(20px); 
             transform: scale(1.1);
-            transition: filter 0.5s ease-out, transform 0.5s ease-out;
+            opacity: 0; /* Yüklenene kadar gizli kalsın */
+            transition: opacity 0.3s ease; /* Sadece görünür olma efekti */
         }
         
-        /* Net Hal */
+        /* Resim yüklendiğinde bu sınıfı ekleyeceğiz */
+        .loaded {
+            opacity: 1 !important;
+        }
+        
+        /* Net Hal (Sadece buraya transition ekliyoruz) */
         .revealed { 
             filter: blur(0) !important;
             transform: scale(1) !important;
+            /* Sadece netleşirken yumuşak geçiş yap */
+            transition: filter 0.5s ease-out, transform 0.5s ease-out;
         }
 
         #palette-view { width: 100%; height: 60px; display: none; }
@@ -534,7 +543,7 @@
         }
 
         function loadQuestion() {
-            if(currentQIndex>=gameQuestions.length) currentQIndex=0;
+            if(currentQIndex >= gameQuestions.length) currentQIndex = 0;
             const q = gameQuestions[currentQIndex];
             
             // Reset
@@ -547,8 +556,22 @@
             const pImg = document.getElementById('game-poster');
             const sImg = document.getElementById('game-snapshot');
             
+            // 1. Önce sınıfları temizle (Revealed kalksın, Loaded kalksın)
+            // Bu işlem resmi anında bulanıklaştırır ve gizler.
             pImg.className = "";
             sImg.className = "";
+            
+            // 2. Eski resmin kalıntısını önlemek için src'yi boşalt
+            pImg.src = "";
+            sImg.src = "";
+
+            // Resmi yükleyince görünür yapacak fonksiyon
+            const onImgLoad = (e) => {
+                e.target.classList.add('loaded');
+            };
+            
+            pImg.onload = onImgLoad;
+            sImg.onload = onImgLoad;
 
             if(currentMode === 'quote') {
                 document.getElementById('game-quote').innerText = `"${q.text}"`;
