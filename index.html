@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CINEPALETTE: Online</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #fff; text-align: center; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
+        .screen { display: none; width: 90%; max-width: 500px; padding: 20px; background: #1e1e1e; border-radius: 15px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .active { display: flex; flex-direction: column; align-items: center; }
+        
+        h1 { color: #FFD700; margin-bottom: 5px; }
+        input, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; box-sizing: border-box; }
+        input { background: #333; color: #fff; border: 1px solid #444; }
+        button { background: #FFD700; color: #000; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { transform: scale(1.02); background: #ffea70; }
+        button:disabled { background: #555; color: #888; cursor: not-allowed; }
+        
+        .room-code { font-size: 40px; letter-spacing: 5px; color: #28a745; font-family: monospace; margin: 20px 0; border: 2px dashed #444; padding: 10px; width: 100%; }
+        
+        /* Lobi Listesi */
+        #player-list { list-style: none; padding: 0; width: 100%; }
+        #player-list li { background: #2a2a2a; margin: 5px 0; padding: 10px; border-radius: 5px; display: flex; justify-content: space-between; }
+        
+        /* Oyun Alanı */
+        .palette-container { display: flex; width: 100%; height: 150px; border: 3px solid #fff; margin-bottom: 15px; border-radius: 8px; overflow: hidden; }
+        .color-box { flex: 1; height: 100%; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        .option-btn { padding: 15px; background: #333; color: #fff; }
+        .correct { background: #28a745 !important; }
+        .wrong { background: #dc3545 !important; }
+        
+        /* Tablo */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #444; }
+        th { color: #FFD700; }
+        
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #FFD700; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="screen-login" class="screen active">
+        <h1>CINEPALETTE</h1>
+        <p>Online Sinema Bilgi Yarışması</p>
+        <input type="text" id="username" placeholder="Takma Adın Nedir?">
+        <hr style="width:100%; border-color:#333">
+        <button onclick="createRoom()">YENİ ODA KUR</button>
+        <p style="font-size:12px; color:#aaa">- VEYA -</p>
+        <input type="text" id="room-code-input" placeholder="Oda Kodu Gir (Örn: 1234)">
+        <button onclick="joinRoom()">ODAYA KATIL</button>
+    </div>
+
+    <div id="screen-lobby" class="screen">
+        <h2>LOBİ</h2>
+        <p>Arkadaşlarına bu kodu ver:</p>
+        <div class="room-code" id="display-room-code">----</div>
+        <p>Bağlanan Oyuncular:</p>
+        <ul id="player-list"></ul>
+        <div id="host-controls" style="display:none; width:100%">
+            <button onclick="startGameByHost()">HERKES İÇİN BAŞLAT</button>
+        </div>
+        <p id="guest-msg" style="color:#aaa; font-size:12px">Oda sahibi bekleniyor...</p>
+    </div>
+
+    <div id="screen-game" class="screen">
+        <div style="display:flex; justify-content:space-between; width:100%; font-weight:bold; margin-bottom:10px">
+            <span id="game-timer">15</span>
+            <span id="game-score">0 Puan</span>
+        </div>
+        <div class="palette-container" id="palette-box"></div>
+        <div class="options-grid" id="options-box"></div>
+        <div id="game-msg" style="height:20px; font-weight:bold; margin-top:10px"></div>
+    </div>
+
+    <div id="screen-waiting" class="screen">
+        <h2>TAMAMLADIN!</h2>
+        <p>Diğer oyuncuların bitirmesi bekleniyor...</p>
+        <div class="loader"></div>
+        <p id="waiting-status">Durum bekleniyor...</p>
+    </div>
+
+    <div id="screen-result" class="screen">
+        <h1>SONUÇLAR</h1>
+        <table id="leaderboard-table">
+            <thead><tr><th>Sıra</th><th>Oyuncu</th><th>Puan</th></tr></thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="location.reload()" style="margin-top:20px">ÇIKIŞ</button>
+    </div>
+
+    <script>
+    
+        const firebaseConfig = {
+  apiKey: "AIzaSyCKXuqXEtQ_dr1FNw-8NZj0BpeoSDl_mRY",
+  authDomain: "cinepalette-e7a2b.firebaseapp.com",
+  databaseURL: "https://cinepalette-e7a2b-default-rtdb.firebaseio.com",
+  projectId: "cinepalette-e7a2b",
+  storageBucket: "cinepalette-e7a2b.firebasestorage.app",
+  messagingSenderId: "933599264840",
+  appId: "1:933599264840:web:667563470c4ea338f7187d"
+};
+
+        // Firebase Başlat
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        // --- 2. OYUN VERİSİ ---
+        const questions = [
+            { colors: ["#000000", "#0D2615", "#00FF41", "#FFFFFF"], correct: "The Matrix", options: ["Hulk", "The Matrix", "Alien", "Tron"] },
+            { colors: ["#E0218A", "#F5BDD6", "#40E0D0", "#FFFDD0"], correct: "Barbie", options: ["Mean Girls", "Legally Blonde", "Barbie", "Clueless"] },
+            { colors: ["#8A1C26", "#D98F25", "#1C3F38", "#FFFFFF"], correct: "Joker", options: ["Iron Man", "Joker", "Halloween", "It"] },
+            { colors: ["#F5DEB3", "#8B4513", "#2F4F4F", "#000000"], correct: "Dune", options: ["Mad Max", "Dune", "Star Wars", "The Martian"] },
+            { colors: ["#FFD700", "#000000", "#FF0000", "#FFFFFF"], correct: "Kill Bill", options: ["Pulp Fiction", "Kill Bill", "Sin City", "Taxi Driver"] }
+        ];
+
+        // --- 3. DEĞİŞKENLER ---
+        let myName = "";
+        let myRoomCode = "";
+        let myId = ""; // Firebase tarafından verilen unique ID
+        let currentQIndex = 0;
+        let score = 0;
+        let lives = 3;
+        let timerInterval;
+        let isHost = false;
+
+        // --- 4. ODA YÖNETİMİ ---
+
+        function generateRoomCode() {
+            return Math.floor(1000 + Math.random() * 9000).toString();
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function createRoom() {
+            myName = document.getElementById('username').value.trim();
+            if(!myName) return alert("Lütfen bir isim gir!");
+
+            myRoomCode = generateRoomCode();
+            isHost = true;
+
+            // Odayı veritabanında oluştur
+            const roomRef = db.ref('rooms/' + myRoomCode);
+            roomRef.set({
+                status: "lobby",
+                createdAt: Date.now()
+            });
+
+            // Kendimi oyuncu olarak ekle
+            const playerRef = roomRef.child('players').push();
+            myId = playerRef.key;
+            playerRef.set({
+                name: myName,
+                score: 0,
+                status: "waiting" // waiting, playing, finished
+            });
+
+            setupLobbyListener();
+        }
+
+        function joinRoom() {
+            myName = document.getElementById('username').value.trim();
+            myRoomCode = document.getElementById('room-code-input').value.trim();
+            if(!myName || !myRoomCode) return alert("İsim ve Oda Kodu gerekli!");
+
+            const roomRef = db.ref('rooms/' + myRoomCode);
+            
+            // Oda var mı kontrol et
+            roomRef.get().then((snapshot) => {
+                if (snapshot.exists()) {
+                    if(snapshot.val().status !== "lobby") return alert("Oyun çoktan başlamış!");
+                    
+                    // Odaya gir
+                    const playerRef = roomRef.child('players').push();
+                    myId = playerRef.key;
+                    playerRef.set({
+                        name: myName,
+                        score: 0,
+                        status: "waiting"
+                    });
+                    setupLobbyListener();
+
+                } else {
+                    alert("Böyle bir oda bulunamadı!");
+                }
+            });
+        }
+
+        function setupLobbyListener() {
+            showScreen('screen-lobby');
+            document.getElementById('display-room-code').innerText = myRoomCode;
+            
+            if(isHost) {
+                document.getElementById('host-controls').style.display = 'block';
+                document.getElementById('guest-msg').style.display = 'none';
+            }
+
+            const roomRef = db.ref('rooms/' + myRoomCode);
+
+            // 1. Oyuncuları Dinle (Biri gelirse listeyi güncelle)
+            roomRef.child('players').on('value', (snapshot) => {
+                const players = snapshot.val();
+                const list = document.getElementById('player-list');
+                list.innerHTML = '';
+                if(players) {
+                    Object.values(players).forEach(p => {
+                        const li = document.createElement('li');
+                        li.innerText = p.name + (p.status === "finished" ? " (Bitirdi)" : "");
+                        list.appendChild(li);
+                    });
+                }
+            });
+
+            // 2. Oyun Durumunu Dinle (Başladı mı?)
+            roomRef.child('status').on('value', (snapshot) => {
+                const status = snapshot.val();
+                if(status === 'playing') {
+                    // Oyun başladı!
+                    startGameLocal();
+                } else if (status === 'finished') {
+                    // Oyun bitti, sonuçları göster
+                    showFinalResults();
+                }
+            });
+        }
+
+        function startGameByHost() {
+            // Host butona basınca veritabanındaki durumu değiştirir
+            db.ref('rooms/' + myRoomCode).update({ status: "playing" });
+        }
+
+        // --- 5. OYUN MANTIĞI (YEREL) ---
+
+        function startGameLocal() {
+            showScreen('screen-game');
+            currentQIndex = 0;
+            score = 0;
+            lives = 3;
+            loadQuestion();
+            
+            // Veritabanında durumumu "playing" yap
+            db.ref(`rooms/${myRoomCode}/players/${myId}`).update({ status: "playing" });
+        }
+
+        function loadQuestion() {
+            if (currentQIndex >= questions.length || lives <= 0) {
+                finishGameLocal();
+                return;
+            }
+
+            const q = questions[currentQIndex];
+            const paletteDiv = document.getElementById('palette-box');
+            const optionsDiv = document.getElementById('options-box');
+            const msgDiv = document.getElementById('game-msg');
+            
+            paletteDiv.innerHTML = '';
+            optionsDiv.innerHTML = '';
+            msgDiv.innerText = '';
+
+            // Renkler
+            q.colors.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'color-box';
+                div.style.backgroundColor = c;
+                paletteDiv.appendChild(div);
+            });
+
+            // Şıklar
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt, q.correct, btn);
+                optionsDiv.appendChild(btn);
+            });
+
+            // Süre
+            startTimer();
+        }
+
+        function startTimer() {
+            let timeLeft = 15;
+            document.getElementById('game-timer').innerText = timeLeft;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('game-timer').innerText = timeLeft;
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    lives--; // Süre bitti can git
+                    currentQIndex++;
+                    loadQuestion();
+                }
+            }, 1000);
+        }
+
+        function checkAnswer(selected, correct, btn) {
+            clearInterval(timerInterval);
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.disabled = true);
+
+            if(selected === correct) {
+                btn.classList.add('correct');
+                score += 10;
+                document.getElementById('game-score').innerText = score + " Puan";
+            } else {
+                btn.classList.add('wrong');
+                lives--;
+            }
+
+            setTimeout(() => {
+                if(lives <= 0) {
+                    finishGameLocal();
+                } else {
+                    currentQIndex++;
+                    loadQuestion();
+                }
+            }, 1000);
+        }
+
+        function finishGameLocal() {
+            // Oyunum bitti, puanımı gönder
+            db.ref(`rooms/${myRoomCode}/players/${myId}`).update({
+                score: score,
+                status: "finished"
+            });
+
+            showScreen('screen-waiting');
+            checkIfAllFinished();
+        }
+
+        // --- 6. BİTİŞ KONTROLÜ ---
+
+        function checkIfAllFinished() {
+            // Burası biraz trickli: Herkesin bitirip bitirmediğini kontrol ediyoruz.
+            // Sadece Host veya herkes kendi kontrol edebilir. 
+            
+            const playersRef = db.ref(`rooms/${myRoomCode}/players`);
+            
+            playersRef.on('value', (snapshot) => {
+                const players = snapshot.val();
+                if(!players) return;
+                
+                const playerArray = Object.values(players);
+                const totalPlayers = playerArray.length;
+                const finishedPlayers = playerArray.filter(p => p.status === "finished").length;
+
+                document.getElementById('waiting-status').innerText = 
+                    `${finishedPlayers} / ${totalPlayers} oyuncu tamamladı.`;
+
+                // Eğer herkes bitirdiyse ve ben Host isem, oyun statüsünü 'finished' yap
+                if(isHost && finishedPlayers === totalPlayers) {
+                    db.ref('rooms/' + myRoomCode).update({ status: "finished" });
+                }
+            });
+        }
+
+        function showFinalResults() {
+            showScreen('screen-result');
+            const tbody = document.querySelector('#leaderboard-table tbody');
+            tbody.innerHTML = '';
+
+            db.ref(`rooms/${myRoomCode}/players`).once('value').then(snapshot => {
+                const players = Object.values(snapshot.val());
+                // Puana göre sırala
+                players.sort((a, b) => b.score - a.score);
+
+                players.forEach((p, index) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${p.name}</td>
+                        <td>${p.score}</td>
+                    `;
+                    if(index === 0) tr.style.color = "#FFD700"; // 1. Gold
+                    tbody.appendChild(tr);
+                });
+            });
+        }
+
+    </script>
+</body>
+</html>
