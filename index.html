@@ -16,6 +16,8 @@
             --glass-panel: rgba(20, 20, 20, 0.98);
             --border-color: rgba(255, 255, 255, 0.15);
             --text-gold: #e5c100;
+            --correct-green: #46d369;
+            --wrong-red: #ff4b4b;
         }
 
         body {
@@ -31,7 +33,7 @@
             font-size: 4rem; margin: 20px 0 0 0; letter-spacing: 3px;
             text-shadow: 0 0 20px rgba(216, 31, 38, 0.4);
         }
-        .tagline { color: #666; font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 30px; line-height: 1; }
+        .tagline { color: #666; font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 20px; line-height: 1; }
 
         .screen {
             display: none; width: 90%; max-width: 600px; padding: 30px;
@@ -72,32 +74,42 @@
         .btn-exit { background: transparent; border: 1px solid #444; padding: 5px 15px; font-size: 0.8rem; width: auto; margin: 0; }
         .score-badge { background: #222; padding: 5px 15px; border-radius: 20px; border: 1px solid #333; font-weight: bold; color: var(--text-gold); }
 
+        /* --- GERİ BİLDİRİM ALANI (DOĞRU/YANLIŞ) --- */
+        #feedback-display {
+            width: 100%; text-align: center; font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem; height: 60px; margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            opacity: 0; transition: opacity 0.2s;
+        }
+        .status-correct { color: var(--correct-green); opacity: 1 !important; letter-spacing: 2px; }
+        .status-wrong { color: var(--wrong-red); opacity: 1 !important; letter-spacing: 2px; }
+
         .media-container {
             width: 100%; background: #000; border: 1px solid #333; border-radius: 12px;
             overflow: hidden; margin-bottom: 15px; position: relative;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
-            min-height: 400px; 
+            min-height: 450px; 
         }
         
         #poster-view, #snapshot-view { 
-            width: 100%; height: 450px; 
+            width: 100%; height: 500px; 
             display: none; position: relative; background: black; overflow: hidden;
         }
 
-        /* --- FLU (BLUR) EFEKTİ --- */
+        /* --- BLUR EFEKTİ --- */
         #game-poster, #game-snapshot { 
             width: 100%; 
             height: 100%; 
             object-fit: contain;
-            filter: blur(20px); /* Başlangıç bulanıklığı */
-            transform: scale(1.1); /* Kenarlar beyazlamasın diye az zoom */
-            transition: filter 0.5s ease-out, transform 0.5s ease-out; 
+            filter: blur(20px); /* Başlangıçta bulanık */
+            transform: scale(1.1);
+            transition: filter 0.5s ease-out, transform 0.5s ease-out;
         }
         
-        /* Netleşince */
-        #game-poster.revealed, #game-snapshot.revealed { 
-            filter: blur(0px); /* Netleştir */
-            transform: scale(1); 
+        /* Net Hal */
+        .revealed { 
+            filter: blur(0) !important;
+            transform: scale(1) !important;
         }
 
         #palette-view { width: 100%; height: 60px; display: none; }
@@ -114,8 +126,11 @@
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
         .opt-btn { padding: 15px; background: #181818; border: 1px solid #333; color: #ccc; border-radius: 8px; cursor: pointer; transition: 0.1s; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; text-align: center; }
         .opt-btn:hover { background: #252525; color: #fff; }
-        .correct { background: #155d27 !important; border-color: #2ecc71 !important; color: #fff; }
-        .wrong { background: #681212 !important; border-color: #ef4444 !important; color: #fff; opacity: 0.5; }
+        
+        /* Doğru/Yanlış Buton Renkleri */
+        .btn-correct { background: var(--correct-green) !important; border-color: var(--correct-green) !important; color: #000 !important; font-weight: bold; }
+        .btn-wrong { background: var(--wrong-red) !important; border-color: var(--wrong-red) !important; color: #fff !important; opacity: 0.5; }
+        
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
@@ -130,26 +145,26 @@
         <div style="width:100%; margin-bottom: 20px;">
             <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">OYUN MODU</label>
             <select id="genre-select" onchange="uiUpdate()">
-                <option value="mix">🎲 KARIŞIK (Hepsi)</option>
-                <option value="snapshot">🖼️ TEK KARE (Zor Mod)</option>
-                <option value="quote">💬 REPLİKLER (Zor Seviye)</option>
-                <option value="palettes">🎨 RENK PALETİ</option>
-                <option value="cult">🍷 KÜLT & ARTHOUSE</option>
-                <option value="scifi">🚀 BİLİM KURGU</option>
+                <option value="mix">KARIŞIK</option>
+                <option value="snapshot">TEK KARE (Zor Mod)</option>
+                <option value="quote">REPLİKLER (Zor Seviye)</option>
+                <option value="palettes"> RENK PALETİ</option>
+                <option value="cult">KÜLT & ARTHOUSE</option>
+                <option value="scifi">BİLİM KURGU</option>
             </select>
             
             <div id="visual-setting">
                 <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">GÖRÜNÜM</label>
                 <select id="visual-select">
-                    <option value="both">Palet + Flu Poster</option>
+                    <option value="both">Palet + Bulanık Poster</option>
                     <option value="palette">Sadece Renk Paleti</option>
-                    <option value="poster">Sadece Flu Poster</option>
+                    <option value="poster">Sadece Bulanık Poster</option>
                 </select>
             </div>
         </div>
 
-        <button onclick="startSinglePlayerGame()">⭐ TEK KİŞİLİK FİLM KEYFİ</button>
-        <button class="btn-multiplayer-toggle" onclick="toggleMultiplayer()">👥 ARKADAŞLARLA OYNA</button>
+        <button onclick="startSinglePlayerGame()">TEK KİŞİLİK FİLM KEYFİ</button>
+        <button class="btn-multiplayer-toggle" onclick="toggleMultiplayer()">ARKADAŞLARLA OYNA</button>
 
         <div id="multiplayer-panel">
             <div style="display:flex; gap:10px;">
@@ -176,6 +191,8 @@
             <div class="score-badge">PUAN: <span id="score-display">0</span></div>
         </div>
 
+        <div id="feedback-display"></div>
+
         <div class="media-container">
             <div id="poster-view"><img id="game-poster" src=""></div>
             <div id="snapshot-view"><img id="game-snapshot" src=""></div> 
@@ -195,7 +212,7 @@
     </div>
 
     <div id="screen-result" class="screen">
-        <h2 style="font-family:'Bebas Neue'; font-size:3rem;">KAST LİSTESİ</h2>
+        <h2 style="font-family:'Bebas Neue'; font-size:3rem;">OYUNCULAR</h2>
         <table id="result-table" style="width:100%; border-collapse:collapse; text-align:left;">
             <thead><tr style="color:#666; border-bottom:1px solid #333;"><th>#</th><th>Oyuncu</th><th>Puan</th></tr></thead>
             <tbody></tbody>
@@ -210,72 +227,44 @@
     </div>
 
     <script>
-        // 1. FIREBASE CONFIG
+        // 1. FIREBASE AYARLARI
         const firebaseConfig = {
-  apiKey: "AIzaSyCKXuqXEtQ_dr1FNw-8NZj0BpeoSDl_mRY",
-  authDomain: "cinepalette-e7a2b.firebaseapp.com",
-  databaseURL: "https://cinepalette-e7a2b-default-rtdb.firebaseio.com",
-  projectId: "cinepalette-e7a2b",
-  storageBucket: "cinepalette-e7a2b.firebasestorage.app",
-  messagingSenderId: "933599264840",
-  appId: "1:933599264840:web:667563470c4ea338f7187d"
-};
+            apiKey: "AIzaSyCKXuqXEtQ_dr1FNw-8NZj0BpeoSDl_mRY", 
+            authDomain: "cinepalette-e7a2b.firebaseapp.com",
+            databaseURL: "https://cinepalette-e7a2b-default-rtdb.firebaseio.com",
+            projectId: "cinepalette-e7a2b",
+            storageBucket: "cinepalette-e7a2b.firebasestorage.app",
+            messagingSenderId: "933599264840",
+            appId: "1:933599264840:web:667563470c4ea338f7187d"
+        };
 
         let db; 
         let isMultiplayer = false;
 
-        // 2. DEVASA VERİTABANI (Yaklaşık 50+ Örnek, Daha Fazla Eklenebilir)
+        // --- VERİTABANI (AMAZON / IMDB LİNKLERİ - TÜRKİYE DOSTU) ---
         const database = [
-            // REPLİKLER
-            { type: "quote", text: "I'm going to make him an offer he can't refuse.", hint: "Mafya, 1972", correct: "The Godfather", options: ["The Godfather", "Scarface", "Goodfellas", "Casino"] },
-            { type: "quote", text: "May the Force be with you.", hint: "Uzay Operası", correct: "Star Wars", options: ["Star Trek", "Star Wars", "Guardians of the Galaxy", "Dune"] },
-            { type: "quote", text: "You talkin' to me?", hint: "Ayna Karşısında, Taksi", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Joker", "King of Comedy"] },
-            { type: "quote", text: "I see dead people.", hint: "Bruce Willis, 1999", correct: "The Sixth Sense", options: ["The Sixth Sense", "The Others", "Signs", "Poltergeist"] },
-            { type: "quote", text: "Here's Johnny!", hint: "Balta, Otel", correct: "The Shining", options: ["The Shining", "It", "Misery", "Psycho"] },
-            { type: "quote", text: "I drink your milkshake!", hint: "Petrol, Hırs", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "The Master", "Gangs of New York"] },
-            { type: "quote", text: "Why so serious?", hint: "Palyaço Makyajı", correct: "The Dark Knight", options: ["The Dark Knight", "Joker", "Batman Begins", "Suicide Squad"] },
-            { type: "quote", text: "The first rule of Fight Club is: You do not talk about Fight Club.", hint: "Sabun, Bodrum Katı", correct: "Fight Club", options: ["Fight Club", "Se7en", "Snatch", "The Game"] },
-            { type: "quote", text: "Say hello to my little friend!", hint: "Makineli Tüfek, Küba", correct: "Scarface", options: ["Scarface", "The Godfather", "Carlito's Way", "Heat"] },
-            { type: "quote", text: "Toto, I've a feeling we're not in Kansas anymore.", hint: "Kırmızı Pabuçlar", correct: "The Wizard of Oz", options: ["The Wizard of Oz", "Alice in Wonderland", "Peter Pan", "Narnia"] },
-            { type: "quote", text: "Hasta la vista, baby.", hint: "Robot, Gelecek", correct: "Terminator 2", options: ["Terminator 2", "RoboCop", "Total Recall", "Predator"] },
-            { type: "quote", text: "You can't handle the truth!", hint: "Askeri Mahkeme", correct: "A Few Good Men", options: ["A Few Good Men", "Top Gun", "Crimson Tide", "Gladiator"] },
-            { type: "quote", text: "I'll be back.", hint: "Arnold Schwarzenegger", correct: "The Terminator", options: ["The Terminator", "Predator", "Commando", "Alien"] },
-            { type: "quote", text: "My precious.", hint: "Yüzük", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "The Hobbit", "Harry Potter", "Willow"] },
-            { type: "quote", text: "Houston, we have a problem.", hint: "Uzay Mekiği", correct: "Apollo 13", options: ["Apollo 13", "Gravity", "First Man", "Interstellar"] },
-            { type: "quote", text: "There's no place like home.", hint: "Sarı Tuğlalı Yol", correct: "The Wizard of Oz", options: ["The Wizard of Oz", "Mary Poppins", "Sound of Music", "E.T."] },
-            { type: "quote", text: "I am your father.", hint: "Karanlık Taraf", correct: "Star Wars: Empire Strikes Back", options: ["Star Wars: Empire Strikes Back", "Star Trek", "Dune", "Avatar"] },
-            { type: "quote", text: "Just keep swimming.", hint: "Mavi Balık", correct: "Finding Nemo", options: ["Finding Nemo", "Shark Tale", "Luca", "Moana"] },
-            { type: "quote", text: "What's in the box?", hint: "Çöl, Kutu, Brad Pitt", correct: "Se7en", options: ["Se7en", "Zodiac", "Prisoners", "Saw"] },
-            { type: "quote", text: "Keep your friends close, but your enemies closer.", hint: "Baba Tavsiyesi", correct: "The Godfather Part II", options: ["The Godfather Part II", "Goodfellas", "Casino", "The Irishman"] },
-            { type: "quote", text: "Elementary, my dear Watson.", hint: "Dedektif, Londra", correct: "Sherlock Holmes", options: ["Sherlock Holmes", "Knives Out", "Murder on the Orient Express", "Enola Holmes"] },
-            { type: "quote", text: "Carpe diem. Seize the day, boys.", hint: "Ölü Ozanlar", correct: "Dead Poets Society", options: ["Dead Poets Society", "Good Will Hunting", "Patch Adams", "Scent of a Woman"] },
-            { type: "quote", text: "It's alive! It's alive!", hint: "Canavar Yaratmak", correct: "Frankenstein", options: ["Frankenstein", "Dracula", "The Mummy", "The Invisible Man"] },
-            { type: "quote", text: "You had me at 'hello'.", hint: "Romantik, Tom Cruise", correct: "Jerry Maguire", options: ["Jerry Maguire", "Top Gun", "Rain Man", "Notting Hill"] },
-            { type: "quote", text: "A martini. Shaken, not stirred.", hint: "Ajan 007", correct: "Goldfinger", options: ["Goldfinger", "Casino Royale", "Skyfall", "Dr. No"] },
-
             // SNAPSHOTS (TEK KARE)
-            { type: "movie", genre: "snapshot", hint: "Kore, Çekiç", correct: "Oldboy", snapshot: "https://image.tmdb.org/t/p/original/r3pPehX4ik8pOR1E8UPNDafuuE4.jpg", options: ["Oldboy", "Parasite", "The Chaser", "Memories of Murder"] },
-            { type: "movie", genre: "snapshot", hint: "Uzay, Monolit", correct: "2001: A Space Odyssey", snapshot: "https://image.tmdb.org/t/p/original/w7eOQ0y3jW05a1b25z8P0z6.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Gravity"] },
-            { type: "movie", genre: "snapshot", hint: "Reality Show, Merdiven", correct: "The Truman Show", snapshot: "https://image.tmdb.org/t/p/original/e3P1d3x2x6x7.jpg", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Yes Man"] },
-            { type: "movie", genre: "snapshot", hint: "Western, Düello", correct: "The Good, the Bad and the Ugly", snapshot: "https://image.tmdb.org/t/p/original/x1peF1Q6u5Wq75e5fK3e5.jpg", options: ["The Good, the Bad and the Ugly", "Django", "Unforgiven", "Once Upon a Time in the West"] },
-            { type: "movie", genre: "snapshot", hint: "Sarı Eşofman, Motor", correct: "Kill Bill: Vol. 1", snapshot: "https://image.tmdb.org/t/p/original/v7TaX8kXMXs5yGGxuzM9cMDNG5H.jpg", options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Death Proof", "Sin City"] },
-            { type: "movie", genre: "snapshot", hint: "Kırmızı Balon, Yağmur", correct: "It", snapshot: "https://image.tmdb.org/t/p/original/tcheoA2nPATCm2vvXw2hZsxc790.jpg", options: ["It", "Stranger Things", "Dark", "Poltergeist"] },
-            { type: "movie", genre: "snapshot", hint: "Satranç, Ölüm", correct: "The Seventh Seal", snapshot: "https://image.tmdb.org/t/p/original/b099o14L3j58z8h2V3fT3r1w1.jpg", options: ["The Seventh Seal", "Persona", "Wild Strawberries", "8½"] },
-            { type: "movie", genre: "snapshot", hint: "Dans, Lise", correct: "Grease", snapshot: "https://image.tmdb.org/t/p/original/ijB3jS7hQ7E21e2r3223.jpg", options: ["Grease", "Dirty Dancing", "Footloose", "Hairspray"] },
-            { type: "movie", genre: "snapshot", hint: "Banyo, Kan", correct: "Psycho", snapshot: "https://image.tmdb.org/t/p/original/81d8oyEFx7i4j6IawbZpUOqFVo.jpg", options: ["Psycho", "Birds", "Vertigo", "Rear Window"] },
-            { type: "movie", genre: "snapshot", hint: "Gemi Batıyor", correct: "Titanic", snapshot: "https://image.tmdb.org/t/p/original/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
-
-            // FİLMLER (POSTER + PALET)
-            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://image.tmdb.org/t/p/w500/ykRPzwJ7MSClPFR33fG6T2t16S8.jpg", colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
-            { type: "movie", genre: "scifi", hint: "Kara Delik", correct: "Interstellar", poster: "https://image.tmdb.org/t/p/w500/gEU2QniL6C971PN668mgz8QAqQ.jpg", colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "Arrival"] },
-            { type: "movie", genre: "scifi", hint: "Uzaylı Dili", correct: "Arrival", poster: "https://image.tmdb.org/t/p/w500/x2FJsf1ElAgr63C3cwpfkl94Lx.jpg", colors: ["#2E4053", "#5D6D7E", "#AEB6BF", "#17202A", "#000000", "#1C2833", "#85929E", "#D5D8DC"], options: ["Arrival", "Contact", "District 9", "Dune"] },
-            { type: "movie", genre: "scifi", hint: "Neon, Cyberpunk", correct: "Blade Runner 2049", poster: "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg", colors: ["#F28C0F", "#D35400", "#E67E22", "#003B59", "#000000", "#A67A53", "#5E6C6F", "#17202A"], options: ["Blade Runner 2049", "Tron: Legacy", "Dune", "Oblivion"] },
-            { type: "movie", genre: "scifi", hint: "Mars'ta Tek Başına", correct: "The Martian", poster: "https://image.tmdb.org/t/p/w500/5BHuvQ6p9kfc091Z8RiFNhAwL4J.jpg", colors: ["#D35400", "#E67E22", "#A04000", "#873600", "#FAD7A0", "#FFFFFF", "#1C2833", "#000000"], options: ["The Martian", "Interstellar", "Red Planet", "Prometheus"] },
-            { type: "movie", genre: "cult", hint: "Miami, Büyüme", correct: "Moonlight", poster: "https://image.tmdb.org/t/p/w500/49U1d7XJ93b0Qeb1v6s57d6l8Z.jpg", colors: ["#000000", "#0B0B3B", "#101050", "#1A237E", "#303F9F", "#3F51B5", "#283593", "#C5CAE9"], options: ["Moonlight", "Pariah", "Boyz n the Hood", "Green Book"] },
-            { type: "movie", genre: "palettes", hint: "Wes Anderson, Çöl", correct: "Asteroid City", poster: "https://image.tmdb.org/t/p/w500/qfcJJJZ276yK1x2Q2v6b3w.jpg", colors: ["#FAD7A0", "#F8C471", "#F5B041", "#F39C12", "#5DADE2", "#3498DB", "#2E86C1", "#D6EAF8"], options: ["Asteroid City", "Moonrise Kingdom", "The Royal Tenenbaums", "Nope"] },
-            { type: "movie", genre: "palettes", hint: "Pembe Otel", correct: "The Grand Budapest Hotel", poster: "https://image.tmdb.org/t/p/w500/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg", colors: ["#F29FCD", "#E0218A", "#C2185B", "#880E4F", "#FCE4EC", "#4A148C", "#7B1FA2", "#BA68C8"], options: ["The Grand Budapest Hotel", "French Dispatch", "Amélie", "Marie Antoinette"] },
-            { type: "movie", genre: "horror", hint: "Gündüz Korkusu", correct: "Midsommar", poster: "https://image.tmdb.org/t/p/w500/7LEI8ulZzO5gy9JwyMcP8P52lpa.jpg", colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Witch"] },
-            { type: "movie", genre: "cult", hint: "Dans, Ucuz Roman", correct: "Pulp Fiction", poster: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg", colors: ["#000000", "#17202A", "#B03A2E", "#E74C3C", "#F1C40F", "#F39C12", "#F4D03F", "#FFFFFF"], options: ["Pulp Fiction", "Reservoir Dogs", "Kill Bill", "Jackie Brown"] }
+            { type: "movie", genre: "snapshot", hint: "Kore, Çekiç", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
+            { type: "movie", genre: "snapshot", hint: "Uzay, Monolit", correct: "2001: A Space Odyssey", snapshot: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Gravity"] },
+            { type: "movie", genre: "snapshot", hint: "Reality Show, Merdiven", correct: "The Truman Show", snapshot: "https://m.media-amazon.com/images/M/MV5BMDIzODcyY2EtMmY2MC00ZWVlLTgwMzAtMjQwOWUyNmJjNTYyXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_.jpg", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Yes Man"] },
+            { type: "movie", genre: "snapshot", hint: "Western, Düello", correct: "The Good, the Bad and the Ugly", snapshot: "https://m.media-amazon.com/images/M/MV5BNjgyMTM1YjAtOGMxYS00NWRlLTk4ZmItY2Q2M2RkOTY3MTQ2XkEyXkFqcGdeQXVyMTA3MDExNDEw._V1_.jpg", options: ["The Good, the Bad and the Ugly", "Django", "Unforgiven", "Once Upon a Time in the West"] },
+            { type: "movie", genre: "snapshot", hint: "Sarı Eşofman, Motor", correct: "Kill Bill: Vol. 1", snapshot: "https://m.media-amazon.com/images/M/MV5BNzM3NDFhYTAtYmU5Mi00NGRmLTljYjgtMDkyODQ4MjNkMGY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Death Proof", "Sin City"] },
+            
+            // REPLİKLER
+            { type: "quote", text: "I drink your milkshake!", hint: "Petrol Arayışı", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "Lincoln"] },
+            { type: "quote", text: "Tears in rain.", hint: "Replikant", correct: "Blade Runner", options: ["Blade Runner", "Dune", "Alien", "Total Recall"] },
+            { type: "quote", text: "I'm gonna make him an offer he can't refuse.", hint: "Mafya", correct: "The Godfather", options: ["The Godfather", "Goodfellas", "Scarface", "Casino"] },
+            { type: "quote", text: "Here's looking at you, kid.", hint: "Savaş, Aşk", correct: "Casablanca", options: ["Casablanca", "Citizen Kane", "Gone with the Wind", "Roman Holiday"] },
+            { type: "quote", text: "You talkin' to me?", hint: "Taksi Şoförü", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Joker", "King of Comedy"] },
+            
+            // FİLMLER (Poster + Renk) - Amazon Linkleri
+            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://m.media-amazon.com/images/M/MV5BMjA1Nzk0OTM2OF5BMl5BanBnXkFtZTgwNjU2NjEwMDE@._V1_.jpg", colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
+            { type: "movie", genre: "scifi", hint: "Kara Delik", correct: "Interstellar", poster: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "Arrival"] },
+            { type: "movie", genre: "cult", hint: "Miami, Büyüme", correct: "Moonlight", poster: "https://m.media-amazon.com/images/M/MV5BNzQxNTIyODAxMV5BMl5BanBnXkFtZTgwNzQyMDA3OTE@._V1_.jpg", colors: ["#000000", "#0B0B3B", "#101050", "#1A237E", "#303F9F", "#3F51B5", "#283593", "#C5CAE9"], options: ["Moonlight", "Pariah", "Boyz n the Hood", "Green Book"] },
+            { type: "movie", genre: "palettes", hint: "Çöl, Meteor", correct: "Asteroid City", poster: "https://m.media-amazon.com/images/M/MV5BNDJjZTZhOXEtZSEyYi00MzJlLWEwNTAtM2JjOTg5ODg0NDExXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg", colors: ["#FAD7A0", "#F8C471", "#F5B041", "#F39C12", "#5DADE2", "#3498DB", "#2E86C1", "#D6EAF8"], options: ["Asteroid City", "Moonrise Kingdom", "The Royal Tenenbaums", "Nope"] },
+            { type: "movie", genre: "horror", hint: "Gündüz Korkusu", correct: "Midsommar", poster: "https://m.media-amazon.com/images/M/MV5BM2Q1ZWUxZjItM2YxZC00NTQxLTgzNmQtYTAxZWM3YjU5NDY2XkEyXkFqcGdeQXVyMTAxNzQ1NzI@._V1_.jpg", colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Witch"] },
+            { type: "movie", genre: "scifi", hint: "Neon, Cyberpunk", correct: "Blade Runner 2049", poster: "https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_.jpg", colors: ["#F28C0F", "#D35400", "#E67E22", "#003B59", "#000000", "#A67A53", "#5E6C6F", "#17202A"], options: ["Blade Runner 2049", "Tron: Legacy", "Dune", "Oblivion"] },
+            { type: "movie", genre: "cult", hint: "Dans, Ucuz Roman", correct: "Pulp Fiction", poster: "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", colors: ["#000000", "#17202A", "#B03A2E", "#E74C3C", "#F1C40F", "#F39C12", "#F4D03F", "#FFFFFF"], options: ["Pulp Fiction", "Reservoir Dogs", "Kill Bill", "Jackie Brown"] }
         ];
 
         // --- DEĞİŞKENLER ---
@@ -283,7 +272,6 @@
         let gameQuestions=[], currentQIndex=0, score=0, timerInterval;
         let totalTime=60, isPlaying=false, currentMode="movie";
 
-        // --- UI ---
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -302,7 +290,6 @@
         }
         function generateCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
 
-        // --- TEK KİŞİLİK OYUN ---
         function startSinglePlayerGame() {
             myName = document.getElementById('username').value.trim() || "Sinefil";
             isMultiplayer = false;
@@ -313,7 +300,6 @@
             startGame(config);
         }
 
-        // --- MULTIPLAYER ---
         function initFirebase() {
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             if (!db) db = firebase.database();
@@ -370,7 +356,6 @@
         }
         function startGameByHost() { db.ref('rooms/'+myRoomCode).update({status:"playing"}); }
 
-        // --- OYUN MOTORU ---
         function startGame(cfg) {
             if(cfg.genre === 'quote') {
                 currentMode = 'quote';
@@ -430,8 +415,8 @@
                 document.getElementById('hint-display').innerText = gameQuestions[currentQIndex].hint;
                 document.getElementById('btn-hint').disabled = true;
                 
-                if(currentMode==='movie') document.getElementById('game-poster').classList.add('revealed');
-                if(currentMode==='snapshot') document.getElementById('game-snapshot').classList.add('revealed');
+                if(currentMode==='movie') document.getElementById('game-poster').className = "revealed";
+                if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "revealed";
             }
         }
 
@@ -439,15 +424,18 @@
             if(currentQIndex>=gameQuestions.length) currentQIndex=0;
             const q = gameQuestions[currentQIndex];
             
+            // Reset
             document.getElementById('hint-display').innerText = "";
             document.getElementById('btn-hint').disabled = false;
             const optBox = document.getElementById('options-box'); optBox.innerHTML='';
+            document.getElementById('feedback-display').innerText = "";
+            document.getElementById('feedback-display').className = "";
 
             const pImg = document.getElementById('game-poster');
             const sImg = document.getElementById('game-snapshot');
             
-            pImg.classList.remove('revealed');
-            sImg.classList.remove('revealed');
+            pImg.className = "";
+            sImg.className = "";
 
             if(currentMode === 'quote') {
                 document.getElementById('game-quote').innerText = `"${q.text}"`;
@@ -473,17 +461,27 @@
             if(!isPlaying) return;
             document.querySelectorAll('.opt-btn').forEach(b=>b.style.pointerEvents='none');
 
+            const fb = document.getElementById('feedback-display');
+
             if(sel===corr) {
                 score+=10; document.getElementById('score-display').innerText=score;
-                btn.classList.add('correct');
+                btn.classList.add('btn-correct'); // Yeşil buton
                 
-                if(currentMode==='movie') document.getElementById('game-poster').classList.add('revealed');
-                if(currentMode==='snapshot') document.getElementById('game-snapshot').classList.add('revealed');
+                fb.innerText = "DOĞRU";
+                fb.className = "status-correct";
                 
-                setTimeout(()=>{ if(isPlaying){currentQIndex++; loadQuestion();} }, 100);
+                // NETLEŞTİRME
+                if(currentMode==='movie') document.getElementById('game-poster').className = "revealed";
+                if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "revealed";
+                
+                // 1.5 Sn Bekle
+                setTimeout(()=>{ if(isPlaying){currentQIndex++; loadQuestion();} }, 1500);
             } else {
-                btn.classList.add('wrong');
-                setTimeout(()=>{ if(isPlaying){currentQIndex++; loadQuestion();} }, 100);
+                btn.classList.add('btn-wrong'); // Kırmızı buton
+                fb.innerText = "YANLIŞ";
+                fb.className = "status-wrong";
+                
+                setTimeout(()=>{ if(isPlaying){currentQIndex++; loadQuestion();} }, 1000);
             }
         }
 
