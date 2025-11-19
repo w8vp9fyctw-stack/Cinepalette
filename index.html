@@ -96,29 +96,28 @@
             display: none; position: relative; background: black; overflow: hidden;
         }
 
-        /* --- BLUR EFEKTİ (DÜZELTİLMİŞ) --- */
+       /* --- BLUR EFEKTİ (DÜZELTİLMİŞ) --- */
         #game-poster, #game-snapshot { 
             width: 100%; 
             height: 100%; 
             object-fit: contain;
-            /* Varsayılan hali: Hemen bulanık olsun, geçiş efekti OLMASIN */
+            /* Varsayılan: Bulanık. Geçiş efekti YOK (Anında bulanıklaşsın diye) */
             filter: blur(20px); 
             transform: scale(1.1);
-            opacity: 0; /* Yüklenene kadar gizli kalsın */
-            transition: opacity 0.3s ease; /* Sadece görünür olma efekti */
+            opacity: 0; /* Yüklenene kadar gizli */
+            transition: opacity 0.2s ease; /* Sadece belirme efekti */
         }
         
-        /* Resim yüklendiğinde bu sınıfı ekleyeceğiz */
+        /* Resim yüklendiğinde eklenecek sınıf */
         .loaded {
             opacity: 1 !important;
         }
         
-        /* Net Hal (Sadece buraya transition ekliyoruz) */
+        /* Net Hal (Sadece netleşirken animasyon olsun) */
         .revealed { 
             filter: blur(0) !important;
             transform: scale(1) !important;
-            /* Sadece netleşirken yumuşak geçiş yap */
-            transition: filter 0.5s ease-out, transform 0.5s ease-out;
+            transition: filter 0.8s ease-out, transform 0.8s ease-out;
         }
 
         #palette-view { width: 100%; height: 60px; display: none; }
@@ -541,38 +540,37 @@
                 if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "revealed";
             }
         }
-
-        function loadQuestion() {
+function loadQuestion() {
             if(currentQIndex >= gameQuestions.length) currentQIndex = 0;
             const q = gameQuestions[currentQIndex];
             
-            // Reset
+            // UI Temizliği
             document.getElementById('hint-display').innerText = "";
             document.getElementById('btn-hint').disabled = false;
-            const optBox = document.getElementById('options-box'); optBox.innerHTML='';
+            document.getElementById('options-box').innerHTML = "";
             document.getElementById('feedback-display').innerText = "";
             document.getElementById('feedback-display').className = "";
 
             const pImg = document.getElementById('game-poster');
             const sImg = document.getElementById('game-snapshot');
             
-            // 1. Önce sınıfları temizle (Revealed kalksın, Loaded kalksın)
-            // Bu işlem resmi anında bulanıklaştırır ve gizler.
-            pImg.className = "";
+            // 1. GÖRSELİ SIFIRLA (Anında bulanıklaş ve gizlen)
+            // 'revealed' sınıfını kaldırıyoruz, CSS transition olmadığı için anında blur olur.
+            pImg.className = ""; 
             sImg.className = "";
             
-            // 2. Eski resmin kalıntısını önlemek için src'yi boşalt
+            // 2. Eski resim kalıntısını temizle (Flash etkisini önler)
             pImg.src = "";
             sImg.src = "";
 
-            // Resmi yükleyince görünür yapacak fonksiyon
+            // Resim yüklendiğinde görünür yap (Fade-in)
             const onImgLoad = (e) => {
                 e.target.classList.add('loaded');
             };
-            
             pImg.onload = onImgLoad;
             sImg.onload = onImgLoad;
 
+            // İçerik Doldurma
             if(currentMode === 'quote') {
                 document.getElementById('game-quote').innerText = `"${q.text}"`;
             } else if (currentMode === 'snapshot') {
@@ -589,7 +587,7 @@
             q.options.forEach(opt=>{
                 const btn=document.createElement('div'); btn.className='opt-btn'; btn.innerText=opt;
                 btn.onclick = ()=>checkAnswer(opt, q.correct, btn);
-                optBox.appendChild(btn);
+                document.getElementById('options-box').appendChild(btn);
             });
         }
 
@@ -600,24 +598,39 @@
             const fb = document.getElementById('feedback-display');
 
             if(sel===corr) {
+                // DOĞRU CEVAP
                 score+=10; document.getElementById('score-display').innerText=score;
-                btn.classList.add('btn-correct'); // Yeşil buton
+                btn.classList.add('btn-correct');
                 
                 fb.innerText = "DOĞRU";
                 fb.className = "status-correct";
                 
-                // NETLEŞTİRME
-                if(currentMode==='movie') document.getElementById('game-poster').className = "revealed";
-                if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "revealed";
+                // Resmi Netleştir
+                if(currentMode==='movie') document.getElementById('game-poster').classList.add('revealed');
+                if(currentMode==='snapshot') document.getElementById('game-snapshot').classList.add('revealed');
                 
-                // 1.5 Sn Bekle
-                setTimeout(()=>{ if(isPlaying){currentQIndex++; loadQuestion();} }, 1500);
+                // SÜRE AYARI: Burada 2500ms (2.5 saniye) bekletiyoruz.
+                // Poster netleşecek ve ekranda kalacak.
+                setTimeout(()=>{ 
+                    if(isPlaying){
+                        currentQIndex++; 
+                        loadQuestion(); 
+                    } 
+                }, 2500);
+
             } else {
-                btn.classList.add('btn-wrong'); // Kırmızı buton
+                // YANLIŞ CEVAP
+                btn.classList.add('btn-wrong');
                 fb.innerText = "YANLIŞ";
                 fb.className = "status-wrong";
                 
-                setTimeout(()=>{ if(isPlaying){currentQIndex++; loadQuestion();} }, 1000);
+                // Yanlışta daha hızlı geçebiliriz (1 saniye)
+                setTimeout(()=>{ 
+                    if(isPlaying){
+                        currentQIndex++; 
+                        loadQuestion(); 
+                    } 
+                }, 1000);
             }
         }
 
