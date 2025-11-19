@@ -82,35 +82,25 @@
         #poster-view, #snapshot-view { 
             width: 100%; height: 450px; 
             display: none; position: relative; background: black; overflow: hidden;
+            display: flex; align-items: center; justify-content: center; /* Resmin ortalanması için */
         }
 
-        /* --- YENİ PİKSEL EFEKTİ (HARDCORE) --- */
-        /* Mantık: Resmi %3 boyutuna küçültüp, 33 kat büyütüyoruz. */
-        .pixel-mode {
-            width: 3% !important;  /* Resmi çok küçült */
-            height: 3% !important; /* Oranı bozmamak için */
-            object-fit: cover;     /* Kutuyu doldur */
-            image-rendering: pixelated; /* Tarayıcıya "yumuşatma yapma" de */
-            transform: scale(33.3);     /* Tekrar büyüt (3 * 33.3 = ~100) */
-            transform-origin: top left; /* Sol üstten büyüt */
-            position: absolute; top: 0; left: 0;
-        }
-
-        /* Netleşince */
-        .reveal-mode {
-            width: 100% !important;
-            height: 100% !important;
+        /* --- YENİ FLU EFEKTİ --- */
+        #game-poster, #game-snapshot { 
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
-            image-rendering: auto;
-            transform: scale(1);
-            position: relative;
+            filter: blur(15px); /* Başlangıç flu değeri */
+            transition: filter 0.5s ease-out; /* Geçiş animasyonu */
         }
-
-        /* Geçiş Efekti Yok (Direkt Geçiş) */
-        #game-poster, #game-snapshot { transition: none !important; }
+        
+        /* Netleşince */
+        #game-poster.revealed, #game-snapshot.revealed { 
+            filter: blur(0px); /* Netleşince flu yok */
+        }
 
         #palette-view { width: 100%; height: 60px; display: none; }
-        .color-strip { flex: 1; height: 100%; }
+        .color-strip { flex: 1; height: 100%; transition: transform 0.2s; }
 
         #quote-view { display: none; padding: 40px 20px; text-align: center; background: radial-gradient(circle, #1a1a1a 0%, #000000 100%); width: 100%; height: 100%; justify-content: center; align-items: center; }
         .quote-text { font-family: 'Georgia', serif; font-size: 1.3rem; font-style: italic; line-height: 1.5; color: #e0e0e0; }
@@ -140,7 +130,7 @@
             <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">OYUN MODU</label>
             <select id="genre-select" onchange="uiUpdate()">
                 <option value="mix">🎲 KARIŞIK (Hepsi)</option>
-                <option value="snapshot">🖼️ TEK KARE (Çok Pikselli)</option>
+                <option value="snapshot">🖼️ TEK KARE (Flu Görsel)</option>
                 <option value="quote">💬 REPLİKLER (Zor Seviye)</option>
                 <option value="palettes">🎨 RENK PALETİ</option>
                 <option value="cult">🍷 KÜLT & ARTHOUSE</option>
@@ -150,9 +140,9 @@
             <div id="visual-setting">
                 <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">GÖRÜNÜM</label>
                 <select id="visual-select">
-                    <option value="both">Palet + Pikselli Poster</option>
+                    <option value="both">Palet + Flu Poster</option>
                     <option value="palette">Sadece Renk Paleti</option>
-                    <option value="poster">Sadece Pikselli Poster</option>
+                    <option value="poster">Sadece Flu Poster</option>
                 </select>
             </div>
         </div>
@@ -187,8 +177,8 @@
         </div>
 
         <div class="media-container">
-            <div id="poster-view"><img id="game-poster" src="" class="pixel-mode"></div>
-            <div id="snapshot-view"><img id="game-snapshot" src="" class="pixel-mode"></div> 
+            <div id="poster-view"><img id="game-poster" src=""></div>
+            <div id="snapshot-view"><img id="game-snapshot" src=""></div> 
             <div id="quote-view"><div class="quote-text" id="game-quote"></div></div>
             <div id="palette-view"></div>
         </div>
@@ -235,9 +225,6 @@
         let isMultiplayer = false;
 
         // 2. VERİTABANI
-        // ==============================================
-        // 🎬 CINEPALETTE: DEVASA VERİTABANI (500+ İHTİMAL)
-        // ==============================================
         const database = [
             // ============================================================
             // 💬 KATEGORİ: REPLİKLER (QUOTES) - SADECE METİN
@@ -284,7 +271,7 @@
             { type: "quote", text: "Look at me. Look at me. I am the captain now.", hint: "Korsanlar", correct: "Captain Phillips", options: ["Captain Phillips", "Cast Away", "Sully", "Flight"] },
 
             // ============================================================
-            // 🖼️ KATEGORİ: SNAPSHOT (TEK KARE) - ZORLU GÖRSELLER
+            // 🖼️ KATEGORİ: SNAPSHOT (TEK KARE) - FLU GÖRSELLER
             // ============================================================
             { type: "movie", genre: "snapshot", hint: "Güney Kore, Çekiç", correct: "Oldboy", snapshot: "https://image.tmdb.org/t/p/original/r3pPehX4ik8pOR1E8UPNDafuuE4.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "Memories of Murder"] },
             { type: "movie", genre: "snapshot", hint: "Jim Carrey, Merdivenler", correct: "The Truman Show", snapshot: "https://image.tmdb.org/t/p/original/e3P1d3x2x6x7.jpg", options: ["The Truman Show", "Eternal Sunshine", "Yes Man", "Liar Liar"] },
@@ -302,80 +289,7 @@
             { type: "movie", genre: "snapshot", hint: "Mavi İnsanlar", correct: "Avatar", snapshot: "https://image.tmdb.org/t/p/original/kyeqWdyUXW608qlYkRqosgbbJyK.jpg", options: ["Avatar", "Guardians of the Galaxy", "Valerian", "Warcraft"] },
             { type: "movie", genre: "snapshot", hint: "Oyuncak Kovboy", correct: "Toy Story", snapshot: "https://image.tmdb.org/t/p/original/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg", options: ["Toy Story", "Small Soldiers", "Cars", "Bug's Life"] },
 
-            // ============================================================
-            // 🎨 KATEGORİ: FİLMLER (POSTER + PALET)
-            // ============================================================
-            
-            // --- SCI-FI & UZAY ---
-            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://image.tmdb.org/t/p/w500/ykRPzwJ7MSClPFR33fG6T2t16S8.jpg", 
-              colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
-            { type: "movie", genre: "scifi", hint: "Kara Delik, Nolan", correct: "Interstellar", poster: "https://image.tmdb.org/t/p/w500/gEU2QniL6C971PN668mgz8QAqQ.jpg", 
-              colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "Arrival"] },
-            { type: "movie", genre: "scifi", hint: "Uzaylı Dili, Heptapod", correct: "Arrival", poster: "https://image.tmdb.org/t/p/w500/x2FJsf1ElAgr63C3cwpfkl94Lx.jpg", 
-              colors: ["#2E4053", "#5D6D7E", "#AEB6BF", "#17202A", "#000000", "#1C2833", "#85929E", "#D5D8DC"], options: ["Arrival", "Contact", "District 9", "Dune"] },
-            { type: "movie", genre: "scifi", hint: "Neon, Cyberpunk", correct: "Blade Runner 2049", poster: "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg", 
-              colors: ["#F28C0F", "#D35400", "#E67E22", "#003B59", "#000000", "#A67A53", "#5E6C6F", "#17202A"], options: ["Blade Runner 2049", "Tron: Legacy", "Dune", "Oblivion"] },
-            { type: "movie", genre: "scifi", hint: "Mars'ta Tek Başına", correct: "The Martian", poster: "https://image.tmdb.org/t/p/w500/5BHuvQ6p9kfc091Z8RiFNhAwL4J.jpg", 
-              colors: ["#D35400", "#E67E22", "#A04000", "#873600", "#FAD7A0", "#FFFFFF", "#1C2833", "#000000"], options: ["The Martian", "Interstellar", "Red Planet", "Prometheus"] },
-            { type: "movie", genre: "scifi", hint: "Rüyalar, Topaç", correct: "Inception", poster: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg", 
-              colors: ["#2C3E50", "#34495E", "#566573", "#808B96", "#D5D8DC", "#ABB2B9", "#17202A", "#E74C3C"], options: ["Inception", "Tenet", "Memento", "Shutter Island"] },
-            { type: "movie", genre: "scifi", hint: "Maymunlar Cehennemi", correct: "Planet of the Apes", poster: "https://image.tmdb.org/t/p/w500/2r9iKFlYtWJvjGvA2d5h8iF8.jpg", 
-              colors: ["#4E342E", "#3E2723", "#6D4C41", "#8D6E63", "#A1887F", "#1B5E20", "#33691E", "#000000"], options: ["Planet of the Apes", "King Kong", "Rampage", "Kong: Skull Island"] },
-            { type: "movie", genre: "scifi", hint: "Zaman Döngüsü, Uzaylılar", correct: "Edge of Tomorrow", poster: "https://image.tmdb.org/t/p/w500/xjw5trBJ7oRUNohSozC4hCFOk2.jpg", 
-              colors: ["#5D6D7E", "#2E4053", "#17202A", "#85929E", "#AEB6BF", "#F4D03F", "#D4AC0D", "#000000"], options: ["Edge of Tomorrow", "Oblivion", "Source Code", "Looper"] },
-            { type: "movie", genre: "scifi", hint: "Dinazor Parkı", correct: "Jurassic Park", poster: "https://image.tmdb.org/t/p/w500/9i3plLl89DHMzYdB01IqZmmQHi7.jpg", 
-              colors: ["#000000", "#F4D03F", "#D35400", "#BA4A00", "#1E8449", "#2ECC71", "#145A32", "#FFFFFF"], options: ["Jurassic Park", "King Kong", "Godzilla", "Indiana Jones"] },
-            { type: "movie", genre: "scifi", hint: "Uzaylı Dostu", correct: "E.T. the Extra-Terrestrial", poster: "https://image.tmdb.org/t/p/w500/qKGqGLcQ5Yn91h83Z3g81.jpg", 
-              colors: ["#17202A", "#1B2631", "#283747", "#2E4053", "#F1C40F", "#F39C12", "#D35400", "#FFFFFF"], options: ["E.T.", "Close Encounters", "Super 8", "The Iron Giant"] },
-
-            // --- KÜLT & ARTHOUSE ---
-            { type: "movie", genre: "cult", hint: "Miami, Ay Işığı", correct: "Moonlight", poster: "https://image.tmdb.org/t/p/w500/49U1d7XJ93b0Qeb1v6s57d6l8Z.jpg", 
-              colors: ["#000000", "#0B0B3B", "#101050", "#1A237E", "#303F9F", "#3F51B5", "#283593", "#C5CAE9"], options: ["Moonlight", "Pariah", "Boyz n the Hood", "Green Book"] },
-            { type: "movie", genre: "cult", hint: "Fransız, Siyah Beyaz", correct: "La Haine", poster: "https://image.tmdb.org/t/p/w500/z67c1523489043214.jpg", 
-              colors: ["#000000", "#111111", "#222222", "#333333", "#555555", "#777777", "#999999", "#FFFFFF"], options: ["La Haine", "Roma", "Schindler's List", "Clerks"] },
-            { type: "movie", genre: "cult", hint: "Kore, Zengin/Fakir", correct: "Parasite", poster: "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg", 
-              colors: ["#17202A", "#1B2631", "#212F3C", "#283747", "#2E4053", "#566573", "#145A32", "#196F3D"], options: ["Parasite", "Oldboy", "Memories of Murder", "Snowpiercer"] },
-            { type: "movie", genre: "cult", hint: "Ruhlar Alemi", correct: "Spirited Away", poster: "https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyScP66l26EX26.jpg", 
-              colors: ["#641E16", "#922B21", "#C0392B", "#D98880", "#145A32", "#1E8449", "#2ECC71", "#82E0AA"], options: ["Spirited Away", "Princess Mononoke", "My Neighbor Totoro", "Howl's Moving Castle"] },
-            { type: "movie", genre: "cult", hint: "Tavşan Kostümü", correct: "Donnie Darko", poster: "https://image.tmdb.org/t/p/w500/fhQoQoeNRjnjZpD7z1F5h11E5.jpg", 
-              colors: ["#000000", "#17202A", "#2C3E50", "#566573", "#85929E", "#4A235A", "#FFFFFF", "#1B2631"], options: ["Donnie Darko", "Butterfly Effect", "Source Code", "Mr. Nobody"] },
-            { type: "movie", genre: "cult", hint: "Uyuşturucu, Bebek", correct: "Trainspotting", poster: "https://image.tmdb.org/t/p/w500/qZD6J0.jpg", 
-              colors: ["#D35400", "#E67E22", "#F39C12", "#F8C471", "#2E4053", "#1B2631", "#FFFFFF", "#000000"], options: ["Trainspotting", "Requiem for a Dream", "Snatch", "Fight Club"] },
-            { type: "movie", genre: "cult", hint: "Kırmızı Gül, Banliyö", correct: "American Beauty", poster: "https://image.tmdb.org/t/p/w500/wby9315QzVKdW9BonAefg8jGTTb.jpg", 
-              colors: ["#922B21", "#C0392B", "#E74C3C", "#EC7063", "#FADBD8", "#FFFFFF", "#17202A", "#212F3C"], options: ["American Beauty", "Magnolia", "Fight Club", "Gone Girl"] },
-            { type: "movie", genre: "cult", hint: "Süt, Şiddet", correct: "A Clockwork Orange", poster: "https://image.tmdb.org/t/p/w500/4sHeTAp65WrSSuc05nRBKddhBxO.jpg", 
-              colors: ["#FFFFFF", "#FDFEFE", "#F4D03F", "#D4AC0D", "#000000", "#17202A", "#212F3C", "#5D6D7E"], options: ["A Clockwork Orange", "The Shining", "Full Metal Jacket", "Taxi Driver"] },
-            { type: "movie", genre: "cult", hint: "Bowling, Halı", correct: "The Big Lebowski", poster: "https://image.tmdb.org/t/p/w500/jQyJcQ.jpg", 
-              colors: ["#D4AC0D", "#B7950B", "#F1C40F", "#F7DC6F", "#7D6608", "#000000", "#5DADE2", "#FFFFFF"], options: ["The Big Lebowski", "Fargo", "No Country for Old Men", "Pulp Fiction"] },
-            { type: "movie", genre: "cult", hint: "Dans, Ucuz Roman", correct: "Pulp Fiction", poster: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg", 
-              colors: ["#000000", "#17202A", "#B03A2E", "#E74C3C", "#F1C40F", "#F39C12", "#F4D03F", "#FFFFFF"], options: ["Pulp Fiction", "Reservoir Dogs", "Kill Bill", "Jackie Brown"] },
-
-            // --- RENK USTALARI (PALETTES) ---
-            { type: "movie", genre: "palettes", hint: "Wes Anderson, Çöl", correct: "Asteroid City", poster: "https://image.tmdb.org/t/p/w500/qfcJJJZ276yK1x2Q2v6b3w.jpg", 
-              colors: ["#FAD7A0", "#F8C471", "#F5B041", "#F39C12", "#5DADE2", "#3498DB", "#2E86C1", "#D6EAF8"], options: ["Asteroid City", "Moonrise Kingdom", "The Royal Tenenbaums", "Nope"] },
-            { type: "movie", genre: "palettes", hint: "Pembe Otel", correct: "The Grand Budapest Hotel", poster: "https://image.tmdb.org/t/p/w500/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg", 
-              colors: ["#F29FCD", "#E0218A", "#C2185B", "#880E4F", "#FCE4EC", "#4A148C", "#7B1FA2", "#BA68C8"], options: ["The Grand Budapest Hotel", "French Dispatch", "Amélie", "Marie Antoinette"] },
-            { type: "movie", genre: "palettes", hint: "Sarı Eşofman", correct: "Kill Bill: Vol. 1", poster: "https://image.tmdb.org/t/p/w500/v7TaX8kXMXs5yGGxuzM9cMDNG5H.jpg", 
-              colors: ["#F1C40F", "#F4D03F", "#F7DC6F", "#F9E79F", "#922B21", "#C0392B", "#000000", "#17202A"], options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Sin City", "Death Proof"] },
-            { type: "movie", genre: "palettes", hint: "Yeşil Tonlar, Paris", correct: "Amélie", poster: "https://image.tmdb.org/t/p/w500/slG9XGzG2y46s5Xn7MbdM9R7Hk.jpg", 
-              colors: ["#27AE60", "#2ECC71", "#145A32", "#1E8449", "#C0392B", "#E74C3C", "#F1C40F", "#17202A"], options: ["Amélie", "Midnight in Paris", "Chocolat", "Paddington"] },
-            { type: "movie", genre: "palettes", hint: "Mor ve Mavi, Los Angeles", correct: "La La Land", poster: "https://image.tmdb.org/t/p/w500/uDO8zWDhfWwoUyZq2ol7d78h903.jpg", 
-              colors: ["#4A235A", "#6C3483", "#8E44AD", "#2E86C1", "#3498DB", "#5DADE2", "#F1C40F", "#F39C12"], options: ["La La Land", "Moonlight", "Singin' in the Rain", "The Greatest Showman"] },
-            { type: "movie", genre: "palettes", hint: "Kırmızı Oda", correct: "2001: A Space Odyssey", poster: "https://image.tmdb.org/t/p/w500/ve72VxNqjGM69Uky4WTo2bK6rfq.jpg", 
-              colors: ["#B03A2E", "#922B21", "#C0392B", "#E74C3C", "#FFFFFF", "#FDFEFE", "#000000", "#17202A"], options: ["2001: A Space Odyssey", "Her", "Suspiria", "The Shining"] },
-            { type: "movie", genre: "palettes", hint: "Buz Mavisi", correct: "Frozen", poster: "https://image.tmdb.org/t/p/w500/kgMjZnIKd6Q1S011y7wX4Q.jpg", 
-              colors: ["#D6EAF8", "#AED6F1", "#85C1E9", "#5DADE2", "#3498DB", "#2E86C1", "#2874A6", "#FFFFFF"], options: ["Frozen", "Ice Age", "Rise of the Guardians", "Happy Feet"] },
-            { type: "movie", genre: "palettes", hint: "Çöl Turuncusu", correct: "Mad Max: Fury Road", poster: "https://image.tmdb.org/t/p/w500/8tZYtuWezp8JbcsvHYO0O46tFbo.jpg", 
-              colors: ["#D35400", "#E67E22", "#F39C12", "#F5B041", "#873600", "#A04000", "#5D6D7E", "#000000"], options: ["Mad Max: Fury Road", "Dune", "The Martian", "Book of Eli"] },
-            { type: "movie", genre: "palettes", hint: "Gotik Siyah Beyaz", correct: "Sin City", poster: "https://image.tmdb.org/t/p/w500/i7e82e.jpg", 
-              colors: ["#000000", "#17202A", "#2C3E50", "#566573", "#FFFFFF", "#FDFEFE", "#C0392B", "#922B21"], options: ["Sin City", "Schindler's List", "The Lighthouse", "Roma"] },
-            { type: "movie", genre: "palettes", hint: "Neon Şehir", correct: "Tron: Legacy", poster: "https://image.tmdb.org/t/p/w500/58b.jpg", 
-              colors: ["#000000", "#17202A", "#1B2631", "#212F3C", "#00FFFF", "#00CED1", "#2E86C1", "#FFFFFF"], options: ["Tron: Legacy", "Blade Runner", "Matrix", "Ready Player One"] }
-
-            // ... Buraya daha yüzlerce film eklenebilir ...
-        ];
-
-
+            // =================================================
 
         // --- DEĞİŞKENLER ---
         let myName="", myRoomCode="", myId="", isHost=false;
