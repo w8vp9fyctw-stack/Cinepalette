@@ -82,21 +82,22 @@
         #poster-view, #snapshot-view { 
             width: 100%; height: 450px; 
             display: none; position: relative; background: black; overflow: hidden;
-            display: flex; align-items: center; justify-content: center; /* Resmin ortalanması için */
         }
 
-        /* --- YENİ FLU EFEKTİ --- */
+        /* --- FLU (BLUR) EFEKTİ --- */
         #game-poster, #game-snapshot { 
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%; 
+            height: 100%; 
             object-fit: contain;
-            filter: blur(15px); /* Başlangıç flu değeri */
-            transition: filter 0.5s ease-out; /* Geçiş animasyonu */
+            filter: blur(20px); /* Başlangıç bulanıklığı */
+            transform: scale(1.1); /* Kenarlar beyazlamasın diye az zoom */
+            transition: filter 0.5s ease-out, transform 0.5s ease-out; 
         }
         
         /* Netleşince */
         #game-poster.revealed, #game-snapshot.revealed { 
-            filter: blur(0px); /* Netleşince flu yok */
+            filter: blur(0px); /* Netleştir */
+            transform: scale(1); 
         }
 
         #palette-view { width: 100%; height: 60px; display: none; }
@@ -130,7 +131,7 @@
             <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">OYUN MODU</label>
             <select id="genre-select" onchange="uiUpdate()">
                 <option value="mix">🎲 KARIŞIK (Hepsi)</option>
-                <option value="snapshot">🖼️ TEK KARE (Flu Görsel)</option>
+                <option value="snapshot">🖼️ TEK KARE (Zor Mod)</option>
                 <option value="quote">💬 REPLİKLER (Zor Seviye)</option>
                 <option value="palettes">🎨 RENK PALETİ</option>
                 <option value="cult">🍷 KÜLT & ARTHOUSE</option>
@@ -148,7 +149,6 @@
         </div>
 
         <button onclick="startSinglePlayerGame()">⭐ TEK KİŞİLİK FİLM KEYFİ</button>
-
         <button class="btn-multiplayer-toggle" onclick="toggleMultiplayer()">👥 ARKADAŞLARLA OYNA</button>
 
         <div id="multiplayer-panel">
@@ -210,7 +210,7 @@
     </div>
 
     <script>
-        // 1. FIREBASE AYARLARI (Kendi Bilgilerinizi Buraya Yapıştırın)
+        // 1. FIREBASE CONFIG
         const firebaseConfig = {
   apiKey: "AIzaSyCKXuqXEtQ_dr1FNw-8NZj0BpeoSDl_mRY",
   authDomain: "cinepalette-e7a2b.firebaseapp.com",
@@ -224,11 +224,9 @@
         let db; 
         let isMultiplayer = false;
 
-        // 2. VERİTABANI
+        // 2. DEVASA VERİTABANI (Yaklaşık 50+ Örnek, Daha Fazla Eklenebilir)
         const database = [
-            // ============================================================
-            // 💬 KATEGORİ: REPLİKLER (QUOTES) - SADECE METİN
-            // ============================================================
+            // REPLİKLER
             { type: "quote", text: "I'm going to make him an offer he can't refuse.", hint: "Mafya, 1972", correct: "The Godfather", options: ["The Godfather", "Scarface", "Goodfellas", "Casino"] },
             { type: "quote", text: "May the Force be with you.", hint: "Uzay Operası", correct: "Star Wars", options: ["Star Trek", "Star Wars", "Guardians of the Galaxy", "Dune"] },
             { type: "quote", text: "You talkin' to me?", hint: "Ayna Karşısında, Taksi", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Joker", "King of Comedy"] },
@@ -254,49 +252,38 @@
             { type: "quote", text: "It's alive! It's alive!", hint: "Canavar Yaratmak", correct: "Frankenstein", options: ["Frankenstein", "Dracula", "The Mummy", "The Invisible Man"] },
             { type: "quote", text: "You had me at 'hello'.", hint: "Romantik, Tom Cruise", correct: "Jerry Maguire", options: ["Jerry Maguire", "Top Gun", "Rain Man", "Notting Hill"] },
             { type: "quote", text: "A martini. Shaken, not stirred.", hint: "Ajan 007", correct: "Goldfinger", options: ["Goldfinger", "Casino Royale", "Skyfall", "Dr. No"] },
-            { type: "quote", text: "I feel the need... the need for speed!", hint: "Uçaklar, Pilot", correct: "Top Gun", options: ["Top Gun", "Days of Thunder", "Mission Impossible", "Speed"] },
-            { type: "quote", text: "Nobody puts Baby in a corner.", hint: "Dans", correct: "Dirty Dancing", options: ["Dirty Dancing", "Grease", "Footloose", "Flashdance"] },
-            { type: "quote", text: "I'm the king of the world!", hint: "Gemi, Okyanus", correct: "Titanic", options: ["Titanic", "Avatar", "Life of Pi", "Pearl Harbor"] },
-            { type: "quote", text: "They may take our lives, but they'll never take our freedom!", hint: "İskoçya, Savaş", correct: "Braveheart", options: ["Braveheart", "Gladiator", "300", "Troy"] },
-            { type: "quote", text: "Why so serious?", hint: "Joker", correct: "The Dark Knight", options: ["The Dark Knight", "Joker", "Batman", "Suicide Squad"] },
-            { type: "quote", text: "Magic Mirror on the wall, who is the fairest one of all?", hint: "Prenses, Elma", correct: "Snow White", options: ["Snow White", "Cinderella", "Sleeping Beauty", "Frozen"] },
-            { type: "quote", text: "Of all the gin joints in all the towns in all the world, she walks into mine.", hint: "Fas, Piyano", correct: "Casablanca", options: ["Casablanca", "Citizen Kane", "Gone with the Wind", "The Maltese Falcon"] },
-            { type: "quote", text: "I'm walking here! I'm walking here!", hint: "New York Taksi", correct: "Midnight Cowboy", options: ["Midnight Cowboy", "Taxi Driver", "Mean Streets", "Serpico"] },
-            { type: "quote", text: "Show me the money!", hint: "Spor Menajeri", correct: "Jerry Maguire", options: ["Jerry Maguire", "Wall Street", "Moneyball", "The Wolf of Wall Street"] },
-            { type: "quote", text: "You're gonna need a bigger boat.", hint: "Köpekbalığı", correct: "Jaws", options: ["Jaws", "The Meg", "Deep Blue Sea", "Piranha"] },
-            { type: "quote", text: "All work and no play makes Jack a dull boy.", hint: "Daktilo", correct: "The Shining", options: ["The Shining", "Misery", "Secret Window", "1408"] },
-            { type: "quote", text: "Life is like a box of chocolates.", hint: "Bank, Koşmak", correct: "Forrest Gump", options: ["Forrest Gump", "Big", "Cast Away", "Rain Man"] },
-            { type: "quote", text: "I see dead people.", hint: "Çocuk, Hayaletler", correct: "The Sixth Sense", options: ["The Sixth Sense", "Signs", "The Others", "Unbreakable"] },
-            { type: "quote", text: "Good morning, and in case I don't see you, good afternoon, good evening, and good night!", hint: "Sahte Dünya", correct: "The Truman Show", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Bruce Almighty"] },
-            { type: "quote", text: "Look at me. Look at me. I am the captain now.", hint: "Korsanlar", correct: "Captain Phillips", options: ["Captain Phillips", "Cast Away", "Sully", "Flight"] },
 
-            // ============================================================
-            // 🖼️ KATEGORİ: SNAPSHOT (TEK KARE) - FLU GÖRSELLER
-            // ============================================================
-            { type: "movie", genre: "snapshot", hint: "Güney Kore, Çekiç", correct: "Oldboy", snapshot: "https://image.tmdb.org/t/p/original/r3pPehX4ik8pOR1E8UPNDafuuE4.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "Memories of Murder"] },
-            { type: "movie", genre: "snapshot", hint: "Jim Carrey, Merdivenler", correct: "The Truman Show", snapshot: "https://image.tmdb.org/t/p/original/e3P1d3x2x6x7.jpg", options: ["The Truman Show", "Eternal Sunshine", "Yes Man", "Liar Liar"] },
+            // SNAPSHOTS (TEK KARE)
+            { type: "movie", genre: "snapshot", hint: "Kore, Çekiç", correct: "Oldboy", snapshot: "https://image.tmdb.org/t/p/original/r3pPehX4ik8pOR1E8UPNDafuuE4.jpg", options: ["Oldboy", "Parasite", "The Chaser", "Memories of Murder"] },
             { type: "movie", genre: "snapshot", hint: "Uzay, Monolit", correct: "2001: A Space Odyssey", snapshot: "https://image.tmdb.org/t/p/original/w7eOQ0y3jW05a1b25z8P0z6.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Gravity"] },
-            { type: "movie", genre: "snapshot", hint: "Sarı Eşofman, Motorsiklet", correct: "Kill Bill: Vol. 1", snapshot: "https://image.tmdb.org/t/p/original/v7TaX8kXMXs5yGGxuzM9cMDNG5H.jpg", options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Death Proof", "Sin City"] },
-            { type: "movie", genre: "snapshot", hint: "Kırmızı Balon, Yağmurluk", correct: "It", snapshot: "https://image.tmdb.org/t/p/original/tcheoA2nPATCm2vvXw2hZsxc790.jpg", options: ["It", "Stranger Things", "Dark", "Poltergeist"] },
-            { type: "movie", genre: "snapshot", hint: "Piyon, Satranç, Ölüm", correct: "The Seventh Seal", snapshot: "https://image.tmdb.org/t/p/original/b099o14L3j58z8h2V3fT3r1w1.jpg", options: ["The Seventh Seal", "Persona", "Wild Strawberries", "8½"] },
-            { type: "movie", genre: "snapshot", hint: "Çöl, Baharat", correct: "Dune: Part One", snapshot: "https://image.tmdb.org/t/p/original/2uNw4WbgwhvF1dTrTj5L90X4b5.jpg", options: ["Dune: Part One", "Star Wars", "Mad Max: Fury Road", "Blade Runner 2049"] },
+            { type: "movie", genre: "snapshot", hint: "Reality Show, Merdiven", correct: "The Truman Show", snapshot: "https://image.tmdb.org/t/p/original/e3P1d3x2x6x7.jpg", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Yes Man"] },
+            { type: "movie", genre: "snapshot", hint: "Western, Düello", correct: "The Good, the Bad and the Ugly", snapshot: "https://image.tmdb.org/t/p/original/x1peF1Q6u5Wq75e5fK3e5.jpg", options: ["The Good, the Bad and the Ugly", "Django", "Unforgiven", "Once Upon a Time in the West"] },
+            { type: "movie", genre: "snapshot", hint: "Sarı Eşofman, Motor", correct: "Kill Bill: Vol. 1", snapshot: "https://image.tmdb.org/t/p/original/v7TaX8kXMXs5yGGxuzM9cMDNG5H.jpg", options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Death Proof", "Sin City"] },
+            { type: "movie", genre: "snapshot", hint: "Kırmızı Balon, Yağmur", correct: "It", snapshot: "https://image.tmdb.org/t/p/original/tcheoA2nPATCm2vvXw2hZsxc790.jpg", options: ["It", "Stranger Things", "Dark", "Poltergeist"] },
+            { type: "movie", genre: "snapshot", hint: "Satranç, Ölüm", correct: "The Seventh Seal", snapshot: "https://image.tmdb.org/t/p/original/b099o14L3j58z8h2V3fT3r1w1.jpg", options: ["The Seventh Seal", "Persona", "Wild Strawberries", "8½"] },
             { type: "movie", genre: "snapshot", hint: "Dans, Lise", correct: "Grease", snapshot: "https://image.tmdb.org/t/p/original/ijB3jS7hQ7E21e2r3223.jpg", options: ["Grease", "Dirty Dancing", "Footloose", "Hairspray"] },
-            { type: "movie", genre: "snapshot", hint: "Banyo, Kan, Hitchcock", correct: "Psycho", snapshot: "https://image.tmdb.org/t/p/original/81d8oyEFx7i4j6IawbZpUOqFVo.jpg", options: ["Psycho", "Birds", "Vertigo", "Rear Window"] },
+            { type: "movie", genre: "snapshot", hint: "Banyo, Kan", correct: "Psycho", snapshot: "https://image.tmdb.org/t/p/original/81d8oyEFx7i4j6IawbZpUOqFVo.jpg", options: ["Psycho", "Birds", "Vertigo", "Rear Window"] },
             { type: "movie", genre: "snapshot", hint: "Gemi Batıyor", correct: "Titanic", snapshot: "https://image.tmdb.org/t/p/original/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
-            { type: "movie", genre: "snapshot", hint: "Yüzük, Yanardağ", correct: "The Lord of the Rings: The Return of the King", snapshot: "https://image.tmdb.org/t/p/original/rCzpDGLbOoPwLjy3OAm5NUPOtrC.jpg", options: ["LOTR: Return of the King", "The Hobbit", "Game of Thrones", "Warcraft"] },
-            { type: "movie", genre: "snapshot", hint: "Keanu Reeves, Mermi", correct: "The Matrix", snapshot: "https://image.tmdb.org/t/p/original/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg", options: ["The Matrix", "John Wick", "Constantine", "Equilibrium"] },
-            { type: "movie", genre: "snapshot", hint: "Aslan, Kaya", correct: "The Lion King", snapshot: "https://image.tmdb.org/t/p/original/2WfNF6VPSqwR7s1F82x1p1.jpg", options: ["The Lion King", "Madagascar", "Jungle Book", "Tarzan"] },
-            { type: "movie", genre: "snapshot", hint: "Mavi İnsanlar", correct: "Avatar", snapshot: "https://image.tmdb.org/t/p/original/kyeqWdyUXW608qlYkRqosgbbJyK.jpg", options: ["Avatar", "Guardians of the Galaxy", "Valerian", "Warcraft"] },
-            { type: "movie", genre: "snapshot", hint: "Oyuncak Kovboy", correct: "Toy Story", snapshot: "https://image.tmdb.org/t/p/original/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg", options: ["Toy Story", "Small Soldiers", "Cars", "Bug's Life"] },
 
-            // =================================================
+            // FİLMLER (POSTER + PALET)
+            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://image.tmdb.org/t/p/w500/ykRPzwJ7MSClPFR33fG6T2t16S8.jpg", colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
+            { type: "movie", genre: "scifi", hint: "Kara Delik", correct: "Interstellar", poster: "https://image.tmdb.org/t/p/w500/gEU2QniL6C971PN668mgz8QAqQ.jpg", colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "Arrival"] },
+            { type: "movie", genre: "scifi", hint: "Uzaylı Dili", correct: "Arrival", poster: "https://image.tmdb.org/t/p/w500/x2FJsf1ElAgr63C3cwpfkl94Lx.jpg", colors: ["#2E4053", "#5D6D7E", "#AEB6BF", "#17202A", "#000000", "#1C2833", "#85929E", "#D5D8DC"], options: ["Arrival", "Contact", "District 9", "Dune"] },
+            { type: "movie", genre: "scifi", hint: "Neon, Cyberpunk", correct: "Blade Runner 2049", poster: "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg", colors: ["#F28C0F", "#D35400", "#E67E22", "#003B59", "#000000", "#A67A53", "#5E6C6F", "#17202A"], options: ["Blade Runner 2049", "Tron: Legacy", "Dune", "Oblivion"] },
+            { type: "movie", genre: "scifi", hint: "Mars'ta Tek Başına", correct: "The Martian", poster: "https://image.tmdb.org/t/p/w500/5BHuvQ6p9kfc091Z8RiFNhAwL4J.jpg", colors: ["#D35400", "#E67E22", "#A04000", "#873600", "#FAD7A0", "#FFFFFF", "#1C2833", "#000000"], options: ["The Martian", "Interstellar", "Red Planet", "Prometheus"] },
+            { type: "movie", genre: "cult", hint: "Miami, Büyüme", correct: "Moonlight", poster: "https://image.tmdb.org/t/p/w500/49U1d7XJ93b0Qeb1v6s57d6l8Z.jpg", colors: ["#000000", "#0B0B3B", "#101050", "#1A237E", "#303F9F", "#3F51B5", "#283593", "#C5CAE9"], options: ["Moonlight", "Pariah", "Boyz n the Hood", "Green Book"] },
+            { type: "movie", genre: "palettes", hint: "Wes Anderson, Çöl", correct: "Asteroid City", poster: "https://image.tmdb.org/t/p/w500/qfcJJJZ276yK1x2Q2v6b3w.jpg", colors: ["#FAD7A0", "#F8C471", "#F5B041", "#F39C12", "#5DADE2", "#3498DB", "#2E86C1", "#D6EAF8"], options: ["Asteroid City", "Moonrise Kingdom", "The Royal Tenenbaums", "Nope"] },
+            { type: "movie", genre: "palettes", hint: "Pembe Otel", correct: "The Grand Budapest Hotel", poster: "https://image.tmdb.org/t/p/w500/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg", colors: ["#F29FCD", "#E0218A", "#C2185B", "#880E4F", "#FCE4EC", "#4A148C", "#7B1FA2", "#BA68C8"], options: ["The Grand Budapest Hotel", "French Dispatch", "Amélie", "Marie Antoinette"] },
+            { type: "movie", genre: "horror", hint: "Gündüz Korkusu", correct: "Midsommar", poster: "https://image.tmdb.org/t/p/w500/7LEI8ulZzO5gy9JwyMcP8P52lpa.jpg", colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Witch"] },
+            { type: "movie", genre: "cult", hint: "Dans, Ucuz Roman", correct: "Pulp Fiction", poster: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg", colors: ["#000000", "#17202A", "#B03A2E", "#E74C3C", "#F1C40F", "#F39C12", "#F4D03F", "#FFFFFF"], options: ["Pulp Fiction", "Reservoir Dogs", "Kill Bill", "Jackie Brown"] }
+        ];
 
         // --- DEĞİŞKENLER ---
         let myName="", myRoomCode="", myId="", isHost=false;
         let gameQuestions=[], currentQIndex=0, score=0, timerInterval;
         let totalTime=60, isPlaying=false, currentMode="movie";
 
-        // --- UI YÖNETİMİ ---
+        // --- UI ---
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -315,7 +302,7 @@
         }
         function generateCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
 
-        // --- TEK KİŞİLİK OYUN (Kodsuz) ---
+        // --- TEK KİŞİLİK OYUN ---
         function startSinglePlayerGame() {
             myName = document.getElementById('username').value.trim() || "Sinefil";
             isMultiplayer = false;
@@ -326,7 +313,7 @@
             startGame(config);
         }
 
-        // --- MULTIPLAYER İŞLEMLERİ ---
+        // --- MULTIPLAYER ---
         function initFirebase() {
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             if (!db) db = firebase.database();
@@ -404,7 +391,6 @@
             showScreen('screen-game');
             currentQIndex=0; score=0; isPlaying=true; totalTime=60;
 
-            // Görünüm Ayarları
             document.getElementById('quote-view').style.display = (currentMode==='quote')?'flex':'none';
             document.getElementById('snapshot-view').style.display = (currentMode==='snapshot')?'block':'none';
             
@@ -444,12 +430,8 @@
                 document.getElementById('hint-display').innerText = gameQuestions[currentQIndex].hint;
                 document.getElementById('btn-hint').disabled = true;
                 
-                // İpucunda görsel netleşsin
-                const pImg = document.getElementById('game-poster');
-                const sImg = document.getElementById('game-snapshot');
-                
-                pImg.className = "reveal-mode";
-                sImg.className = "reveal-mode";
+                if(currentMode==='movie') document.getElementById('game-poster').classList.add('revealed');
+                if(currentMode==='snapshot') document.getElementById('game-snapshot').classList.add('revealed');
             }
         }
 
@@ -461,16 +443,11 @@
             document.getElementById('btn-hint').disabled = false;
             const optBox = document.getElementById('options-box'); optBox.innerHTML='';
 
-            // Görselleri PİKSELLİ hale getir (Sıfırla)
             const pImg = document.getElementById('game-poster');
             const sImg = document.getElementById('game-snapshot');
             
-            // Önce src boşalt ki eski resim görünmesin
-            pImg.src = ""; sImg.src = "";
-            
-            // Sonra class'ı pixel yap
-            pImg.className = "pixel-mode";
-            sImg.className = "pixel-mode";
+            pImg.classList.remove('revealed');
+            sImg.classList.remove('revealed');
 
             if(currentMode === 'quote') {
                 document.getElementById('game-quote').innerText = `"${q.text}"`;
@@ -500,11 +477,9 @@
                 score+=10; document.getElementById('score-display').innerText=score;
                 btn.classList.add('correct');
                 
-                // Doğru ise Netleştir
-                if(currentMode==='movie') document.getElementById('game-poster').className = "reveal-mode";
-                if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "reveal-mode";
+                if(currentMode==='movie') document.getElementById('game-poster').classList.add('revealed');
+                if(currentMode==='snapshot') document.getElementById('game-snapshot').classList.add('revealed');
                 
-                // ANINDA GEÇİŞ (100ms)
                 setTimeout(()=>{ if(isPlaying){currentQIndex++; loadQuestion();} }, 100);
             } else {
                 btn.classList.add('wrong');
