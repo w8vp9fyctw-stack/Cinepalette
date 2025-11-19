@@ -3,42 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CINEPALETTE: Online</title>
+    <title>CINEPALETTE: Categories</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #fff; text-align: center; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
-        .screen { display: none; width: 90%; max-width: 500px; padding: 20px; background: #1e1e1e; border-radius: 15px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        /* --- TASARIM --- */
+        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #fff; text-align: center; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; }
+        .screen { display: none; width: 90%; max-width: 500px; padding: 25px; background: #1e1e1e; border-radius: 15px; margin-top: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
         .active { display: flex; flex-direction: column; align-items: center; }
         
-        h1 { color: #FFD700; margin-bottom: 5px; }
-        input, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; box-sizing: border-box; }
-        input { background: #333; color: #fff; border: 1px solid #444; }
-        button { background: #FFD700; color: #000; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        h1 { color: #FFD700; margin-bottom: 5px; letter-spacing: 2px; }
+        h2 { margin-top: 0; color: #eee; }
+        .subtitle { color: #aaa; font-size: 14px; margin-bottom: 20px; }
+
+        /* Form Elemanları */
+        input, select, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; box-sizing: border-box; }
+        input, select { background: #333; color: #fff; border: 1px solid #444; outline: none; }
+        input:focus, select:focus { border-color: #FFD700; }
+        
+        button { background: #FFD700; color: #000; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 15px; }
         button:hover { transform: scale(1.02); background: #ffea70; }
-        button:disabled { background: #555; color: #888; cursor: not-allowed; }
         
-        .room-code { font-size: 40px; letter-spacing: 5px; color: #28a745; font-family: monospace; margin: 20px 0; border: 2px dashed #444; padding: 10px; width: 100%; }
-        
-        /* Lobi Listesi */
-        #player-list { list-style: none; padding: 0; width: 100%; }
-        #player-list li { background: #2a2a2a; margin: 5px 0; padding: 10px; border-radius: 5px; display: flex; justify-content: space-between; }
+        /* Kategori Etiketi */
+        .category-tag { background: #333; color: #FFD700; padding: 5px 10px; border-radius: 5px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+
+        /* Oda Kodu */
+        .room-code { font-size: 40px; letter-spacing: 5px; color: #28a745; font-family: monospace; margin: 15px 0; border: 2px dashed #444; padding: 10px; width: 100%; }
         
         /* Oyun Alanı */
-        .palette-container { display: flex; width: 100%; height: 150px; border: 3px solid #fff; margin-bottom: 15px; border-radius: 8px; overflow: hidden; }
+        .palette-container { display: flex; width: 100%; height: 160px; border: 4px solid #fff; margin-bottom: 20px; border-radius: 10px; overflow: hidden; }
         .color-box { flex: 1; height: 100%; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
-        .option-btn { padding: 15px; background: #333; color: #fff; }
-        .correct { background: #28a745 !important; }
-        .wrong { background: #dc3545 !important; }
         
-        /* Tablo */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #444; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+        .option-btn { padding: 15px; background: #2a2a2a; color: #fff; border: 1px solid #444; cursor: pointer; transition: 0.2s; }
+        .option-btn:hover { background: #3a3a3a; }
+        
+        .correct { background: #28a745 !important; border-color: #28a745; }
+        .wrong { background: #dc3545 !important; border-color: #dc3545; }
+        
+        /* Liste ve Tablo */
+        ul { list-style: none; padding: 0; width: 100%; }
+        li { background: #2a2a2a; margin: 5px 0; padding: 12px; border-radius: 5px; display: flex; justify-content: space-between; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
         th { color: #FFD700; }
         
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #FFD700; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
+        .loader { border: 4px solid #333; border-top: 4px solid #FFD700; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -46,56 +58,78 @@
 
     <div id="screen-login" class="screen active">
         <h1>CINEPALETTE</h1>
-        <p>Online Sinema Bilgi Yarışması</p>
-        <input type="text" id="username" placeholder="Takma Adın Nedir?">
-        <hr style="width:100%; border-color:#333">
-        <button onclick="createRoom()">YENİ ODA KUR</button>
-        <p style="font-size:12px; color:#aaa">- VEYA -</p>
-        <input type="text" id="room-code-input" placeholder="Oda Kodu Gir (Örn: 1234)">
-        <button onclick="joinRoom()">ODAYA KATIL</button>
+        <p class="subtitle">Online Sinema Bilgi Yarışması</p>
+        
+        <input type="text" id="username" placeholder="Adın / Lakabın">
+        
+        <div style="background: #252525; padding: 15px; border-radius: 10px; margin: 20px 0; width: 100%; box-sizing: border-box;">
+            <h3 style="margin:0 0 10px 0; color:#FFD700; text-align:left;">ODA KUR</h3>
+            <label style="display:block; text-align:left; color:#aaa; font-size:12px; margin-bottom:5px;">Kategori Seç:</label>
+            <select id="category-select">
+                <option value="mix">🎲 Karışık (Hepsi)</option>
+                <option value="horror">👻 Korku / Gerilim</option>
+                <option value="scifi">🚀 Bilim Kurgu</option>
+                <option value="animation">🧸 Animasyon</option>
+                <option value="cult">🎬 Kült Filmler</option>
+            </select>
+            <button onclick="createRoom()">ODA OLUŞTUR</button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; margin: 20px 0;">
+            <hr style="flex:1; border-color:#333"> <span style="color:#555; font-size:12px">VEYA</span> <hr style="flex:1; border-color:#333">
+        </div>
+
+        <input type="text" id="room-code-input" placeholder="Oda Kodu Gir (Varsa)">
+        <button onclick="joinRoom()" style="background:#444; color:#fff;">ODAYA KATIL</button>
     </div>
 
     <div id="screen-lobby" class="screen">
         <h2>LOBİ</h2>
-        <p>Arkadaşlarına bu kodu ver:</p>
+        <div class="category-tag" id="lobby-category-display">Kategori: ...</div>
+        <p style="margin-bottom:5px">Oda Kodu:</p>
         <div class="room-code" id="display-room-code">----</div>
-        <p>Bağlanan Oyuncular:</p>
+        
+        <p>Oyuncular:</p>
         <ul id="player-list"></ul>
+        
         <div id="host-controls" style="display:none; width:100%">
-            <button onclick="startGameByHost()">HERKES İÇİN BAŞLAT</button>
+            <button onclick="startGameByHost()">BAŞLAT</button>
         </div>
         <p id="guest-msg" style="color:#aaa; font-size:12px">Oda sahibi bekleniyor...</p>
     </div>
 
     <div id="screen-game" class="screen">
-        <div style="display:flex; justify-content:space-between; width:100%; font-weight:bold; margin-bottom:10px">
-            <span id="game-timer">15</span>
+        <div style="display:flex; justify-content:space-between; width:100%; font-weight:bold; margin-bottom:15px">
+            <span id="game-timer" style="font-size:20px; color:#FFD700">15</span>
             <span id="game-score">0 Puan</span>
         </div>
+        
+        <div class="category-tag" id="game-category-tag"></div>
         <div class="palette-container" id="palette-box"></div>
         <div class="options-grid" id="options-box"></div>
-        <div id="game-msg" style="height:20px; font-weight:bold; margin-top:10px"></div>
+        <div id="game-msg" style="height:20px; font-weight:bold; margin-top:15px"></div>
     </div>
 
     <div id="screen-waiting" class="screen">
-        <h2>TAMAMLADIN!</h2>
-        <p>Diğer oyuncuların bitirmesi bekleniyor...</p>
+        <h2>BİTİRDİN!</h2>
+        <p>Diğer sinefillerin bitirmesi bekleniyor...</p>
         <div class="loader"></div>
-        <p id="waiting-status">Durum bekleniyor...</p>
+        <p id="waiting-status" style="color:#aaa">...</p>
     </div>
 
     <div id="screen-result" class="screen">
-        <h1>SONUÇLAR</h1>
+        <h1>🏆 SONUÇLAR</h1>
+        <div class="category-tag" id="result-category-display"></div>
         <table id="leaderboard-table">
-            <thead><tr><th>Sıra</th><th>Oyuncu</th><th>Puan</th></tr></thead>
+            <thead><tr><th>#</th><th>Oyuncu</th><th>Puan</th></tr></thead>
             <tbody></tbody>
         </table>
-        <button onclick="location.reload()" style="margin-top:20px">ÇIKIŞ</button>
+        <button onclick="location.reload()" style="margin-top:20px">ANA MENÜYE DÖN</button>
     </div>
 
     <script>
-    
-        const firebaseConfig = {
+        // -----------------------------------------------------------
+       onst firebaseConfig = {
   apiKey: "AIzaSyCKXuqXEtQ_dr1FNw-8NZj0BpeoSDl_mRY",
   authDomain: "cinepalette-e7a2b.firebaseapp.com",
   databaseURL: "https://cinepalette-e7a2b-default-rtdb.firebaseio.com",
@@ -104,174 +138,201 @@
   messagingSenderId: "933599264840",
   appId: "1:933599264840:web:667563470c4ea338f7187d"
 };
+        // -----------------------------------------------------------
 
-        // Firebase Başlat
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // --- 2. OYUN VERİSİ ---
-        const questions = [
-            { colors: ["#000000", "#0D2615", "#00FF41", "#FFFFFF"], correct: "The Matrix", options: ["Hulk", "The Matrix", "Alien", "Tron"] },
-            { colors: ["#E0218A", "#F5BDD6", "#40E0D0", "#FFFDD0"], correct: "Barbie", options: ["Mean Girls", "Legally Blonde", "Barbie", "Clueless"] },
-            { colors: ["#8A1C26", "#D98F25", "#1C3F38", "#FFFFFF"], correct: "Joker", options: ["Iron Man", "Joker", "Halloween", "It"] },
-            { colors: ["#F5DEB3", "#8B4513", "#2F4F4F", "#000000"], correct: "Dune", options: ["Mad Max", "Dune", "Star Wars", "The Martian"] },
-            { colors: ["#FFD700", "#000000", "#FF0000", "#FFFFFF"], correct: "Kill Bill", options: ["Pulp Fiction", "Kill Bill", "Sin City", "Taxi Driver"] }
+        // --- FİLM VERİTABANI (GENİŞLETİLMİŞ) ---
+        const allQuestions = [
+            // --- KORKU (HORROR) ---
+            { category: "horror", colors: ["#000000", "#8B0000", "#FF4500", "#1C1C1C", "#FFFFFF"], correct: "The Shining", options: ["It", "The Shining", "Carrie", "Misery"] },
+            { category: "horror", colors: ["#FFFFFF", "#FF0000", "#FFFF00", "#000000", "#555555"], correct: "It", options: ["It", "Joker", "Clown", "Poltergeist"] },
+            { category: "horror", colors: ["#000000", "#1C1C1C", "#D35400", "#2E4053", "#FFFFFF"], correct: "Halloween", options: ["Scream", "Halloween", "Friday the 13th", "The Ring"] },
+            { category: "horror", colors: ["#000000", "#5F6A6A", "#FDFEFE", "#922B21", "#17202A"], correct: "Psycho", options: ["Birds", "Psycho", "Vertigo", "Rear Window"] },
+            { category: "horror", colors: ["#000000", "#FFFFFF", "#E74C3C", "#2C3E50", "#7F8C8D"], correct: "Scream", options: ["Scary Movie", "Scream", "I Know What You Did Last Summer", "Saw"] },
+            { category: "horror", colors: ["#1B4F72", "#111111", "#145A32", "#000000", "#99A3A4"], correct: "Alien", options: ["Predator", "Alien", "The Thing", "Gravity"] },
+            { category: "horror", colors: ["#F1C40F", "#E67E22", "#FFFFFF", "#27AE60", "#D35400"], correct: "Midsommar", options: ["Midsommar", "Hereditary", "The Witch", "Get Out"] },
+
+            // --- BİLİM KURGU (SCIFI) ---
+            { category: "scifi", colors: ["#000000", "#0D2615", "#00FF41", "#1A4D2E", "#FFFFFF"], correct: "The Matrix", options: ["Hulk", "The Matrix", "Tron", "Inception"] },
+            { category: "scifi", colors: ["#F5DEB3", "#C2B280", "#8B4513", "#2F4F4F", "#000000"], correct: "Dune", options: ["Mad Max", "Dune", "Star Wars", "Prometheus"] },
+            { category: "scifi", colors: ["#F39C12", "#1B2631", "#E74C3C", "#3498DB", "#FFFFFF"], correct: "Star Wars", options: ["Star Trek", "Star Wars", "Guardians of Galaxy", "Avatar"] },
+            { category: "scifi", colors: ["#F28C0F", "#003B59", "#A67A53", "#0D0D0D", "#5E6C6F"], correct: "Blade Runner 2049", options: ["Blade Runner 2049", "Cyberpunk", "Ghost in the Shell", "Total Recall"] },
+            { category: "scifi", colors: ["#000000", "#1C2833", "#F4D03F", "#5D6D7E", "#FFFFFF"], correct: "Interstellar", options: ["Gravity", "Arrival", "Interstellar", "The Martian"] },
+            { category: "scifi", colors: ["#2E86C1", "#17202A", "#2ECC71", "#FFFFFF", "#34495E"], correct: "Avatar", options: ["Avatar", "Smurfs", "Warcraft", "Valerian"] },
+
+            // --- ANİMASYON (ANIMATION) ---
+            { category: "animation", colors: ["#4B8BBE", "#FFD43B", "#FFFFFF", "#306998", "#000000"], correct: "Minions", options: ["Simpsonlar", "Sünger Bob", "Minions", "Pokemon"] },
+            { category: "animation", colors: ["#7D3C98", "#2ECC71", "#F39C12", "#E74C3C", "#3498DB"], correct: "Inside Out", options: ["Up", "Inside Out", "Soul", "Coco"] },
+            { category: "animation", colors: ["#C0392B", "#F1C40F", "#2980B9", "#34495E", "#ECF0F1"], correct: "Toy Story", options: ["Cars", "Toy Story", "Monsters Inc", "Bug's Life"] },
+            { category: "animation", colors: ["#82E0AA", "#196F3D", "#F5B041", "#935116", "#FDFEFE"], correct: "Shrek", options: ["Shrek", "Tangled", "Frozen", "Brave"] },
+            { category: "animation", colors: ["#E74C3C", "#3498DB", "#17202A", "#F1C40F", "#8E44AD"], correct: "Spider-Man: Into the Spider-Verse", options: ["Spider-Man", "Incredibles", "Big Hero 6", "Avengers"] },
+
+            // --- KÜLT / DRAM (CULT) ---
+            { category: "cult", colors: ["#E0218A", "#F5BDD6", "#40E0D0", "#FFFDD0", "#FFFFFF"], correct: "Barbie", options: ["Mean Girls", "Legally Blonde", "Barbie", "Clueless"] },
+            { category: "cult", colors: ["#8A1C26", "#D98F25", "#1C3F38", "#F2E9D8", "#000000"], correct: "Joker", options: ["Iron Man", "Joker", "The Batman", "V for Vendetta"] },
+            { category: "cult", colors: ["#FFD700", "#FFF000", "#000000", "#FF0000", "#FFFFFF"], correct: "Kill Bill", options: ["Pulp Fiction", "Kill Bill", "Sin City", "Oldboy"] },
+            { category: "cult", colors: ["#F29FCD", "#581845", "#86C0D7", "#F2E9D8", "#5D3F6A"], correct: "Grand Budapest Hotel", options: ["French Dispatch", "Grand Budapest Hotel", "Amélie", "Moonrise Kingdom"] },
+            { category: "cult", colors: ["#D93221", "#30632A", "#F2C53D", "#F2E9D8", "#000000"], correct: "Amélie", options: ["Amélie", "Chocolat", "Midnight in Paris", "La Vie en Rose"] },
+            { category: "cult", colors: ["#102C54", "#4B367C", "#222222", "#185A8C", "#000000"], correct: "La La Land", options: ["Moonlight", "La La Land", "A Star is Born", "Whiplash"] },
+            { category: "cult", colors: ["#922B21", "#17202A", "#F1948A", "#D7DBDD", "#566573"], correct: "Fight Club", options: ["Se7en", "Fight Club", "Snatch", "Trainspotting"] }
         ];
 
-        // --- 3. DEĞİŞKENLER ---
-        let myName = "";
-        let myRoomCode = "";
-        let myId = ""; // Firebase tarafından verilen unique ID
-        let currentQIndex = 0;
-        let score = 0;
-        let lives = 3;
-        let timerInterval;
+        // --- DEĞİŞKENLER ---
+        let myName = "", myRoomCode = "", myId = "";
         let isHost = false;
+        let currentQuestions = [];
+        let currentQIndex = 0, score = 0, lives = 3;
+        let timerInterval;
 
-        // --- 4. ODA YÖNETİMİ ---
-
-        function generateRoomCode() {
-            return Math.floor(1000 + Math.random() * 9000).toString();
-        }
-
+        // --- YARDIMCI FONKSİYONLAR ---
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
+        function generateCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
+        function getCategoryName(key) {
+            const names = { "mix": "Karışık", "horror": "Korku/Gerilim", "scifi": "Bilim Kurgu", "animation": "Animasyon", "cult": "Kült Filmler" };
+            return names[key] || "Bilinmiyor";
+        }
+
+        // -----------------------------------------------------------
+        // 2. ODA KURMA VE KATILMA
+        // -----------------------------------------------------------
 
         function createRoom() {
             myName = document.getElementById('username').value.trim();
-            if(!myName) return alert("Lütfen bir isim gir!");
+            const category = document.getElementById('category-select').value;
+            if(!myName) return alert("İsim girmelisin!");
 
-            myRoomCode = generateRoomCode();
+            myRoomCode = generateCode();
             isHost = true;
 
-            // Odayı veritabanında oluştur
-            const roomRef = db.ref('rooms/' + myRoomCode);
-            roomRef.set({
+            // Odayı Kur (Kategori bilgisini de ekle)
+            db.ref('rooms/' + myRoomCode).set({
                 status: "lobby",
+                category: category, // Seçilen kategori burada saklanıyor
                 createdAt: Date.now()
             });
 
-            // Kendimi oyuncu olarak ekle
-            const playerRef = roomRef.child('players').push();
-            myId = playerRef.key;
-            playerRef.set({
-                name: myName,
-                score: 0,
-                status: "waiting" // waiting, playing, finished
-            });
-
-            setupLobbyListener();
+            joinMyOwnRoom();
         }
 
         function joinRoom() {
             myName = document.getElementById('username').value.trim();
             myRoomCode = document.getElementById('room-code-input').value.trim();
-            if(!myName || !myRoomCode) return alert("İsim ve Oda Kodu gerekli!");
+            if(!myName || !myRoomCode) return alert("Bilgileri eksiksiz gir!");
 
             const roomRef = db.ref('rooms/' + myRoomCode);
-            
-            // Oda var mı kontrol et
-            roomRef.get().then((snapshot) => {
-                if (snapshot.exists()) {
-                    if(snapshot.val().status !== "lobby") return alert("Oyun çoktan başlamış!");
-                    
-                    // Odaya gir
-                    const playerRef = roomRef.child('players').push();
-                    myId = playerRef.key;
-                    playerRef.set({
-                        name: myName,
-                        score: 0,
-                        status: "waiting"
-                    });
-                    setupLobbyListener();
-
+            roomRef.get().then((snap) => {
+                if (snap.exists()) {
+                    if(snap.val().status !== "lobby") return alert("Oyun başlamış!");
+                    joinMyOwnRoom();
                 } else {
-                    alert("Böyle bir oda bulunamadı!");
+                    alert("Oda bulunamadı!");
                 }
             });
         }
 
-        function setupLobbyListener() {
+        function joinMyOwnRoom() {
+            // Kendimi oyuncu listesine ekle
+            const playerRef = db.ref(`rooms/${myRoomCode}/players`).push();
+            myId = playerRef.key;
+            playerRef.set({ name: myName, score: 0, status: "waiting" });
+
+            setupLobby();
+        }
+
+        function setupLobby() {
             showScreen('screen-lobby');
             document.getElementById('display-room-code').innerText = myRoomCode;
-            
-            if(isHost) {
-                document.getElementById('host-controls').style.display = 'block';
-                document.getElementById('guest-msg').style.display = 'none';
-            }
+            if(isHost) document.getElementById('host-controls').style.display = 'block';
+            else document.getElementById('guest-msg').style.display = 'block';
 
+            // Dinleyiciler
             const roomRef = db.ref('rooms/' + myRoomCode);
 
-            // 1. Oyuncuları Dinle (Biri gelirse listeyi güncelle)
-            roomRef.child('players').on('value', (snapshot) => {
-                const players = snapshot.val();
+            // 1. Oyuncuları Dinle
+            roomRef.child('players').on('value', (snap) => {
                 const list = document.getElementById('player-list');
                 list.innerHTML = '';
-                if(players) {
-                    Object.values(players).forEach(p => {
+                if(snap.val()) {
+                    Object.values(snap.val()).forEach(p => {
                         const li = document.createElement('li');
-                        li.innerText = p.name + (p.status === "finished" ? " (Bitirdi)" : "");
+                        li.innerHTML = `<span>${p.name}</span> <span>${p.score || 0} P</span>`;
                         list.appendChild(li);
                     });
                 }
             });
 
-            // 2. Oyun Durumunu Dinle (Başladı mı?)
-            roomRef.child('status').on('value', (snapshot) => {
-                const status = snapshot.val();
-                if(status === 'playing') {
-                    // Oyun başladı!
-                    startGameLocal();
-                } else if (status === 'finished') {
-                    // Oyun bitti, sonuçları göster
+            // 2. Oda Bilgisi (Kategori Gösterimi)
+            roomRef.once('value').then(snap => {
+                const cat = snap.val().category;
+                document.getElementById('lobby-category-display').innerText = "Kategori: " + getCategoryName(cat);
+            });
+
+            // 3. Oyun Durumu
+            roomRef.child('status').on('value', (snap) => {
+                if(snap.val() === 'playing') {
+                    // Oyun başladı! Önce kategoriyi öğren, sonra oyunu kur.
+                    roomRef.child('category').once('value').then(catSnap => {
+                        startGame(catSnap.val());
+                    });
+                } else if(snap.val() === 'finished') {
                     showFinalResults();
                 }
             });
         }
 
         function startGameByHost() {
-            // Host butona basınca veritabanındaki durumu değiştirir
             db.ref('rooms/' + myRoomCode).update({ status: "playing" });
         }
 
-        // --- 5. OYUN MANTIĞI (YEREL) ---
+        // -----------------------------------------------------------
+        // 3. OYUN MOTORU
+        // -----------------------------------------------------------
 
-        function startGameLocal() {
+        function startGame(categoryKey) {
+            // Soruları Filtrele
+            if (categoryKey === 'mix') {
+                currentQuestions = allQuestions.sort(() => Math.random() - 0.5).slice(0, 10); // Rastgele 10 soru
+            } else {
+                // Sadece o kategoriyi al ve karıştır
+                currentQuestions = allQuestions.filter(q => q.category === categoryKey).sort(() => Math.random() - 0.5);
+            }
+
+            // UI Ayarla
             showScreen('screen-game');
+            document.getElementById('game-category-tag').innerText = getCategoryName(categoryKey);
+            
             currentQIndex = 0;
             score = 0;
             lives = 3;
-            loadQuestion();
             
-            // Veritabanında durumumu "playing" yap
             db.ref(`rooms/${myRoomCode}/players/${myId}`).update({ status: "playing" });
+            loadQuestion();
         }
 
         function loadQuestion() {
-            if (currentQIndex >= questions.length || lives <= 0) {
+            if (currentQIndex >= currentQuestions.length || lives <= 0) {
                 finishGameLocal();
                 return;
             }
 
-            const q = questions[currentQIndex];
-            const paletteDiv = document.getElementById('palette-box');
-            const optionsDiv = document.getElementById('options-box');
-            const msgDiv = document.getElementById('game-msg');
+            const q = currentQuestions[currentQIndex];
             
-            paletteDiv.innerHTML = '';
-            optionsDiv.innerHTML = '';
-            msgDiv.innerText = '';
-
+            // Temizlik
+            document.getElementById('palette-box').innerHTML = '';
+            document.getElementById('options-box').innerHTML = '';
+            document.getElementById('game-msg').innerText = '';
+            
             // Renkler
             q.colors.forEach(c => {
                 const div = document.createElement('div');
                 div.className = 'color-box';
                 div.style.backgroundColor = c;
-                paletteDiv.appendChild(div);
+                document.getElementById('palette-box').appendChild(div);
             });
 
             // Şıklar
@@ -280,85 +341,82 @@
                 btn.className = 'option-btn';
                 btn.innerText = opt;
                 btn.onclick = () => checkAnswer(opt, q.correct, btn);
-                optionsDiv.appendChild(btn);
+                document.getElementById('options-box').appendChild(btn);
             });
 
-            // Süre
             startTimer();
         }
 
         function startTimer() {
             let timeLeft = 15;
-            document.getElementById('game-timer').innerText = timeLeft;
+            const timerEl = document.getElementById('game-timer');
+            timerEl.innerText = timeLeft;
+            
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 timeLeft--;
-                document.getElementById('game-timer').innerText = timeLeft;
+                timerEl.innerText = timeLeft;
                 if(timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    lives--; // Süre bitti can git
-                    currentQIndex++;
-                    loadQuestion();
+                    handleWrong("Süre Doldu!");
                 }
             }, 1000);
         }
 
         function checkAnswer(selected, correct, btn) {
             clearInterval(timerInterval);
-            const allBtns = document.querySelectorAll('.option-btn');
-            allBtns.forEach(b => b.disabled = true);
+            document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
 
-            if(selected === correct) {
+            if (selected === correct) {
                 btn.classList.add('correct');
                 score += 10;
                 document.getElementById('game-score').innerText = score + " Puan";
+                setTimeout(() => { currentQIndex++; loadQuestion(); }, 1000);
             } else {
                 btn.classList.add('wrong');
-                lives--;
+                handleWrong("Yanlış!");
             }
-
-            setTimeout(() => {
-                if(lives <= 0) {
-                    finishGameLocal();
-                } else {
-                    currentQIndex++;
-                    loadQuestion();
-                }
-            }, 1000);
         }
 
+        function handleWrong(msg) {
+            lives--;
+            const msgDiv = document.getElementById('game-msg');
+            msgDiv.innerText = msg;
+            msgDiv.style.color = "#dc3545";
+            
+            setTimeout(() => {
+                if(lives <= 0) finishGameLocal();
+                else { currentQIndex++; loadQuestion(); }
+            }, 1500);
+        }
+
+        // -----------------------------------------------------------
+        // 4. SONUÇ YÖNETİMİ
+        // -----------------------------------------------------------
+
         function finishGameLocal() {
-            // Oyunum bitti, puanımı gönder
+            clearInterval(timerInterval);
             db.ref(`rooms/${myRoomCode}/players/${myId}`).update({
                 score: score,
                 status: "finished"
             });
 
             showScreen('screen-waiting');
-            checkIfAllFinished();
+            checkAllFinished();
         }
 
-        // --- 6. BİTİŞ KONTROLÜ ---
-
-        function checkIfAllFinished() {
-            // Burası biraz trickli: Herkesin bitirip bitirmediğini kontrol ediyoruz.
-            // Sadece Host veya herkes kendi kontrol edebilir. 
-            
+        function checkAllFinished() {
             const playersRef = db.ref(`rooms/${myRoomCode}/players`);
-            
-            playersRef.on('value', (snapshot) => {
-                const players = snapshot.val();
-                if(!players) return;
+            playersRef.on('value', (snap) => {
+                if(!snap.val()) return;
+                const arr = Object.values(snap.val());
+                const finishedCount = arr.filter(p => p.status === "finished").length;
                 
-                const playerArray = Object.values(players);
-                const totalPlayers = playerArray.length;
-                const finishedPlayers = playerArray.filter(p => p.status === "finished").length;
-
                 document.getElementById('waiting-status').innerText = 
-                    `${finishedPlayers} / ${totalPlayers} oyuncu tamamladı.`;
+                    `${finishedCount} / ${arr.length} kişi tamamladı.`;
 
-                // Eğer herkes bitirdiyse ve ben Host isem, oyun statüsünü 'finished' yap
-                if(isHost && finishedPlayers === totalPlayers) {
+                // Eğer ben Host isem ve herkes bitirdiyse oyunu tamamen bitir
+                if(isHost && finishedCount === arr.length) {
                     db.ref('rooms/' + myRoomCode).update({ status: "finished" });
                 }
             });
@@ -369,24 +427,18 @@
             const tbody = document.querySelector('#leaderboard-table tbody');
             tbody.innerHTML = '';
 
-            db.ref(`rooms/${myRoomCode}/players`).once('value').then(snapshot => {
-                const players = Object.values(snapshot.val());
-                // Puana göre sırala
-                players.sort((a, b) => b.score - a.score);
+            db.ref(`rooms/${myRoomCode}/players`).once('value').then(snap => {
+                const players = Object.values(snap.val());
+                players.sort((a, b) => b.score - a.score); // Puana göre sırala
 
                 players.forEach((p, index) => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${p.name}</td>
-                        <td>${p.score}</td>
-                    `;
-                    if(index === 0) tr.style.color = "#FFD700"; // 1. Gold
+                    tr.innerHTML = `<td>${index+1}</td><td>${p.name}</td><td>${p.score}</td>`;
+                    if(index===0) tr.style.color = "#FFD700";
                     tbody.appendChild(tr);
                 });
             });
         }
-
     </script>
 </body>
 </html>
