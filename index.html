@@ -3,207 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CINEPALETTE: Ultimate</title>
+    <title>CINEPALETTE: Hardcore Edition</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- PREMIUM TASARIM --- */
+        /* --- CINEPHILE DARK TASARIM --- */
         :root {
-            --primary-red: #E50914;
-            --bg-gradient: linear-gradient(135deg, #000000, #1a1a1a, #0f0f0f);
-            --glass-bg: rgba(20, 20, 20, 0.90);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
-            --text-main: #ffffff;
-            --accent-yellow: #f1c40f;
+            --primary-red: #D81F26;
+            --bg-dark: #0a0a0a;
+            --glass-panel: rgba(20, 20, 20, 0.95);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-gold: #e5c100;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-main);
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at top, #1f1f1f 0%, #000000 100%);
+            color: #fff; margin: 0; min-height: 100vh;
             display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; margin: 0; overflow-x: hidden;
         }
 
-        /* Header */
+        /* Başlık */
         h1 {
-            font-family: 'Bebas Neue', cursive;
-            color: var(--primary-red);
-            font-size: 3.5rem; margin: 15px 0 5px 0;
-            letter-spacing: 2px; text-shadow: 0 4px 20px rgba(229, 9, 20, 0.8);
+            font-family: 'Bebas Neue', sans-serif; color: var(--primary-red);
+            font-size: 4rem; margin: 20px 0 0 0; letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(216, 31, 38, 0.4);
         }
-        
-        .subtitle { color: #888; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px; }
+        .tagline { color: #666; font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 30px; }
 
-        /* Screen Containers */
+        /* Ekranlar */
         .screen {
-            display: none; width: 90%; max-width: 550px; padding: 30px;
-            background: var(--glass-bg); border-radius: 20px;
-            border: var(--glass-border); box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-            position: relative;
+            display: none; width: 90%; max-width: 600px; padding: 40px;
+            background: var(--glass-panel); border: 1px solid var(--border-color);
+            border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            animation: slideIn 0.5s ease-out;
         }
-        .active { display: flex; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .active { display: flex; flex-direction: column; align-items: center; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Form Elements */
+        /* Giriş Elemanları */
         input, select {
-            width: 100%; padding: 15px; background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
-            color: white; font-family: inherit; margin-bottom: 15px; outline: none;
-            box-sizing: border-box;
+            width: 100%; padding: 18px; background: #141414; border: 1px solid #333;
+            color: #fff; font-family: inherit; margin-bottom: 15px; outline: none;
+            border-radius: 8px; font-size: 1rem;
         }
-        input:focus, select:focus { border-color: var(--primary-red); background: rgba(255,255,255,0.1); }
+        input:focus, select:focus { border-color: var(--primary-red); background: #1a1a1a; }
         
         button {
-            width: 100%; padding: 16px; background: var(--primary-red); color: white;
-            border: none; border-radius: 8px; font-weight: 800; letter-spacing: 1px;
-            cursor: pointer; transition: 0.2s; text-transform: uppercase;
+            width: 100%; padding: 20px; background: var(--primary-red); color: #fff;
+            border: none; border-radius: 8px; font-weight: 800; font-size: 1rem;
+            cursor: pointer; transition: 0.3s; letter-spacing: 1px; text-transform: uppercase;
         }
-        button:hover { transform: scale(1.02); box-shadow: 0 0 15px rgba(229,9,20,0.5); }
-        
+        button:hover { background: #b00e15; transform: scale(1.02); }
         .btn-secondary { background: #333; margin-top: 10px; }
-        .btn-secondary:hover { background: #444; box-shadow: none; }
+        .btn-secondary:hover { background: #444; }
 
-        /* --- OYUN ALANI --- */
-        .game-header { 
-            display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px; 
+        /* --- OYUN ARAYÜZÜ --- */
+        .top-hud { display: flex; justify-content: space-between; width: 100%; margin-bottom: 20px; align-items: center; }
+        .btn-exit { background: transparent; border: 1px solid #444; padding: 8px 20px; font-size: 0.8rem; width: auto; }
+        .btn-exit:hover { border-color: #fff; background: #222; transform: none; }
+
+        .score-badge { background: #222; padding: 5px 15px; border-radius: 20px; border: 1px solid #333; font-weight: bold; color: var(--text-gold); }
+
+        /* Görsel Alan */
+        .media-container {
+            width: 100%; background: #000; border: 1px solid #333; border-radius: 12px;
+            overflow: hidden; margin-bottom: 20px; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
         
-        /* Geri Butonu */
-        .btn-exit {
-            background: transparent; border: 1px solid #444; width: auto; padding: 8px 15px;
-            font-size: 0.8rem; color: #aaa; border-radius: 50px; font-weight: 600;
-        }
-        .btn-exit:hover { background: #333; color: #fff; transform: none; box-shadow: none; }
-
-        /* Sayaç */
-        .timer-box { font-family: 'Bebas Neue'; font-size: 3rem; color: #fff; line-height: 1; }
-        .timer-box.penalty { color: #ff0000; animation: shake 0.5s; }
-
-        /* Görsel Alanı */
-        .visual-container { 
-            width: 100%; display: flex; flex-direction: column; gap: 0; margin-bottom: 15px; 
-            border-radius: 12px; overflow: hidden; background: #000; border: 1px solid #333;
-        }
-
         /* Poster */
-        #poster-wrapper { width: 100%; height: 280px; display: none; position: relative; overflow: hidden; }
-        #game-poster { 
-            width: 100%; height: 100%; object-fit: cover; 
-            filter: blur(18px) brightness(0.6); transform: scale(1.1);
-            transition: filter 1.5s ease, transform 1.5s ease; 
-        }
-        #game-poster.revealed { filter: blur(0) brightness(1); transform: scale(1); }
+        #poster-view { width: 100%; height: 300px; display: none; position: relative; }
+        #game-poster { width: 100%; height: 100%; object-fit: cover; filter: blur(20px); transform: scale(1.1); transition: 1.5s ease; }
+        #game-poster.revealed { filter: blur(0); transform: scale(1); }
 
-        /* Zengin Palet (8 Renk) */
-        #palette-wrapper { width: 100%; height: 70px; display: none; }
-        .color-box { flex: 1; height: 100%; transition: transform 0.3s; }
-        .color-box:hover { transform: scaleY(1.1); z-index: 2; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        /* Palet (8 Renk) */
+        #palette-view { width: 100%; height: 80px; display: none; }
+        .color-strip { flex: 1; height: 100%; transition: transform 0.2s; }
+        .color-strip:hover { transform: scaleY(1.15); z-index: 10; }
 
         /* Diyalog */
-        #quote-wrapper {
-            display: none; width: 100%; padding: 40px 20px; box-sizing: border-box;
-            background: radial-gradient(circle, #222 0%, #000 100%);
-            text-align: center; border-bottom: 3px solid var(--primary-red);
+        #quote-view { 
+            display: none; padding: 50px 30px; text-align: center; 
+            background: radial-gradient(circle, #1a1a1a 0%, #000000 100%);
         }
-        #game-quote { font-style: italic; font-size: 1.2rem; color: #eee; font-family: 'Georgia', serif; }
+        .quote-text { font-family: 'Georgia', serif; font-size: 1.4rem; font-style: italic; line-height: 1.5; color: #e0e0e0; }
+        .quote-author { display: block; margin-top: 15px; font-size: 0.9rem; color: #666; font-style: normal; }
 
-        /* Kontroller (İpucu vb.) */
-        .control-bar { display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px; align-items: center; }
-        
-        .btn-hint {
-            background: rgba(241, 196, 15, 0.15); color: var(--accent-yellow); border: 1px solid var(--accent-yellow);
-            width: auto; padding: 8px 15px; font-size: 0.8rem; border-radius: 5px;
-        }
-        .btn-hint:hover { background: var(--accent-yellow); color: #000; }
-        .btn-hint:disabled { opacity: 0.3; cursor: not-allowed; background: transparent; }
+        /* Kontroller */
+        .timer-display { font-family: 'Bebas Neue'; font-size: 3.5rem; line-height: 1; }
+        .timer-display.danger { color: #ff0000; animation: pulse 0.5s infinite; }
 
-        #hint-display { 
-            font-size: 0.85rem; color: #aaa; font-style: italic; height: 20px; 
-            display: flex; align-items: center; justify-content: flex-end;
-        }
+        .hint-btn { background: #e5c1001a; color: var(--text-gold); border: 1px solid var(--text-gold); width: auto; padding: 8px 15px; font-size: 0.8rem; }
+        .hint-btn:hover { background: var(--text-gold); color: #000; transform: none; }
+        .hint-text { color: #666; font-size: 0.8rem; font-style: italic; margin-top: 5px; text-align: right; height: 15px; }
 
         /* Şıklar */
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
-        .option-btn {
-            padding: 18px; background: #181818; border: 1px solid #333; border-radius: 8px;
-            color: #ccc; cursor: pointer; transition: 0.2s; font-size: 0.9rem;
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+        .opt-btn { 
+            padding: 20px; background: #181818; border: 1px solid #333; color: #ccc; 
+            border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.95rem;
+            display: flex; align-items: center; justify-content: center; text-align: center;
         }
-        .option-btn:hover { background: #252525; border-color: #555; }
-        .correct { background: #1b5e20 !important; border-color: #2ecc71 !important; color: #fff; }
-        .wrong { background: #7f1d1d !important; border-color: #ef4444 !important; color: #fff; opacity: 0.6; }
+        .opt-btn:hover { background: #252525; border-color: #666; color: #fff; }
+        .correct { background: #155d27 !important; border-color: #2ecc71 !important; color: #fff; }
+        .wrong { background: #681212 !important; border-color: #ef4444 !important; color: #fff; opacity: 0.5; }
 
-        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } 100% { transform: translateX(0); } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <h1>CINEPALETTE</h1>
-    <p class="subtitle">Ultimate Edition</p>
+    <div class="tagline">Ultimate Hardcore Edition</div>
 
     <div id="screen-login" class="screen active">
-        <input type="text" id="username" placeholder="Kullanıcı Adı Giriniz">
+        <input type="text" id="username" placeholder="Sinefil Adın">
         
-        <div style="border-top:1px solid #333; margin: 20px 0; padding-top: 20px;">
-            <label style="font-size:0.7rem; color:#aaa; font-weight:bold;">OYUN MODU</label>
-            <select id="genre-select" onchange="toggleVisualOptions()">
-                <option value="mix">Karışık (Tüm Türler)</option>
-                <option value="horror">Korku & Gerilim</option>
-                <option value="scifi">Bilim Kurgu</option>
-                <option value="cult">Kült Klasikler</option>
-                <option value="quote">Unutulmaz Replikler (Süresiz)</option>
+        <div style="border-top:1px solid #333; border-bottom:1px solid #333; padding: 20px 0; margin: 20px 0;">
+            <label style="font-size:0.8rem; color:#666; font-weight:bold; display:block; margin-bottom:8px;">OYUN MODU SEÇ</label>
+            <select id="genre-select" onchange="uiUpdate()">
+                <option value="mix">🎲 KARIŞIK (Tüm Türler)</option>
+                <option value="quote">💬 REPLİKLER (Zor Seviye)</option>
+                <option value="palettes">🎨 SADECE RENK PALETİ (Görsel)</option>
+                <option value="cult">🍷 KÜLT & ARTHOUSE</option>
+                <option value="scifi">🚀 BİLİM KURGU & UZAY</option>
             </select>
-
-            <div id="visual-options-div">
-                <label style="font-size:0.7rem; color:#aaa; font-weight:bold;">GÖRSEL TİPİ</label>
+            
+            <div id="visual-setting">
+                <label style="font-size:0.8rem; color:#666; font-weight:bold; display:block; margin-bottom:8px;">GÖRÜNÜM</label>
                 <select id="visual-select">
-                    <option value="both">Palet + Poster (Dengeli)</option>
-                    <option value="palette">Sadece Renk Paleti (Zor)</option>
-                    <option value="poster">Sadece Bulanık Poster (Orta)</option>
+                    <option value="both">Palet + Bulanık Poster</option>
+                    <option value="palette">Sadece Renk Paleti (Expert)</option>
                 </select>
             </div>
-            
+
             <button onclick="createRoom()">ODAYI OLUŞTUR</button>
         </div>
 
-        <div style="display:flex; gap:10px; margin-top:10px;">
-            <input type="text" id="room-code-input" placeholder="Oda Kodu" style="margin:0;">
-            <button class="btn-secondary" style="width:40%; margin:0;" onclick="joinRoom()">KATIL</button>
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="room-code-input" placeholder="Oda Kodu" style="margin:0">
+            <button class="btn-secondary" style="width:40%; margin:0" onclick="joinRoom()">KATIL</button>
         </div>
     </div>
 
     <div id="screen-lobby" class="screen">
-        <h2 style="margin-top:0">BEKLEME ODASI</h2>
-        <div id="display-room-code" style="font-size:2.5rem; color:var(--primary-red); font-weight:bold; letter-spacing:5px; margin-bottom:20px;">---</div>
-        
-        <ul id="player-list" style="list-style:none; padding:0; width:100%;"></ul>
-        
-        <div id="host-controls" style="display:none; width:100%">
-            <button onclick="startGameByHost()">FİLMİ BAŞLAT</button>
-        </div>
-        <p id="guest-msg" style="color:#666; font-size:0.8rem; margin-top:20px;">Yönetmen bekleniyor...</p>
+        <h2>BEKLEME ODASI</h2>
+        <div id="display-room-code" style="font-size:3rem; color:var(--primary-red); font-family:'Bebas Neue'; letter-spacing:5px;">---</div>
+        <ul id="player-list" style="list-style:none; padding:0; width:100%; margin-top:30px;"></ul>
+        <div id="host-controls" style="display:none; width:100%"><button onclick="startGameByHost()">MOTOR!</button></div>
+        <p id="guest-msg" style="color:#666; font-size:0.9rem; margin-top:20px;">Yönetmen bekleniyor...</p>
     </div>
 
     <div id="screen-game" class="screen">
-        <div class="game-header">
-            <button class="btn-exit" onclick="exitToMenu()">✕ Çıkış</button>
-            <div style="font-weight:bold; color:var(--primary-red)">PUAN: <span id="game-score">0</span></div>
+        <div class="top-hud">
+            <button class="btn-exit" onclick="exitGame()">✕ Çıkış</button>
+            <div class="score-badge">PUAN: <span id="score-display">0</span></div>
         </div>
 
-        <div class="visual-container">
-            <div id="poster-wrapper"><img id="game-poster" src=""></div>
-            <div id="quote-wrapper"><span id="game-quote">Quote here</span></div>
-            <div id="palette-wrapper"></div>
+        <div class="media-container">
+            <div id="poster-view"><img id="game-poster" src=""></div>
+            <div id="quote-view">
+                <div class="quote-text" id="game-quote">"Repliği buraya gelecek..."</div>
+            </div>
+            <div id="palette-view"></div>
         </div>
 
-        <div class="control-bar">
-            <div class="timer-box" id="game-timer">60</div>
+        <div class="top-hud" style="margin-bottom:10px;">
+            <div class="timer-display" id="timer-display">60</div>
             <div style="text-align:right;">
-                <button class="btn-hint" id="btn-hint" onclick="useHint()">💡 İPUCU (-2sn)</button>
-                <div id="hint-display"></div>
+                <button class="hint-btn" id="btn-hint" onclick="useHint()">💡 İPUCU (-5sn)</button>
+                <div class="hint-text" id="hint-display"></div>
             </div>
         </div>
 
@@ -211,89 +184,120 @@
     </div>
 
     <div id="screen-result" class="screen">
-        <h2 style="font-family:'Bebas Neue'; font-size:3rem;">FİNAL CUT</h2>
-        <table id="leaderboard-table" style="width:100%; border-collapse:collapse; margin-bottom:20px;">
-            <thead><tr style="border-bottom:1px solid #444; color:#888;"><th style="text-align:left; padding:10px;">#</th><th>İsim</th><th>Puan</th></tr></thead>
+        <h2 style="font-family:'Bebas Neue'; font-size:3rem;">KAST LİSTESİ</h2>
+        <table id="result-table" style="width:100%; border-collapse:collapse; text-align:left;">
+            <thead><tr style="color:#666; border-bottom:1px solid #333;"><th>#</th><th>Oyuncu</th><th>Puan</th></tr></thead>
             <tbody></tbody>
         </table>
-        <button class="btn-secondary" onclick="location.reload()">ANA MENÜYE DÖN</button>
+        <button class="btn-secondary" onclick="location.reload()" style="margin-top:20px;">ANA MENÜ</button>
     </div>
 
     <script>
-        // --- FIREBASE AYARLARI ---
         const firebaseConfig = {
-            apiKey: "AIzaSyDummyKeyForExample",
-            authDomain: "project.firebaseapp.com",
-            databaseURL: "https://project-default-rtdb.firebaseio.com",
-            projectId: "project",
-            storageBucket: "project.appspot.com",
-            messagingSenderId: "12345",
-            appId: "1:12345:web:abcde"
-        };
+  apiKey: "AIzaSyCKXuqXEtQ_dr1FNw-8NZj0BpeoSDl_mRY",
+  authDomain: "cinepalette-e7a2b.firebaseapp.com",
+  databaseURL: "https://cinepalette-e7a2b-default-rtdb.firebaseio.com",
+  projectId: "cinepalette-e7a2b",
+  storageBucket: "cinepalette-e7a2b.firebasestorage.app",
+  messagingSenderId: "933599264840",
+  appId: "1:933599264840:web:667563470c4ea338f7187d"
+};
 
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // --- VERİTABANI (8 RENKLİ PALETLER) ---
+        // ==============================================
+        // DEVASA VE ZORLU VERİTABANI (HARDCORE EDITION)
+        // ==============================================
         const database = [
-            // KORKU
-            { type: "movie", genre: "horror", hint: "Jack Nicholson, 1980", correct: "The Shining", poster: "https://image.tmdb.org/t/p/w500/b4gYVcl8pParX8AjkN90iQrWrWO.jpg", 
-              colors: ["#000000", "#2b0505", "#540b0b", "#8B0000", "#c41e1e", "#FF4500", "#b05b3b", "#FFFFFF"], 
-              options: ["The Shining", "It", "Misery", "Carrie"] },
+            // --- ZORLU REPLİKLER (QUOTE MODE) ---
+            { type: "quote", text: "I drink your milkshake! I drink it up!", hint: "Daniel Day-Lewis", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "The Master", "Gangs of New York"] },
+            { type: "quote", text: "All those moments will be lost in time, like tears in rain.", hint: "Ridley Scott, 1982", correct: "Blade Runner", options: ["Blade Runner", "2001: A Space Odyssey", "Dune", "Alien"] },
+            { type: "quote", text: "I'm as mad as hell, and I'm not going to take this anymore!", hint: "Medya eleştirisi, 1976", correct: "Network", options: ["Network", "Taxi Driver", "Dog Day Afternoon", "The French Connection"] },
+            { type: "quote", text: "You don't understand! I coulda had class. I coulda been a contender.", hint: "Marlon Brando", correct: "On the Waterfront", options: ["On the Waterfront", "A Streetcar Named Desire", "The Godfather", "Raging Bull"] },
+            { type: "quote", text: "I love the smell of napalm in the morning.", hint: "Vietnam Savaşı", correct: "Apocalypse Now", options: ["Apocalypse Now", "Full Metal Jacket", "Platoon", "The Deer Hunter"] },
+            { type: "quote", text: "Open the pod bay doors, HAL.", hint: "Stanley Kubrick", correct: "2001: A Space Odyssey", options: ["2001: A Space Odyssey", "Interstellar", "Solaris", "Moon"] },
+            { type: "quote", text: "I have always depended on the kindness of strangers.", hint: "Tennessee Williams uyarlaması", correct: "A Streetcar Named Desire", options: ["A Streetcar Named Desire", "Gone with the Wind", "Casablanca", "Sunset Boulevard"] },
+            { type: "quote", text: "Forget it, Jake. It's Chinatown.", hint: "Roman Polanski", correct: "Chinatown", options: ["Chinatown", "L.A. Confidential", "The Maltese Falcon", "Double Indemnity"] },
+            { type: "quote", text: "Just keep swimming.", hint: "Animasyon", correct: "Finding Nemo", options: ["Finding Nemo", "The Little Mermaid", "Moana", "Shark Tale"] },
+            { type: "quote", text: "What's in the box?", hint: "David Fincher", correct: "Se7en", options: ["Se7en", "Fight Club", "Zodiac", "Prisoners"] },
+            { type: "quote", text: "If you build it, he will come.", hint: "Beyzbol", correct: "Field of Dreams", options: ["Field of Dreams", "Moneyball", "The Natural", "Bull Durham"] },
+            { type: "quote", text: "Nobody puts Baby in a corner.", hint: "Dans filmi", correct: "Dirty Dancing", options: ["Dirty Dancing", "Footloose", "Grease", "Flashdance"] },
+
+            // --- GÖRSEL ŞÖLEN & ZOR PALETLER (MOVIE MODE) ---
+            // SCIFI & UZAY
+            { type: "movie", genre: "scifi", hint: "Spike Jonze, Yapay Zeka Aşkı", correct: "Her", poster: "https://image.tmdb.org/t/p/w500/ykRPzwJ7MSClPFR33fG6T2t16S8.jpg", 
+              colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
+
+            { type: "movie", genre: "scifi", hint: "Christopher Nolan, Kara Delik", correct: "Interstellar", poster: "https://image.tmdb.org/t/p/w500/gEU2QniL6C971PN668mgz8QAqQ.jpg", 
+              colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "First Man"] },
+
+            { type: "movie", genre: "scifi", hint: "Denis Villeneuve, 2016", correct: "Arrival", poster: "https://image.tmdb.org/t/p/w500/x2FJsf1ElAgr63C3cwpfkl94Lx.jpg", 
+              colors: ["#2E4053", "#5D6D7E", "#AEB6BF", "#17202A", "#000000", "#1C2833", "#85929E", "#D5D8DC"], options: ["Arrival", "Contact", "District 9", "Dune"] },
+
+            // KÜLT & ARTHOUSE
+            { type: "movie", genre: "cult", hint: "Barry Jenkins, Oscar Kazananı", correct: "Moonlight", poster: "https://image.tmdb.org/t/p/w500/49U1d7XJ93b0Qeb1v6s57d6l8Z.jpg", 
+              colors: ["#000000", "#0B0B3B", "#101050", "#1A237E", "#303F9F", "#3F51B5", "#283593", "#C5CAE9"], options: ["Moonlight", "If Beale Street Could Talk", "Pariah", "Boyz n the Hood"] },
+
+            { type: "movie", genre: "cult", hint: "Fransız, Siyah Beyaz, Protesto", correct: "La Haine", poster: "https://image.tmdb.org/t/p/w500/z67c1523489043214.jpg", 
+              colors: ["#000000", "#111111", "#222222", "#333333", "#555555", "#777777", "#999999", "#FFFFFF"], options: ["La Haine", "Roma", "Schindler's List", "Clerks"] },
             
-            { type: "movie", genre: "horror", hint: "Kırmızı Balon, Palyaço", correct: "It", poster: "https://image.tmdb.org/t/p/w500/9E2y5Q7WlCVNEhP5GiVTJhEhx1o.jpg", 
-              colors: ["#FFFFFF", "#e0e0e0", "#b3b3b3", "#FF0000", "#990000", "#FFFF00", "#333333", "#000000"], 
-              options: ["It", "Joker", "Clown", "Poltergeist"] },
+            { type: "movie", genre: "cult", hint: "Bong Joon-ho, 2019", correct: "Parasite", poster: "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg", 
+              colors: ["#17202A", "#1B2631", "#212F3C", "#283747", "#2E4053", "#566573", "#145A32", "#196F3D"], options: ["Parasite", "Oldboy", "Memories of Murder", "Snowpiercer"] },
 
-            // BİLİM KURGU
-            { type: "movie", genre: "scifi", hint: "Kırmızı Hap mı Mavi Hap mı?", correct: "The Matrix", poster: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg", 
-              colors: ["#000000", "#051408", "#0D2615", "#0f3d1c", "#00FF41", "#4dff79", "#ccffda", "#FFFFFF"], 
-              options: ["The Matrix", "Tron", "Inception", "Alien"] },
-            
-            { type: "movie", genre: "scifi", hint: "Baharat, Çöl Solucanı", correct: "Dune", poster: "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg", 
-              colors: ["#000000", "#2F4F4F", "#4a3b2a", "#8B4513", "#ad6f2f", "#C2B280", "#F5DEB3", "#fffbe8"], 
-              options: ["Dune", "Mad Max", "Star Wars", "Prometheus"] },
+            { type: "movie", genre: "cult", hint: "Studio Ghibli, Ruhlar", correct: "Spirited Away", poster: "https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyScP66l26EX26.jpg", 
+              colors: ["#641E16", "#922B21", "#C0392B", "#D98880", "#145A32", "#1E8449", "#2ECC71", "#82E0AA"], options: ["Spirited Away", "Princess Mononoke", "My Neighbor Totoro", "Howl's Moving Castle"] },
 
-            // KÜLT
-            { type: "movie", genre: "cult", hint: "Sarı Eşofman, Katana", correct: "Kill Bill", poster: "https://image.tmdb.org/t/p/w500/v7TaX8kXMXs5yGGxuzM9cMDNG5H.jpg", 
-              colors: ["#000000", "#333333", "#8B0000", "#d90404", "#FF0000", "#ffaa00", "#FFD700", "#FFFFFF"], 
-              options: ["Kill Bill", "Pulp Fiction", "Sin City", "Oldboy"] },
-              
-            { type: "movie", genre: "cult", hint: "Wes Anderson, Pembe Otel", correct: "Grand Budapest Hotel", poster: "https://image.tmdb.org/t/p/w500/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg", 
-              colors: ["#581845", "#900C3F", "#C70039", "#E0218A", "#F29FCD", "#F5BDD6", "#40E0D0", "#FFFDD0"], 
-              options: ["Grand Budapest Hotel", "French Dispatch", "Amélie", "Moonrise Kingdom"] },
+            { type: "movie", genre: "cult", hint: "Wong Kar-wai, Aşk", correct: "In the Mood for Love", poster: "https://image.tmdb.org/t/p/w500/iYyaLxLEld4V31I91d1424324.jpg", 
+              colors: ["#4A235A", "#5B2C6F", "#6C3483", "#7D3C98", "#943126", "#B03A2E", "#CB4335", "#E74C3C"], options: ["In the Mood for Love", "Chungking Express", "2046", "Fallen Angels"] },
 
-            // REPLİKLER (Süresiz Mod)
-            { type: "quote", text: "I see dead people.", hint: "Bruce Willis, 1999", correct: "The Sixth Sense", options: ["The Sixth Sense", "The Others", "Signs", "Poltergeist"] },
-            { type: "quote", text: "I'm gonna make him an offer he can't refuse.", hint: "Mafya Babası", correct: "The Godfather", options: ["The Godfather", "Scarface", "Goodfellas", "Casino"] }
+            // RENK USTALARI (Wes Anderson vb.)
+            { type: "movie", genre: "palettes", hint: "Wes Anderson, Çöl", correct: "Asteroid City", poster: "https://image.tmdb.org/t/p/w500/qfcJJJZ276yK1x2Q2v6b3w.jpg", 
+              colors: ["#FAD7A0", "#F8C471", "#F5B041", "#F39C12", "#5DADE2", "#3498DB", "#2E86C1", "#D6EAF8"], options: ["Asteroid City", "Moonrise Kingdom", "The Royal Tenenbaums", "Nope"] },
+
+            { type: "movie", genre: "palettes", hint: "Sarı Eşofman, Kan", correct: "Kill Bill Vol. 1", poster: "https://image.tmdb.org/t/p/w500/v7TaX8kXMXs5yGGxuzM9cMDNG5H.jpg", 
+              colors: ["#F1C40F", "#F4D03F", "#F7DC6F", "#F9E79F", "#922B21", "#C0392B", "#000000", "#17202A"], options: ["Kill Bill Vol. 1", "Pulp Fiction", "Sin City", "Death Proof"] },
+
+            { type: "movie", genre: "palettes", hint: "Mor Neon, Ryan Gosling", correct: "Blade Runner 2049", poster: "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg", 
+              colors: ["#4A235A", "#E74C3C", "#F39C12", "#D35400", "#17202A", "#000000", "#5D6D7E", "#2874A6"], options: ["Blade Runner 2049", "Drive", "Only God Forgives", "Neon Demon"] },
+
+            { type: "movie", genre: "palettes", hint: "Amelie Poulain", correct: "Amélie", poster: "https://image.tmdb.org/t/p/w500/slG9XGzG2y46s5Xn7MbdM9R7Hk.jpg", 
+              colors: ["#C0392B", "#E74C3C", "#27AE60", "#2ECC71", "#F1C40F", "#F39C12", "#17202A", "#1C2833"], options: ["Amélie", "Delicatessen", "Hugo", "Paddington"] },
+
+            // KORKU (Zor)
+            { type: "movie", genre: "horror", hint: "Ari Aster, Gündüz Korkusu", correct: "Midsommar", poster: "https://image.tmdb.org/t/p/w500/7LEI8ulZzO5gy9JwyMcP8P52lpa.jpg", 
+              colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Witch"] },
+
+            { type: "movie", genre: "horror", hint: "Robert Eggers, Deniz Feneri", correct: "The Lighthouse", poster: "https://image.tmdb.org/t/p/w500/3nk9UoepYmv1G9oP18q6JJCeYwN.jpg", 
+              colors: ["#000000", "#17202A", "#2C3E50", "#566573", "#808B96", "#ABB2B9", "#D5D8DC", "#EAECEE"], options: ["The Lighthouse", "The Witch", "A Ghost Story", "Nosferatu"] }
         ];
 
-        // --- DEĞİŞKENLER ---
+        // --- GLOBAL DEĞİŞKENLER ---
         let myName="", myRoomCode="", myId="", isHost=false;
         let gameQuestions=[], currentQIndex=0, score=0, timerInterval;
         let totalTime=60, isPlaying=false, currentMode="movie";
 
-        // --- UI & ODA ---
+        // --- UI YÖNETİMİ ---
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
-        function generateCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
-        function toggleVisualOptions() {
-            const genre = document.getElementById('genre-select').value;
-            document.getElementById('visual-options-div').style.opacity = (genre === 'quote') ? '0.3' : '1';
-            if(genre === 'quote') document.getElementById('visual-select').disabled = true;
-            else document.getElementById('visual-select').disabled = false;
+        function uiUpdate() {
+            const g = document.getElementById('genre-select').value;
+            document.getElementById('visual-setting').style.display = (g === 'quote') ? 'none' : 'block';
         }
+        function generateCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
 
-        // ODAYA KATILMA
+        // --- ODA ---
         function createRoom() {
             myName = document.getElementById('username').value.trim();
-            const genre = document.getElementById('genre-select').value;
-            const visual = document.getElementById('visual-select').value;
-            if(!myName) return alert("İsim gir!");
+            if(!myName) return alert("İsim gerekli!");
+            const config = {
+                genre: document.getElementById('genre-select').value,
+                visual: document.getElementById('visual-select').value
+            };
             myRoomCode = generateCode(); isHost = true;
-            db.ref('rooms/' + myRoomCode).set({ status: "lobby", config: {genre, visual}, createdAt: Date.now() });
+            db.ref('rooms/'+myRoomCode).set({status:"lobby", config:config, createdAt:Date.now()});
             joinMyOwnRoom();
         }
 
@@ -301,190 +305,160 @@
             myName = document.getElementById('username').value.trim();
             myRoomCode = document.getElementById('room-code-input').value.trim();
             if(!myName || !myRoomCode) return alert("Eksik bilgi!");
-            db.ref('rooms/' + myRoomCode).get().then(snap => {
-                if(snap.exists() && snap.val().status === "lobby") joinMyOwnRoom();
+            db.ref('rooms/'+myRoomCode).get().then(snap=>{
+                if(snap.exists() && snap.val().status==="lobby") joinMyOwnRoom();
                 else alert("Oda yok!");
             });
         }
-
         function joinMyOwnRoom() {
             const ref = db.ref(`rooms/${myRoomCode}/players`).push();
             myId = ref.key;
-            ref.set({ name: myName, score: 0, status: "waiting" });
+            ref.set({name:myName, score:0, status:"waiting"});
             setupLobby();
         }
-
         function setupLobby() {
             showScreen('screen-lobby');
             document.getElementById('display-room-code').innerText = myRoomCode;
-            if(isHost) document.getElementById('host-controls').style.display = 'block';
-            else document.getElementById('guest-msg').style.display = 'block';
+            if(isHost) document.getElementById('host-controls').style.display='block';
+            else document.getElementById('guest-msg').style.display='block';
             
-            const roomRef = db.ref('rooms/' + myRoomCode);
-            roomRef.child('players').on('value', snap => {
-                const list = document.getElementById('player-list'); list.innerHTML = '';
-                if(snap.val()) Object.values(snap.val()).forEach(p => list.innerHTML += `<li>${p.name} <span style="color:#E50914">${p.score}</span></li>`);
+            const roomRef = db.ref('rooms/'+myRoomCode);
+            roomRef.child('players').on('value', s=>{
+                const l=document.getElementById('player-list'); l.innerHTML='';
+                if(s.val()) Object.values(s.val()).forEach(p=>l.innerHTML+=`<li>${p.name} <span style="color:#e5c100; float:right">${p.score}</span></li>`);
             });
-            roomRef.child('status').on('value', snap => {
-                if(snap.val() === 'playing') roomRef.once('value').then(all => startGame(all.val().config));
-                else if(snap.val() === 'finished') showResults();
+            roomRef.child('status').on('value', s=>{
+                if(s.val()==='playing') roomRef.once('value').then(snap=>startGame(snap.val().config));
+                else if(s.val()==='finished') showResults();
             });
         }
+        function startGameByHost() { db.ref('rooms/'+myRoomCode).update({status:"playing"}); }
 
-        function startGameByHost() { db.ref('rooms/' + myRoomCode).update({ status: "playing" }); }
-        
         // --- OYUN MOTORU ---
-        function startGame(config) {
-            const genre = config.genre;
-            const visual = config.visual;
-            
-            if(genre === 'quote') {
+        function startGame(cfg) {
+            // Filtreleme
+            if(cfg.genre === 'quote') {
                 currentMode = 'quote';
                 gameQuestions = database.filter(q => q.type === 'quote');
             } else {
                 currentMode = 'movie';
-                gameQuestions = (genre === 'mix') ? database.filter(q => q.type === 'movie') : database.filter(q => q.genre === genre);
+                let pool = database.filter(q => q.type === 'movie');
+                if(cfg.genre === 'palettes') {/* Hepsi */}
+                else if(cfg.genre !== 'mix') pool = pool.filter(q => q.genre === cfg.genre);
+                gameQuestions = pool;
             }
             
-            gameQuestions = gameQuestions.sort(() => Math.random() - 0.5);
-            if(gameQuestions.length === 0) { alert("Soru yok!"); return; }
+            gameQuestions = gameQuestions.sort(()=>Math.random()-0.5);
+            if(gameQuestions.length===0) { alert("Yeterli soru yok!"); return; }
 
             showScreen('screen-game');
-            currentQIndex = 0; score = 0; isPlaying = true;
+            currentQIndex=0; score=0; isPlaying=true; totalTime=60;
 
-            // Mod Ayarları
-            const pWrap = document.getElementById('palette-wrapper');
-            const posWrap = document.getElementById('poster-wrapper');
-            const qWrap = document.getElementById('quote-wrapper');
-            const timerEl = document.getElementById('game-timer');
+            // Mod Ayarı
+            const pView = document.getElementById('palette-view');
+            const posView = document.getElementById('poster-view');
+            const qView = document.getElementById('quote-view');
 
-            if(currentMode === 'quote') {
-                timerEl.innerText = "∞";
-                pWrap.style.display = 'none'; posWrap.style.display = 'none'; qWrap.style.display = 'block';
+            if(currentMode==='quote') {
+                pView.style.display='none'; posView.style.display='none'; qView.style.display='block';
             } else {
-                totalTime = 60; startTimer();
-                qWrap.style.display = 'none';
-                pWrap.style.display = (visual === 'both' || visual === 'palette') ? 'flex' : 'none';
-                posWrap.style.display = (visual === 'both' || visual === 'poster') ? 'block' : 'none';
+                qView.style.display='none';
+                posView.style.display = (cfg.visual==='both') ? 'block' : 'none';
+                pView.style.display = 'flex'; // Her zaman palet var artık
             }
+            startTimer();
             loadQuestion();
         }
 
         function startTimer() {
-            const el = document.getElementById('game-timer');
-            el.innerText = totalTime;
-            el.classList.remove('penalty');
+            const t = document.getElementById('timer-display');
+            t.innerText = totalTime; t.classList.remove('danger');
             clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                totalTime--;
-                el.innerText = totalTime;
-                if(totalTime <= 0) finishGame();
-            }, 1000);
+            timerInterval = setInterval(()=>{
+                totalTime--; t.innerText=totalTime;
+                if(totalTime<=10) t.classList.add('danger');
+                if(totalTime<=0) finishGame();
+            },1000);
         }
 
-        // --- YENİ ÖZELLİKLER ---
-        
-        // 1. Geri Çıkış
-        function exitToMenu() {
-            if(confirm("Oyundan çıkıp ana menüye dönmek istiyor musun?")) {
-                location.reload(); // En temiz çıkış yöntemi
-            }
+        function exitGame() {
+            if(confirm("Çıkmak istediğine emin misin?")) location.reload();
         }
 
-        // 2. İpucu Sistemi
         function useHint() {
-            if(currentMode === 'quote') {
-                // Süresiz modda sadece puan cezası olabilir ama şimdilik sadece gösterelim
-                document.getElementById('hint-display').innerText = gameQuestions[currentQIndex].hint;
-                document.getElementById('btn-hint').disabled = true;
-                return;
-            }
-
-            if(totalTime > 3) {
-                totalTime -= 2; // 2 Saniye ceza
+            if(totalTime > 5) {
+                totalTime -= 5;
+                const t = document.getElementById('timer-display');
+                t.innerText=totalTime; t.classList.add('danger'); 
+                setTimeout(()=>t.classList.remove('danger'),500);
                 
-                // Görsel ceza efekti
-                const tBox = document.getElementById('game-timer');
-                tBox.innerText = totalTime;
-                tBox.classList.add('penalty');
-                setTimeout(() => tBox.classList.remove('penalty'), 500);
-
-                // İpucunu göster
                 document.getElementById('hint-display').innerText = gameQuestions[currentQIndex].hint;
                 document.getElementById('btn-hint').disabled = true;
             }
         }
 
         function loadQuestion() {
-            if(currentQIndex >= gameQuestions.length) currentQIndex = 0;
+            if(currentQIndex>=gameQuestions.length) currentQIndex=0;
             const q = gameQuestions[currentQIndex];
-
-            // Reset Hint
+            
             document.getElementById('hint-display').innerText = "";
             document.getElementById('btn-hint').disabled = false;
-            document.getElementById('options-box').innerHTML = "";
+            const optBox = document.getElementById('options-box'); optBox.innerHTML='';
 
-            if(currentMode === 'quote') {
-                document.getElementById('game-quote').innerText = q.text;
+            if(currentMode==='quote') {
+                document.getElementById('game-quote').innerText = `"${q.text}"`;
             } else {
-                // Poster
                 const img = document.getElementById('game-poster');
                 img.classList.remove('revealed'); img.src = q.poster;
                 
-                // Palet (8 Renk)
-                const pWrap = document.getElementById('palette-wrapper');
-                pWrap.innerHTML = '';
-                q.colors.forEach(c => {
-                    const d = document.createElement('div');
-                    d.className = 'color-box'; d.style.backgroundColor = c;
-                    pWrap.appendChild(d);
+                const pView = document.getElementById('palette-view'); pView.innerHTML='';
+                q.colors.forEach(c=>{
+                    const d=document.createElement('div'); d.className='color-strip'; d.style.backgroundColor=c;
+                    pView.appendChild(d);
                 });
             }
 
-            q.options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn'; btn.innerText = opt;
-                btn.onclick = () => checkAnswer(opt, q.correct, btn);
-                document.getElementById('options-box').appendChild(btn);
+            q.options.forEach(opt=>{
+                const btn=document.createElement('div'); btn.className='opt-btn'; btn.innerText=opt;
+                btn.onclick = ()=>checkAnswer(opt, q.correct, btn);
+                optBox.appendChild(btn);
             });
         }
 
         function checkAnswer(sel, corr, btn) {
             if(!isPlaying) return;
-            document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-            
-            if(sel === corr) {
+            // Kitleme
+            document.querySelectorAll('.opt-btn').forEach(b=>b.style.pointerEvents='none');
+
+            if(sel===corr) {
+                score+=10; document.getElementById('score-display').innerText=score;
                 btn.classList.add('correct');
-                score += 10; document.getElementById('game-score').innerText = score;
-                if(currentMode === 'movie') document.getElementById('game-poster').classList.add('revealed');
-                setTimeout(() => { if(isPlaying) { currentQIndex++; loadQuestion(); } }, 1500);
+                if(currentMode==='movie') document.getElementById('game-poster').classList.add('revealed');
+                setTimeout(()=>{ if(isPlaying){currentQIndex++; loadQuestion();} },1500);
             } else {
                 btn.classList.add('wrong');
-                setTimeout(() => { if(isPlaying) { currentQIndex++; loadQuestion(); } }, 800);
+                setTimeout(()=>{ if(isPlaying){currentQIndex++; loadQuestion();} },800);
             }
         }
 
         function finishGame() {
-            isPlaying = false; clearInterval(timerInterval);
-            db.ref(`rooms/${myRoomCode}/players/${myId}`).update({ score: score, status: "finished" });
-            document.getElementById('options-box').innerHTML = '<h3 style="color:#fff">OYUN BİTTİ!</h3>';
+            isPlaying=false; clearInterval(timerInterval);
+            db.ref(`rooms/${myRoomCode}/players/${myId}`).update({score:score, status:"finished"});
+            document.getElementById('options-box').innerHTML = '<h3 style="grid-column:span 2; text-align:center; color:#D81F26">SÜRE DOLDU!</h3>';
             
-            const ref = db.ref(`rooms/${myRoomCode}/players`);
-            ref.on('value', snap => {
-                const arr = Object.values(snap.val());
-                if(isHost && arr.every(p => p.status === "finished")) {
-                    setTimeout(() => db.ref('rooms/' + myRoomCode).update({ status: "finished" }), 2000);
-                }
+            const r = db.ref(`rooms/${myRoomCode}/players`);
+            r.on('value', s=>{
+                const arr=Object.values(s.val());
+                if(isHost && arr.every(p=>p.status==="finished")) setTimeout(()=>db.ref('rooms/'+myRoomCode).update({status:"finished"}),2000);
             });
         }
 
         function showResults() {
             showScreen('screen-result');
-            const tbody = document.querySelector('#leaderboard-table tbody'); tbody.innerHTML = '';
-            db.ref(`rooms/${myRoomCode}/players`).once('value').then(snap => {
-                const arr = Object.values(snap.val());
-                arr.sort((a, b) => b.score - a.score);
-                arr.forEach((p, i) => tbody.innerHTML += `<tr><td>${i+1}</td><td>${p.name}</td><td>${p.score}</td></tr>`);
+            const t=document.querySelector('#result-table tbody'); t.innerHTML='';
+            db.ref(`rooms/${myRoomCode}/players`).once('value').then(s=>{
+                const arr=Object.values(s.val()).sort((a,b)=>b.score-a.score);
+                arr.forEach((p,i)=>t.innerHTML+=`<tr><td>${i+1}</td><td>${p.name}</td><td style="color:#e5c100; font-weight:bold">${p.score}</td></tr>`);
             });
         }
     </script>
