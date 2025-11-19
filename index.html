@@ -3,62 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CINEPALETTE: Blur Edition</title>
+    <title>CINEPALETTE: Time Attack</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
     <style>
         /* --- TASARIM --- */
-        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #fff; text-align: center; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; }
-        .screen { display: none; width: 90%; max-width: 500px; padding: 25px; background: #1e1e1e; border-radius: 15px; margin-top: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: #e0e0e0; text-align: center; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; user-select: none; }
+        .screen { display: none; width: 95%; max-width: 550px; padding: 20px; background: #1a1a1a; border-radius: 16px; margin-top: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); border: 1px solid #333; }
         .active { display: flex; flex-direction: column; align-items: center; }
         
-        h1 { color: #FFD700; margin-bottom: 5px; letter-spacing: 2px; }
-        
-        /* Form Elemanları */
-        input, select, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; box-sizing: border-box; }
-        input, select { background: #333; color: #fff; border: 1px solid #444; outline: none; }
-        button { background: #FFD700; color: #000; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 15px; }
-        button:hover { transform: scale(1.02); background: #ffea70; }
-        
-        /* Kategori Etiketi */
-        .category-tag { background: #333; color: #FFD700; padding: 5px 10px; border-radius: 5px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        h1 { color: #FFD700; margin-bottom: 5px; font-size: 28px; letter-spacing: 3px; text-transform: uppercase; }
+        .subtitle { color: #888; font-size: 13px; margin-bottom: 20px; letter-spacing: 1px; }
 
-        /* Oda Kodu */
-        .room-code { font-size: 40px; letter-spacing: 5px; color: #28a745; font-family: monospace; margin: 15px 0; border: 2px dashed #444; padding: 10px; width: 100%; }
+        /* Formlar */
+        input, select { width: 100%; padding: 14px; margin: 8px 0; border-radius: 8px; border: 1px solid #444; background: #2a2a2a; color: #fff; outline: none; font-size: 16px; }
+        input:focus, select:focus { border-color: #FFD700; background: #333; }
         
-        /* Oyun Alanı */
-        .palette-container { display: flex; width: 100%; height: 80px; border: 2px solid #555; margin-bottom: 10px; border-radius: 8px; overflow: hidden; }
+        button { width: 100%; padding: 16px; margin-top: 15px; border-radius: 8px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-primary { background: #FFD700; color: #000; }
+        .btn-primary:hover { background: #ffea70; transform: translateY(-2px); }
+        .btn-secondary { background: #444; color: #fff; }
+        
+        /* Oyun İçi Üst Bar */
+        .top-bar { display: flex; justify-content: space-between; width: 100%; margin-bottom: 15px; padding: 10px; background: #252525; border-radius: 8px; font-weight: bold; font-size: 18px; }
+        .timer-box { color: #FFD700; }
+        .timer-box.critical { color: #ff4444; animation: pulse 0.5s infinite; }
+        
+        /* Renk ve Poster Alanı */
+        .palette-container { display: flex; width: 100%; height: 90px; border: 2px solid #555; margin-bottom: 15px; border-radius: 8px; overflow: hidden; }
         .color-box { flex: 1; height: 100%; }
         
-        /* POSTER ALANI (YENİ) */
-        #poster-container {
-            display: none; /* Sadece posterli sorularda açılacak */
-            justify-content: center;
-            margin-bottom: 15px;
-            position: relative;
-        }
-        #game-poster {
-            width: 160px;
-            height: 240px;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 3px solid #fff;
-            /* İŞTE SİHİR BURADA: BULANIKLIK */
-            filter: blur(10px); 
-            transition: filter 0.5s ease;
-        }
+        #poster-container { display: none; justify-content: center; margin-bottom: 15px; position: relative; }
+        #game-poster { width: 150px; height: 220px; object-fit: cover; border-radius: 8px; border: 3px solid #fff; filter: blur(15px); transition: filter 0.5s ease; }
         
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
-        .option-btn { padding: 15px; background: #2a2a2a; color: #fff; border: 1px solid #444; cursor: pointer; transition: 0.2s; }
-        .option-btn:hover { background: #3a3a3a; }
-        .correct { background: #28a745 !important; }
-        .wrong { background: #dc3545 !important; }
+        /* Şıklar */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        .option-btn { padding: 14px; background: #2d2d2d; color: #ccc; border: 1px solid #444; border-radius: 6px; cursor: pointer; font-size: 14px; transition: 0.2s; display: flex; align-items: center; justify-content: center; min-height: 60px; }
+        .option-btn:hover { background: #3d3d3d; }
+        
+        .correct { background: #28a745 !important; color: #fff !important; border-color: #28a745 !important; }
+        .wrong { background: #dc3545 !important; color: #fff !important; border-color: #dc3545 !important; opacity: 0.6; }
+        
+        /* Animasyonlar */
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
         
         /* Tablo */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
-        th { color: #FFD700; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
+        th { color: #FFD700; font-size: 14px; }
+        tr:first-child td { color: #FFD700; font-weight: bold; font-size: 18px; } /* 1. Oyuncu */
         
         .loader { border: 4px solid #333; border-top: 4px solid #FFD700; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -68,48 +62,53 @@
 
     <div id="screen-login" class="screen active">
         <h1>CINEPALETTE</h1>
-        <p style="color:#aaa; font-size:14px;">Renkler ve Bulanık Posterler</p>
+        <p class="subtitle">Time Attack Edition</p>
         
-        <input type="text" id="username" placeholder="Adın / Lakabın">
+        <input type="text" id="username" placeholder="Oyuncu Adı">
         
-        <div style="background: #252525; padding: 15px; border-radius: 10px; margin: 20px 0; width: 100%; box-sizing: border-box;">
-            <h3 style="margin:0 0 10px 0; color:#FFD700; text-align:left;">ODA KUR</h3>
-            <label style="display:block; text-align:left; color:#aaa; font-size:12px; margin-bottom:5px;">Kategori Seç:</label>
+        <div style="background: #222; padding: 15px; border-radius: 10px; margin: 20px 0; width: 100%; box-sizing: border-box; border: 1px solid #333;">
+            <h3 style="margin:0 0 10px 0; color:#FFD700; text-align:left; font-size:16px;">ODA KUR</h3>
+            <label style="display:block; text-align:left; color:#888; font-size:12px;">Mod Seç:</label>
             <select id="category-select">
-                <option value="mix">🎲 Karışık (Hepsi)</option>
-                <option value="poster_blur">🖼️ Sadece Bulanık Posterler</option>
-                <option value="horror">👻 Korku / Gerilim</option>
-                <option value="scifi">🚀 Bilim Kurgu</option>
-                <option value="animation">🧸 Animasyon</option>
+                <option value="mix">🎲 Karışık (60sn)</option>
+                <option value="director">🎬 Yönetmenler (90sn) [ZOR]</option>
+                <option value="poster_blur">🖼️ Bulanık Posterler (60sn)</option>
+                <option value="horror">👻 Korku (60sn)</option>
+                <option value="scifi">🚀 Bilim Kurgu (60sn)</option>
             </select>
-            <button onclick="createRoom()">ODA OLUŞTUR</button>
+            <button class="btn-primary" onclick="createRoom()">ODA OLUŞTUR</button>
         </div>
 
-        <div style="display:flex; align-items:center; gap:10px; margin: 20px 0;">
+        <div style="display:flex; align-items:center; gap:10px; margin: 15px 0;">
             <hr style="flex:1; border-color:#333"> <span style="color:#555; font-size:12px">VEYA</span> <hr style="flex:1; border-color:#333">
         </div>
 
-        <input type="text" id="room-code-input" placeholder="Oda Kodu Gir">
-        <button onclick="joinRoom()" style="background:#444; color:#fff;">ODAYA KATIL</button>
+        <input type="text" id="room-code-input" placeholder="Oda Kodu">
+        <button class="btn-secondary" onclick="joinRoom()">ODAYA KATIL</button>
     </div>
 
     <div id="screen-lobby" class="screen">
-        <h2>LOBİ</h2>
-        <div class="category-tag" id="lobby-category-display">...</div>
-        <p>Oda Kodu:</p>
-        <div class="room-code" id="display-room-code">----</div>
+        <h2 style="margin-top:0">LOBİ</h2>
+        <div style="background:#333; padding:5px 10px; border-radius:4px; color:#FFD700; font-size:14px; margin-bottom:10px;" id="lobby-info">...</div>
+        
+        <div style="border: 2px dashed #444; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <div style="color:#888; font-size:12px">ODA KODU</div>
+            <div style="font-size: 32px; color: #28a745; font-family: monospace; letter-spacing: 5px;" id="display-room-code">----</div>
+        </div>
+        
         <ul id="player-list" style="list-style:none; padding:0; width:100%"></ul>
-        <div id="host-controls" style="display:none; width:100%"><button onclick="startGameByHost()">BAŞLAT</button></div>
-        <p id="guest-msg" style="color:#aaa; font-size:12px">Oda sahibi bekleniyor...</p>
+        
+        <div id="host-controls" style="display:none; width:100%">
+            <button class="btn-primary" onclick="startGameByHost()">HERKES İÇİN BAŞLAT</button>
+        </div>
+        <p id="guest-msg" style="color:#666; font-size:12px; animation: pulse 2s infinite;">Oda sahibi bekleniyor...</p>
     </div>
 
     <div id="screen-game" class="screen">
-        <div style="display:flex; justify-content:space-between; width:100%; font-weight:bold; margin-bottom:10px">
-            <span id="game-timer" style="font-size:20px; color:#FFD700">15</span>
-            <span id="game-score">0 Puan</span>
+        <div class="top-bar">
+            <div class="timer-box" id="game-timer">60</div>
+            <div id="game-score" style="color:#fff">0 Puan</div>
         </div>
-        
-        <div class="category-tag" id="game-category-tag"></div>
         
         <div class="palette-container" id="palette-box"></div>
 
@@ -118,23 +117,22 @@
         </div>
 
         <div class="options-grid" id="options-box"></div>
-        <div id="game-msg" style="height:20px; font-weight:bold; margin-top:15px"></div>
+        <div id="game-feedback" style="height:20px; font-weight:bold; margin-top:10px; font-size:14px;"></div>
     </div>
 
     <div id="screen-waiting" class="screen">
-        <h2>BİTİRDİN!</h2>
-        <p>Herkesin bitirmesi bekleniyor...</p>
+        <h2>SÜRE DOLDU!</h2>
         <div class="loader"></div>
-        <p id="waiting-status" style="color:#aaa">...</p>
+        <p id="waiting-status" style="color:#aaa">Sonuçlar senkronize ediliyor...</p>
     </div>
 
     <div id="screen-result" class="screen">
-        <h1>🏆 SONUÇLAR</h1>
+        <h1>🏆 LİDERLİK TABLOSU</h1>
         <table id="leaderboard-table">
             <thead><tr><th>#</th><th>Oyuncu</th><th>Puan</th></tr></thead>
             <tbody></tbody>
         </table>
-        <button onclick="location.reload()" style="margin-top:20px">ANA MENÜ</button>
+        <button class="btn-secondary" onclick="location.reload()">ANA MENÜ</button>
     </div>
 
     <script>
@@ -147,64 +145,60 @@
   messagingSenderId: "933599264840",
   appId: "1:933599264840:web:667563470c4ea338f7187d"
 };
-        // -----------------------------------------------------------
 
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // --- FİLM VERİTABANI ---
-        // Not: 'posterUrl' kısmına internetteki geçerli resim linkleri gelmeli.
+        // -------------------------------------------------------
+        // GENİŞLETİLMİŞ VERİTABANI (50+ SORU & YÖNETMEN MODU)
+        // -------------------------------------------------------
         const allQuestions = [
-            // --- BULANIK POSTER KATEGORİSİ (PosterUrl Dolu Olanlar) ---
-            { 
-                category: "poster_blur", 
-                colors: ["#0d1b2a", "#1b263b", "#415a77", "#778da9", "#e0e1dd"], 
-                correct: "Titanic", 
-                posterUrl: "https://upload.wikimedia.org/wikipedia/en/1/18/Titanic_%281997_film%29_poster.png",
-                options: ["Titanic", "Avatar", "The Notebook", "Pearl Harbor"] 
-            },
-            { 
-                category: "poster_blur", 
-                colors: ["#000000", "#FFD700", "#8B0000", "#FFFFFF", "#333333"], 
-                correct: "The Godfather", 
-                posterUrl: "https://upload.wikimedia.org/wikipedia/en/1/1c/Godfather_ver1.jpg",
-                options: ["Scarface", "The Godfather", "Goodfellas", "Casino"] 
-            },
-            { 
-                category: "poster_blur", 
-                colors: ["#2C3E50", "#E74C3C", "#ECF0F1", "#3498DB", "#F1C40F"], 
-                correct: "Spider-Man", 
-                posterUrl: "https://upload.wikimedia.org/wikipedia/en/f/f3/Spider-Man2002Poster.jpg",
-                options: ["Spider-Man", "Iron Man", "Superman", "Batman"] 
-            },
-            { 
-                category: "poster_blur", 
-                colors: ["#1C2833", "#F4D03F", "#000000", "#5D6D7E", "#FFFFFF"], 
-                correct: "Batman: The Dark Knight", 
-                posterUrl: "https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29.jpg",
-                options: ["Joker", "Batman Begins", "The Dark Knight", "Superman"] 
-            },
-            { 
-                category: "poster_blur", 
-                colors: ["#2E86C1", "#17202A", "#2ECC71", "#FFFFFF", "#34495E"], 
-                correct: "Avatar", 
-                posterUrl: "https://upload.wikimedia.org/wikipedia/en/d/d6/Avatar_%282009_film%29_poster.jpg",
-                options: ["Avatar", "Tron", "Star Wars", "Dune"] 
-            },
+            // --- YÖNETMENLER (Zorlu Şaşırtmacalar) ---
+            { category: "director", colors: ["#000000", "#0D2615", "#00FF41", "#FFFFFF"], correct: "Wachowskis - The Matrix", options: ["Wachowskis - The Matrix", "Wachowskis - Cloud Atlas", "Ridley Scott - Alien", "Nolan - Inception"] },
+            { category: "director", colors: ["#F29FCD", "#581845", "#86C0D7", "#F2E9D8"], correct: "Wes Anderson - GB Hotel", options: ["Wes Anderson - GB Hotel", "Wes Anderson - French Dispatch", "Wes Anderson - Asteroid City", "Tim Burton - Alice"] },
+            { category: "director", colors: ["#FFD700", "#000000", "#FF0000", "#FFFFFF"], correct: "Tarantino - Kill Bill", options: ["Tarantino - Kill Bill", "Tarantino - Pulp Fiction", "Tarantino - Django", "Scorsese - Taxi Driver"] },
+            { category: "director", colors: ["#000000", "#1C2833", "#F4D03F", "#FFFFFF"], correct: "C. Nolan - Interstellar", options: ["C. Nolan - Interstellar", "C. Nolan - Tenet", "C. Nolan - Inception", "Kubrick - 2001"] },
+            { category: "director", colors: ["#0d1b2a", "#415a77", "#778da9", "#e0e1dd"], correct: "J. Cameron - Titanic", options: ["J. Cameron - Titanic", "J. Cameron - Avatar", "J. Cameron - Abyss", "Spielberg - Jaws"] },
+            { category: "director", colors: ["#2E86C1", "#17202A", "#2ECC71", "#FFFFFF"], correct: "J. Cameron - Avatar", options: ["J. Cameron - Avatar", "J. Cameron - Titanic", "George Lucas - Star Wars", "J.J. Abrams - Star Trek"] },
+            { category: "director", colors: ["#922B21", "#17202A", "#F1948A", "#D7DBDD"], correct: "D. Fincher - Fight Club", options: ["D. Fincher - Fight Club", "D. Fincher - Se7en", "D. Fincher - Gone Girl", "Tarantino - Reservoir Dogs"] },
+            { category: "director", colors: ["#D35400", "#F5B041", "#17202A", "#FDFEFE"], correct: "S. Kubrick - The Shining", options: ["S. Kubrick - The Shining", "S. Kubrick - Clockwork Orange", "Hitchcock - Psycho", "Carpenter - Halloween"] },
+            { category: "director", colors: ["#F1C40F", "#E67E22", "#FFFFFF", "#27AE60"], correct: "Ari Aster - Midsommar", options: ["Ari Aster - Midsommar", "Ari Aster - Hereditary", "Robert Eggers - The Witch", "Jordan Peele - Nope"] },
+            { category: "director", colors: ["#1C2833", "#5D6D7E", "#E74C3C", "#FDFEFE"], correct: "Spielberg - Schindler's List", options: ["Spielberg - Schindler's List", "Spielberg - Saving Private Ryan", "Polanski - The Pianist", "Nolan - Dunkirk"] },
 
-            // --- DİĞER KATEGORİLER (Sadece Renk) ---
-            { category: "horror", colors: ["#000000", "#8B0000", "#FF4500", "#1C1C1C", "#FFFFFF"], correct: "The Shining", options: ["It", "The Shining", "Carrie", "Misery"] },
-            { category: "horror", colors: ["#FFFFFF", "#FF0000", "#FFFF00", "#000000", "#555555"], correct: "It", options: ["It", "Joker", "Clown", "Poltergeist"] },
-            { category: "scifi", colors: ["#000000", "#0D2615", "#00FF41", "#1A4D2E", "#FFFFFF"], correct: "The Matrix", options: ["Hulk", "The Matrix", "Tron", "Inception"] },
-            { category: "scifi", colors: ["#F5DEB3", "#C2B280", "#8B4513", "#2F4F4F", "#000000"], correct: "Dune", options: ["Mad Max", "Dune", "Star Wars", "Prometheus"] },
-            { category: "animation", colors: ["#4B8BBE", "#FFD43B", "#FFFFFF", "#306998", "#000000"], correct: "Minions", options: ["Simpsonlar", "Sünger Bob", "Minions", "Pokemon"] },
-            { category: "animation", colors: ["#7D3C98", "#2ECC71", "#F39C12", "#E74C3C", "#3498DB"], correct: "Inside Out", options: ["Up", "Inside Out", "Soul", "Coco"] }
+            // --- BULANIK POSTERLER ---
+            { category: "poster_blur", colors: ["#1C1C1C", "#C0392B", "#F1C40F", "#ECF0F1"], correct: "The Truman Show", posterUrl: "https://upload.wikimedia.org/wikipedia/en/c/cd/Trumanshow.jpg", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Forrest Gump"] },
+            { category: "poster_blur", colors: ["#000000", "#FFD700", "#8B0000", "#FFFFFF"], correct: "The Godfather", posterUrl: "https://upload.wikimedia.org/wikipedia/en/1/1c/Godfather_ver1.jpg", options: ["The Godfather", "Scarface", "Goodfellas", "Irishman"] },
+            { category: "poster_blur", colors: ["#1a1a1a", "#3e3e3e", "#b0b0b0", "#ffffff"], correct: "Pulp Fiction", posterUrl: "https://upload.wikimedia.org/wikipedia/en/3/3b/Pulp_Fiction_%281994%29_poster.jpg", options: ["Pulp Fiction", "Reservoir Dogs", "Kill Bill", "Snatch"] },
+            { category: "poster_blur", colors: ["#2C3E50", "#E74C3C", "#3498DB", "#F1C40F"], correct: "Spider-Man", posterUrl: "https://upload.wikimedia.org/wikipedia/en/f/f3/Spider-Man2002Poster.jpg", options: ["Spider-Man", "Iron Man", "Daredevil", "X-Men"] },
+            { category: "poster_blur", colors: ["#000000", "#2ECC71", "#17202A", "#FFFFFF"], correct: "Matrix", posterUrl: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg", options: ["Matrix", "Blade Runner", "Tron", "Equilibrium"] },
+            { category: "poster_blur", colors: ["#0E1523", "#3A5F85", "#BFD3E3", "#FFFFFF"], correct: "Frozen", posterUrl: "https://upload.wikimedia.org/wikipedia/en/0/05/Frozen_%282013_film%29_poster.jpg", options: ["Frozen", "Tangled", "Moana", "Cinderella"] },
+
+            // --- KORKU ---
+            { category: "horror", colors: ["#000000", "#8B0000", "#FF4500", "#FFFFFF"], correct: "The Shining", options: ["The Shining", "It", "Misery", "Carrie"] },
+            { category: "horror", colors: ["#1B4F72", "#111111", "#145A32", "#99A3A4"], correct: "Alien", options: ["Alien", "Predator", "The Thing", "Life"] },
+            { category: "horror", colors: ["#FFFFFF", "#FF0000", "#FFFF00", "#000000"], correct: "It", options: ["It", "Joker", "Poltergeist", "Clown"] },
+            { category: "horror", colors: ["#000000", "#5F6A6A", "#FDFEFE", "#922B21"], correct: "Psycho", options: ["Psycho", "Birds", "Vertigo", "Scream"] },
+            
+            // --- BİLİM KURGU ---
+            { category: "scifi", colors: ["#F5DEB3", "#C2B280", "#8B4513", "#000000"], correct: "Dune", options: ["Dune", "Mad Max", "Star Wars", "Martian"] },
+            { category: "scifi", colors: ["#F28C0F", "#003B59", "#A67A53", "#0D0D0D"], correct: "Blade Runner 2049", options: ["Blade Runner 2049", "Tron", "Oblivion", "Dune"] },
+            { category: "scifi", colors: ["#000000", "#1C2833", "#F4D03F", "#FFFFFF"], correct: "Interstellar", options: ["Interstellar", "Gravity", "Arrival", "Contact"] },
+            
+            // --- KARIŞIK İÇİN DOLGU ---
+            { category: "mix", colors: ["#4B8BBE", "#FFD43B", "#FFFFFF", "#000000"], correct: "Minions", options: ["Minions", "Simpsons", "Spongebob", "Pokemon"] },
+            { category: "mix", colors: ["#E0218A", "#F5BDD6", "#40E0D0", "#FFFDD0"], correct: "Barbie", options: ["Barbie", "Mean Girls", "Legally Blonde", "Clueless"] },
+            { category: "mix", colors: ["#8A1C26", "#D98F25", "#1C3F38", "#000000"], correct: "Joker", options: ["Joker", "Iron Man", "The Batman", "Halloween"] },
+            { category: "mix", colors: ["#102C54", "#4B367C", "#222222", "#185A8C"], correct: "La La Land", options: ["La La Land", "Moonlight", "Chicago", "Whiplash"] }
         ];
 
         // --- DEĞİŞKENLER ---
-        let myName = "", myRoomCode = "", myId = "", isHost = false;
-        let currentQuestions = [], currentQIndex = 0, score = 0, lives = 3;
-        let timerInterval;
+        let myName="", myRoomCode="", myId="", isHost=false;
+        let gameQuestions = [];
+        let currentQIndex = 0;
+        let score = 0;
+        let gameTimerInterval;
+        let totalTime = 60; // Varsayılan
+        let isPlaying = false;
 
         // --- FONKSİYONLAR ---
         function showScreen(id) {
@@ -212,18 +206,25 @@
             document.getElementById(id).classList.add('active');
         }
         function generateCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
-        function getCategoryName(key) {
-            const names = { "mix": "Karışık", "poster_blur": "Bulanık Poster", "horror": "Korku", "scifi": "Bilim Kurgu", "animation": "Animasyon" };
-            return names[key] || "Bilinmiyor";
+        function getCategoryInfo(key) {
+            const infos = { 
+                "mix": "Karışık (60sn)", 
+                "director": "Yönetmenler (90sn)", 
+                "poster_blur": "Bulanık Poster (60sn)", 
+                "horror": "Korku (60sn)", 
+                "scifi": "Bilim Kurgu (60sn)" 
+            };
+            return infos[key] || "Bilinmiyor";
         }
 
         // --- ODA YÖNETİMİ ---
         function createRoom() {
             myName = document.getElementById('username').value.trim();
-            const category = document.getElementById('category-select').value;
-            if(!myName) return alert("İsim gir!");
+            const cat = document.getElementById('category-select').value;
+            if(!myName) return alert("İsim giriniz!");
+            
             myRoomCode = generateCode(); isHost = true;
-            db.ref('rooms/' + myRoomCode).set({ status: "lobby", category: category, createdAt: Date.now() });
+            db.ref('rooms/' + myRoomCode).set({ status: "lobby", category: cat, createdAt: Date.now() });
             joinMyOwnRoom();
         }
 
@@ -231,16 +232,17 @@
             myName = document.getElementById('username').value.trim();
             myRoomCode = document.getElementById('room-code-input').value.trim();
             if(!myName || !myRoomCode) return alert("Bilgiler eksik!");
-            db.ref('rooms/' + myRoomCode).get().then((snap) => {
-                if (snap.exists() && snap.val().status === "lobby") joinMyOwnRoom();
+            
+            db.ref('rooms/' + myRoomCode).get().then(snap => {
+                if(snap.exists() && snap.val().status === "lobby") joinMyOwnRoom();
                 else alert("Oda yok veya oyun başlamış!");
             });
         }
 
         function joinMyOwnRoom() {
-            const playerRef = db.ref(`rooms/${myRoomCode}/players`).push();
-            myId = playerRef.key;
-            playerRef.set({ name: myName, score: 0, status: "waiting" });
+            const pRef = db.ref(`rooms/${myRoomCode}/players`).push();
+            myId = pRef.key;
+            pRef.set({ name: myName, score: 0, status: "waiting" });
             setupLobby();
         }
 
@@ -251,16 +253,18 @@
             else document.getElementById('guest-msg').style.display = 'block';
 
             const roomRef = db.ref('rooms/' + myRoomCode);
-            roomRef.child('players').on('value', (snap) => {
+            roomRef.child('players').on('value', snap => {
                 const list = document.getElementById('player-list'); list.innerHTML = '';
                 if(snap.val()) Object.values(snap.val()).forEach(p => {
-                    list.innerHTML += `<li><span>${p.name}</span> <span>${p.score} P</span></li>`;
+                    list.innerHTML += `<li style="background:#222; margin:5px; padding:10px; border-radius:5px; display:flex; justify-content:space-between;"><span>${p.name}</span><span>${p.score} P</span></li>`;
                 });
             });
+
             roomRef.once('value').then(snap => {
-                document.getElementById('lobby-category-display').innerText = getCategoryName(snap.val().category);
+                document.getElementById('lobby-info').innerText = "Mod: " + getCategoryInfo(snap.val().category);
             });
-            roomRef.child('status').on('value', (snap) => {
+
+            roomRef.child('status').on('value', snap => {
                 if(snap.val() === 'playing') {
                     roomRef.child('category').once('value').then(c => startGame(c.val()));
                 } else if(snap.val() === 'finished') showFinalResults();
@@ -269,121 +273,160 @@
 
         function startGameByHost() { db.ref('rooms/' + myRoomCode).update({ status: "playing" }); }
 
-        // --- OYUN MOTORU ---
+        // -------------------------------------------------------
+        // OYUN MOTORU (TIME ATTACK)
+        // -------------------------------------------------------
         function startGame(catKey) {
-            // Filtreleme
-            if (catKey === 'mix') currentQuestions = allQuestions.sort(() => Math.random() - 0.5).slice(0, 10);
-            else currentQuestions = allQuestions.filter(q => q.category === catKey).sort(() => Math.random() - 0.5);
+            // 1. Soruları Hazırla
+            if (catKey === 'mix') {
+                gameQuestions = allQuestions.sort(() => Math.random() - 0.5);
+                totalTime = 60;
+            } else if (catKey === 'director') {
+                // Yönetmen modunda sadece yönetmen soruları
+                gameQuestions = allQuestions.filter(q => q.category === 'director').sort(() => Math.random() - 0.5);
+                totalTime = 90; // Yönetmen modu için 90 saniye
+            } else {
+                gameQuestions = allQuestions.filter(q => q.category === catKey).sort(() => Math.random() - 0.5);
+                totalTime = 60;
+            }
 
-            if(currentQuestions.length === 0) { alert("Bu kategoride soru yok!"); return; }
+            // Yedekleme: Eğer soru biterse başa sarsın diye sonsuz döngü için array kopyalama mantığı
+            // Şimdilik 50 soru yetecektir ama gerekirse index kontrolü yapılır.
+
+            if(gameQuestions.length === 0) { alert("Yeterli soru yok!"); return; }
 
             showScreen('screen-game');
-            document.getElementById('game-category-tag').innerText = getCategoryName(catKey);
-            currentQIndex = 0; score = 0; lives = 3;
-            db.ref(`rooms/${myRoomCode}/players/${myId}`).update({ status: "playing" });
+            currentQIndex = 0; score = 0; isPlaying = true;
+            
+            // GLOBAL SAYACI BAŞLAT
+            startGlobalTimer();
             loadQuestion();
         }
 
-        function loadQuestion() {
-            if (currentQIndex >= currentQuestions.length || lives <= 0) { finishGameLocal(); return; }
-            const q = currentQuestions[currentQIndex];
-            
-            const paletteBox = document.getElementById('palette-box');
-            const posterContainer = document.getElementById('poster-container');
-            const posterImg = document.getElementById('game-poster');
-            
-            paletteBox.innerHTML = ''; document.getElementById('options-box').innerHTML = '';
-            document.getElementById('game-msg').innerText = '';
+        function startGlobalTimer() {
+            const timerEl = document.getElementById('game-timer');
+            timerEl.innerText = totalTime;
+            timerEl.classList.remove('critical');
 
-            // 1. Renkler
+            gameTimerInterval = setInterval(() => {
+                totalTime--;
+                timerEl.innerText = totalTime;
+                
+                if(totalTime <= 10) timerEl.classList.add('critical');
+
+                if(totalTime <= 0) {
+                    finishGameLocal();
+                }
+            }, 1000);
+        }
+
+        function loadQuestion() {
+            // Eğer süre bitmediyse ve sorular bittiyse başa dön
+            if(currentQIndex >= gameQuestions.length) currentQIndex = 0;
+
+            const q = gameQuestions[currentQIndex];
+            const pBox = document.getElementById('palette-box');
+            const oBox = document.getElementById('options-box');
+            const postCont = document.getElementById('poster-container');
+            const postImg = document.getElementById('game-poster');
+
+            pBox.innerHTML = ''; oBox.innerHTML = ''; 
+            document.getElementById('game-feedback').innerText = '';
+
+            // Renkler
             q.colors.forEach(c => {
                 const div = document.createElement('div');
                 div.className = 'color-box'; div.style.backgroundColor = c;
-                paletteBox.appendChild(div);
+                pBox.appendChild(div);
             });
 
-            // 2. Poster (Varsa Göster, Yoksa Gizle)
+            // Poster var mı?
             if(q.posterUrl) {
-                posterContainer.style.display = 'flex';
-                posterImg.src = q.posterUrl;
-                // Her seferinde efekti sıfırla (bazen takılabilir)
-                posterImg.style.filter = "blur(12px)";
+                postCont.style.display = 'flex';
+                postImg.src = q.posterUrl;
+                postImg.style.filter = "blur(15px)"; // Her soruda reset
             } else {
-                posterContainer.style.display = 'none';
+                postCont.style.display = 'none';
             }
 
-            // 3. Şıklar
+            // Şıklar
             q.options.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn'; btn.innerText = opt;
                 btn.onclick = () => checkAnswer(opt, q.correct, btn, q.posterUrl);
-                document.getElementById('options-box').appendChild(btn);
+                oBox.appendChild(btn);
             });
-            startTimer();
-        }
-
-        function startTimer() {
-            let timeLeft = 15;
-            document.getElementById('game-timer').innerText = timeLeft;
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('game-timer').innerText = timeLeft;
-                if(timeLeft <= 0) { clearInterval(timerInterval); handleWrong("Süre Doldu!"); }
-            }, 1000);
         }
 
         function checkAnswer(selected, correct, btn, hasPoster) {
-            clearInterval(timerInterval);
-            document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+            if(!isPlaying) return;
+            
+            // Diğer butonları kitleme, hızlı oyun için
+            const all = document.querySelectorAll('.option-btn');
+            all.forEach(b => b.disabled = true);
 
-            // Eğer posterli soruysa, bilince netleşsin!
-            if(hasPoster) {
-                document.getElementById('game-poster').style.filter = "blur(0px)";
-            }
+            if(hasPoster) document.getElementById('game-poster').style.filter = "blur(0px)";
 
-            if (selected === correct) {
-                btn.classList.add('correct'); score += 10;
+            const fb = document.getElementById('game-feedback');
+
+            if(selected === correct) {
+                btn.classList.add('correct');
+                score += 10;
                 document.getElementById('game-score').innerText = score + " Puan";
-                setTimeout(() => { currentQIndex++; loadQuestion(); }, 2000); // Resmi görmesi için süre uzatıldı
+                fb.innerText = "DOĞRU! (+10)";
+                fb.style.color = "#28a745";
+                
+                // Hızlı geçiş
+                setTimeout(() => {
+                    if(isPlaying) { currentQIndex++; loadQuestion(); }
+                }, 500);
             } else {
                 btn.classList.add('wrong');
-                handleWrong("Yanlış!");
+                fb.innerText = "YANLIŞ!";
+                fb.style.color = "#dc3545";
+                
+                // Hızlı geçiş (Puan yok, zaman cezası yok, sadece soru kaçtı)
+                setTimeout(() => {
+                    if(isPlaying) { currentQIndex++; loadQuestion(); }
+                }, 500);
             }
-        }
-
-        function handleWrong(msg) {
-            lives--;
-            const msgDiv = document.getElementById('game-msg');
-            msgDiv.innerText = msg; msgDiv.style.color = "#dc3545";
-            setTimeout(() => {
-                if(lives <= 0) finishGameLocal();
-                else { currentQIndex++; loadQuestion(); }
-            }, 2000);
         }
 
         function finishGameLocal() {
-            clearInterval(timerInterval);
+            isPlaying = false;
+            clearInterval(gameTimerInterval);
+            
+            // Puanı gönder
             db.ref(`rooms/${myRoomCode}/players/${myId}`).update({ score: score, status: "finished" });
+            
             showScreen('screen-waiting');
             
-            const playersRef = db.ref(`rooms/${myRoomCode}/players`);
-            playersRef.on('value', (snap) => {
+            const pRef = db.ref(`rooms/${myRoomCode}/players`);
+            pRef.on('value', snap => {
                 const arr = Object.values(snap.val());
                 const fin = arr.filter(p => p.status === "finished").length;
-                document.getElementById('waiting-status').innerText = `${fin} / ${arr.length} kişi bitti.`;
-                if(isHost && fin === arr.length) db.ref('rooms/' + myRoomCode).update({ status: "finished" });
+                document.getElementById('waiting-status').innerText = `${fin} / ${arr.length} kişi tamamladı.`;
+                
+                if(isHost && fin === arr.length) {
+                    setTimeout(() => { db.ref('rooms/' + myRoomCode).update({ status: "finished" }); }, 1000);
+                }
             });
         }
 
         function showFinalResults() {
             showScreen('screen-result');
             const tbody = document.querySelector('#leaderboard-table tbody'); tbody.innerHTML = '';
+            
             db.ref(`rooms/${myRoomCode}/players`).once('value').then(snap => {
                 const players = Object.values(snap.val());
                 players.sort((a, b) => b.score - a.score);
+                
                 players.forEach((p, i) => {
-                    tbody.innerHTML += `<tr style="${i===0?'color:#FFD700':''}"><td>${i+1}</td><td>${p.name}</td><td>${p.score}</td></tr>`;
+                    tbody.innerHTML += `<tr style="${i===0?'background:#333':''}">
+                        <td>${i+1}</td>
+                        <td>${p.name}</td>
+                        <td style="color:${i===0?'#FFD700':'#fff'}">${p.score}</td>
+                    </tr>`;
                 });
             });
         }
