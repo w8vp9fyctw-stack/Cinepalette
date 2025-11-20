@@ -85,18 +85,35 @@
         .status-wrong { color: var(--wrong-red); opacity: 1 !important; letter-spacing: 2px; }
 
         /* --- GÖRSEL ALANI --- */
-        .media-container {
-            width: 100%; background: #000; border: 1px solid #333; border-radius: 12px;
-            overflow: hidden; margin-bottom: 10px; position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
-            min-height: 30vh; 
-        }
-        
+       /* --- GÖRSEL ALANI (DÜZELTİLMİŞ) --- */
         #poster-view, #snapshot-view { 
             width: 100%; 
-            height: 40vh; /* Şıklar yukarı gelsin diye yükseklik kısıtlandı */
+            height: 40vh;
             max-height: 400px;
             display: none; position: relative; background: black; overflow: hidden;
+        }
+
+        #game-poster, #game-snapshot { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain;
+            /* Varsayılan: Bulanık */
+            filter: blur(20px) brightness(0.6); 
+            transform: scale(1.1);
+            opacity: 0; /* Yüklenene kadar gizli */
+            transition: opacity 0.5s ease-in; /* Yavaşça belirsin */
+        }
+        
+        /* Resim yüklendiğinde bu sınıf eklenecek */
+        .loaded { 
+            opacity: 1 !important; 
+        }
+
+        /* Doğru bilinince bu sınıf eklenecek */
+        .revealed { 
+            filter: blur(0) brightness(1) !important;
+            transform: scale(1) !important;
+            transition: filter 1s ease-out, transform 1s ease-out;
         }
 
         /* --- BLUR EFEKTİ --- */
@@ -438,34 +455,58 @@
             if(currentQIndex >= gameQuestions.length) currentQIndex = 0;
             const q = gameQuestions[currentQIndex];
             
+            // UI Reset
             document.getElementById('hint-display').innerText = "";
             document.getElementById('btn-hint').disabled = false;
-            const optBox = document.getElementById('options-box'); optBox.innerHTML='';
+            document.getElementById('options-box').innerHTML = "";
             document.getElementById('feedback-display').innerText = "";
             document.getElementById('feedback-display').className = "";
 
             const pImg = document.getElementById('game-poster');
             const sImg = document.getElementById('game-snapshot');
             
-            // Sıfırla
-            pImg.className = ""; sImg.className = "";
-            pImg.src = ""; sImg.src = "";
-            
-            const onLoad = (e) => e.target.classList.add('loaded');
-            pImg.onload = onLoad;
-            sImg.onload = onLoad;
+            // 1. Önceki resmi hemen gizle ve bulanıklaştır (Net kalmasın)
+            pImg.classList.remove('revealed', 'loaded');
+            sImg.classList.remove('revealed', 'loaded');
 
+            // Resim yüklendiğinde çalışacak fonksiyon
+            const onImgLoad = (e) => {
+                e.target.classList.add('loaded'); // Yavaşça görünür yap
+            };
+            
+            // Event Listener'ları her seferinde sıfırlamak yerine üzerine yazıyoruz
+            pImg.onload = onImgLoad;
+            sImg.onload = onImgLoad;
+
+            // 2. Yeni Kaynağı Ata
             if(currentMode === 'quote') {
                 document.getElementById('game-quote').innerText = `"${q.text}"`;
             } else if (currentMode === 'snapshot') {
                 sImg.src = q.snapshot;
             } else {
                 pImg.src = q.poster;
-                const pView = document.getElementById('palette-view'); pView.innerHTML='';
+                
+                // Paleti yükle
+                const pView = document.getElementById('palette-view'); 
+                pView.innerHTML='';
                 if(q.colors) q.colors.forEach(c=>{
                     const d=document.createElement('div'); d.className='color-strip'; d.style.backgroundColor=c;
                     pView.appendChild(d);
                 });
+            }
+
+            // Şıkları Karıştır ve Ekle
+            let shuffledOptions = [...q.options];
+            shuffledOptions.sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach(opt=>{
+                const btn=document.createElement('div'); 
+                btn.className='opt-btn'; 
+                btn.innerText=opt;
+                btn.onclick = ()=>checkAnswer(opt, q.correct, btn);
+                document.getElementById('options-box').appendChild(btn);
+            });
+        }
             }
 
             // ŞIKLARI KARIŞTIR
