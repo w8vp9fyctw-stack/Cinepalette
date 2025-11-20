@@ -104,17 +104,17 @@
             width: 100%; 
             height: 100%; 
             object-fit: contain;
-            filter: blur(20px)
+            filter: blur(20px) brightness(0.6); 
             transform: scale(1.1);
             opacity: 0; 
-            transition: opacity 0.2s ease;
+            transition: opacity 0.3s ease;
         }
         
         .loaded { opacity: 1 !important; }
 
         /* Net Hal */
         .revealed { 
-            filter: blur(0) !important;
+            filter: blur(0) brightness(1) !important;
             transform: scale(1) !important;
             transition: filter 0.8s ease-out, transform 0.8s ease-out;
         }
@@ -156,12 +156,12 @@
         <div style="width:100%; margin-bottom: 20px;">
             <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">OYUN MODU</label>
             <select id="genre-select" onchange="uiUpdate()">
-                <option value="mix"> KARIŞIK (Hepsi)</option>
-                <option value="snapshot"> TEK KARE (Zor Mod)</option>
-                <option value="quote"> REPLİKLER (Zor Seviye)</option>
-                <option value="palettes"> RENK PALETİ</option>
-                <option value="cult"> KÜLT & ARTHOUSE</option>
-                <option value="scifi"> BİLİM KURGU</option>
+                <option value="mix">🎲 KARIŞIK (Hepsi)</option>
+                <option value="snapshot">🖼️ TEK KARE (Zor Mod)</option>
+                <option value="quote">💬 REPLİKLER (Zor Seviye)</option>
+                <option value="palettes">🎨 RENK PALETİ</option>
+                <option value="cult">🍷 KÜLT & ARTHOUSE</option>
+                <option value="scifi">🚀 BİLİM KURGU</option>
             </select>
             
             <div id="visual-setting">
@@ -174,8 +174,8 @@
             </div>
         </div>
 
-        <button onclick="startSinglePlayerGame()"> TEK KİŞİLİK FİLM KEYFİ</button>
-        <button class="btn-multiplayer-toggle" onclick="toggleMultiplayer()"> ARKADAŞLARLA OYNA</button>
+        <button onclick="startSinglePlayerGame()">⭐ TEK KİŞİLİK FİLM KEYFİ</button>
+        <button class="btn-multiplayer-toggle" onclick="toggleMultiplayer()">👥 ARKADAŞLARLA OYNA</button>
 
         <div id="multiplayer-panel">
             <div style="display:flex; gap:10px;">
@@ -223,7 +223,7 @@
     </div>
 
     <div id="screen-result" class="screen">
-        <h2 style="font-family:'Bebas Neue'; font-size:3rem;">OYUNCULAR</h2>
+        <h2 style="font-family:'Bebas Neue'; font-size:3rem;">KAST LİSTESİ</h2>
         <table id="result-table" style="width:100%; border-collapse:collapse; text-align:left;">
             <thead><tr style="color:#666; border-bottom:1px solid #333;"><th>#</th><th>Oyuncu</th><th>Puan</th></tr></thead>
             <tbody></tbody>
@@ -438,33 +438,23 @@
             if(currentQIndex >= gameQuestions.length) currentQIndex = 0;
             const q = gameQuestions[currentQIndex];
             
-            // UI Temizliği
             document.getElementById('hint-display').innerText = "";
             document.getElementById('btn-hint').disabled = false;
-            document.getElementById('options-box').innerHTML = "";
+            const optBox = document.getElementById('options-box'); optBox.innerHTML='';
             document.getElementById('feedback-display').innerText = "";
             document.getElementById('feedback-display').className = "";
 
             const pImg = document.getElementById('game-poster');
             const sImg = document.getElementById('game-snapshot');
             
-            // 1. GÖRSELİ SIFIRLA (Anında bulanıklaş ve gizlen)
-            // 'revealed' sınıfını kaldırıyoruz, CSS transition olmadığı için anında blur olur.
-            pImg.className = ""; 
-            sImg.className = "";
+            // Sıfırla
+            pImg.className = ""; sImg.className = "";
+            pImg.src = ""; sImg.src = "";
             
-            // 2. Eski resim kalıntısını temizle (Flash etkisini önler)
-            pImg.src = "";
-            sImg.src = "";
+            const onLoad = (e) => e.target.classList.add('loaded');
+            pImg.onload = onLoad;
+            sImg.onload = onLoad;
 
-            // Resim yüklendiğinde görünür yap (Fade-in)
-            const onImgLoad = (e) => {
-                e.target.classList.add('loaded');
-            };
-            pImg.onload = onImgLoad;
-            sImg.onload = onImgLoad;
-
-            // İçerik Doldurma
             if(currentMode === 'quote') {
                 document.getElementById('game-quote').innerText = `"${q.text}"`;
             } else if (currentMode === 'snapshot') {
@@ -478,53 +468,64 @@
                 });
             }
 
-            q.options.forEach(opt=>{
-                const btn=document.createElement('div'); btn.className='opt-btn'; btn.innerText=opt;
+            // ŞIKLARI KARIŞTIR
+            let shuffledOptions = [...q.options];
+            shuffledOptions.sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach(opt=>{
+                const btn=document.createElement('div'); 
+                btn.className='opt-btn'; 
+                btn.innerText=opt;
                 btn.onclick = ()=>checkAnswer(opt, q.correct, btn);
-                document.getElementById('options-box').appendChild(btn);
+                optBox.appendChild(btn);
             });
         }
 
         function checkAnswer(sel, corr, btn) {
             if(!isPlaying) return;
-            document.querySelectorAll('.opt-btn').forEach(b=>b.style.pointerEvents='none');
+            
+            // Tüm şık butonlarını seç ve kilitle
+            const allBtns = document.querySelectorAll('.opt-btn');
+            allBtns.forEach(b=>b.style.pointerEvents='none'); 
 
             const fb = document.getElementById('feedback-display');
 
             if(sel===corr) {
-                // DOĞRU CEVAP
+                // DOĞRU BİLİNDİ
                 score+=10; document.getElementById('score-display').innerText=score;
                 btn.classList.add('btn-correct');
                 
                 fb.innerText = "DOĞRU";
                 fb.className = "status-correct";
                 
-                // Resmi Netleştir
-                if(currentMode==='movie') document.getElementById('game-poster').classList.add('revealed');
-                if(currentMode==='snapshot') document.getElementById('game-snapshot').classList.add('revealed');
+                if(currentMode==='movie') document.getElementById('game-poster').className = "revealed";
+                if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "revealed";
                 
-                // SÜRE AYARI: Burada 2500ms (2.5 saniye) bekletiyoruz.
-                // Poster netleşecek ve ekranda kalacak.
+                // SÜRE AYARI: 4000ms (4 Saniye) yaptık
                 setTimeout(()=>{ 
-                    if(isPlaying){
-                        currentQIndex++; 
-                        loadQuestion(); 
-                    } 
-                }, 2500);
-
+                    if(isPlaying){ currentQIndex++; loadQuestion(); } 
+                }, 4000);
             } else {
-                // YANLIŞ CEVAP
+                // YANLIŞ BİLİNDİ
                 btn.classList.add('btn-wrong');
                 fb.innerText = "YANLIŞ";
                 fb.className = "status-wrong";
+
+                // DOĞRU CEVABI GÖSTER (YEŞİL YAP)
+                allBtns.forEach(b => {
+                    if(b.innerText === corr) {
+                        b.classList.add('btn-correct');
+                    }
+                });
                 
-                // Yanlışta daha hızlı geçebiliriz (1 saniye)
+                // Yanlışta da posteri netleştir ki ne olduğunu görsün
+                if(currentMode==='movie') document.getElementById('game-poster').className = "revealed";
+                if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "revealed";
+
+                // SÜRE AYARI: Yanlışta da 4 saniye beklesin
                 setTimeout(()=>{ 
-                    if(isPlaying){
-                        currentQIndex++; 
-                        loadQuestion(); 
-                    } 
-                }, 1000);
+                    if(isPlaying){ currentQIndex++; loadQuestion(); } 
+                }, 4000); 
             }
         }
 
