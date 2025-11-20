@@ -132,7 +132,18 @@
         .timer-display { font-family: 'Bebas Neue'; font-size: 2.5rem; line-height: 1; }
         .timer-display.danger { color: #ff0000; animation: pulse 0.5s infinite; }
         .hint-btn { background: #e5c1001a; color: var(--text-gold); border: 1px solid var(--text-gold); width: auto; padding: 6px 10px; font-size: 0.75rem; margin: 0; }
-        .hint-text { color: #aaa; font-size: 1 rem; font-style: italic; margin-bottom: 3px; text-align: center; height: 15px; }
+        .hint-text {
+            width: 100%; 
+            text-align: center; 
+            color: #aaa; 
+            font-size: 1rem; 
+            font-style: italic; 
+            margin-bottom: 10px; 
+            min-height: 20px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
         .opt-btn { 
@@ -218,9 +229,10 @@
             <div class="timer-display" id="timer-display">60</div>
             <div style="text-align:right;">
                 <button class="hint-btn" id="btn-hint" onclick="useHint()">💡 İPUCU (-5sn)</button>
-                <div class="hint-text" id="hint-display"></div>
             </div>
         </div>
+
+        <div class="hint-text" id="hint-display"></div>
 
         <div class="options-grid" id="options-box"></div>
     </div>
