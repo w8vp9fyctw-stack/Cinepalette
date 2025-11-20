@@ -304,15 +304,140 @@
 
         // --- VERİTABANI ---
         const database = [
-            // REPLİKLER
-            { type: "quote", difficulty: "easy", text: "May the Force be with you.", hint: "Yıldız Savaşları", correct: "Star Wars", options: ["Star Wars", "Star Trek", "Dune", "Avatar"] },
-            { type: "quote", difficulty: "hard", text: "I drink your milkshake!", hint: "Petrol Arayışı", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "Lincoln"] },
+            
+            // ============================================================
+            // 🖼️ KATEGORİ: SNAPSHOT (TEK KARE) - YENİLER EKLENDİ
+            // ============================================================
+            
+            // --- KOLAY ---
+            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Gemi, Buzdağı", correct: "Titanic", snapshot: "https://m.media-amazon.com/images/M/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
+            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Aslan, Kaya", correct: "The Lion King", snapshot: "https://m.media-amazon.com/images/M/MV5BMjIwMjE1Nzc4NV5BMl5BanBnXkFtZTgwNDg4OTA1NzM@._V1_.jpg", options: ["The Lion King", "Madagascar", "Jungle Book", "Tarzan"] },
+            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Mavi İnsanlar, Pandora", correct: "Avatar", snapshot: "https://m.media-amazon.com/images/M/MV5BMTYwOTEwNjAzMl5BMl5BanBnXkFtZTcwODc5MTUwMw@@._V1_.jpg", options: ["Avatar", "Guardians of the Galaxy", "Valerian", "Warcraft"] },
+            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Kırmızı Balon", correct: "It", snapshot: "https://m.media-amazon.com/images/M/MV5BM2Q1ZWUxZjItM2YxZC00NTQxLTgzNmQtYTAxZWM3YjU5NDY2XkEyXkFqcGdeQXVyMTAxNzQ1NzI@._V1_.jpg", options: ["It", "Stranger Things", "Poltergeist", "Annabelle"] },
+            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Mermi, Matrix", correct: "The Matrix", snapshot: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg", options: ["The Matrix", "John Wick", "Constantine", "Equilibrium"] },
+
+            // --- ZOR ---
+            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Kore, Çekiç, Koridor", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
+            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Sarı Eşofman, Motor", correct: "Kill Bill: Vol. 1", snapshot: "https://m.media-amazon.com/images/M/MV5BNzM3NDFhYTAtYmU5Mi00NGRmLTljYjgtMDkyODQ4MjNkMGY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Death Proof", "Sin City"] },
+            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Merdiven, Reality Show", correct: "The Truman Show", snapshot: "https://m.media-amazon.com/images/M/MV5BMDIzODcyY2EtMmY2MC00ZWVlLTgwMzAtMjQwOWUyNmJjNTYyXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_.jpg", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Yes Man"] },
+            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Duş, Bıçak", correct: "Psycho", snapshot: "https://m.media-amazon.com/images/M/MV5BNTQwNDM1YzItNDAxZC00NWY2LTk0M2UtNDIwNWI5OGUyNWUxXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Psycho", "The Birds", "Vertigo", "Rear Window"] },
+            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Dans, Araba", correct: "Grease", snapshot: "https://m.media-amazon.com/images/M/MV5BZWJlNzkyZmEtZjQxYi00OTExLWE4MTQtM2I1ZTIxNDRhODQzXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", options: ["Grease", "Dirty Dancing", "Footloose", "Hairspray"] },
+
+            // --- UZMAN ---
+            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Monolit, Uzay", correct: "2001: A Space Odyssey", snapshot: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Moon"] },
+            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Satranç, Ölüm", correct: "The Seventh Seal", snapshot: "https://m.media-amazon.com/images/M/MV5BNjYzYWRjNDYtNDMwOS00MTVkLTgzMWMtNWZkODlmNmFjMTQ2XkEyXkFqcGdeQXVyMDc2NTEzMw@@._V1_.jpg", options: ["The Seventh Seal", "Persona", "Wild Strawberries", "8½"] },
+            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Mezarlık, Üçlü Düello", correct: "The Good, the Bad and the Ugly", snapshot: "https://m.media-amazon.com/images/M/MV5BNjgyMTM1YjAtOGMxYS00NWRlLTk4ZmItY2Q2M2RkOTY3MTQ2XkEyXkFqcGdeQXVyMTA3MDExNDEw._V1_.jpg", options: ["The Good, the Bad and the Ugly", "Django", "Unforgiven", "Once Upon a Time in the West"] },
+            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Helikopter, Savaş", correct: "Apocalypse Now", snapshot: "https://m.media-amazon.com/images/M/MV5BMDdhODhmZmItYTMwZC00ZGI5LWFkYjMtOTM2NThkNWFlYmNiXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_.jpg", options: ["Apocalypse Now", "Platoon", "Full Metal Jacket", "The Deer Hunter"] },
+            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Bisiklet, Ay", correct: "E.T. the Extra-Terrestrial", snapshot: "https://m.media-amazon.com/images/M/MV5BMTQ2ODFlMDAtNzdhOC00ZDYzLWE3YTMtNDU4ZGFmZmJmYTczXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", options: ["E.T.", "Close Encounters", "Super 8", "The Iron Giant"] },
+
+            // ============================================================
+            // 🧩 KATEGORİ: EMOJI BULMACA
+            // ============================================================
+            { type: "emoji", difficulty: "easy", text: "🎈🏠👴", hint: "Pixar, Uçan Ev", correct: "Up", options: ["Up", "Inside Out", "Coco", "Soul"] },
+            { type: "emoji", difficulty: "easy", text: "🚢❄️💔", hint: "Buzdağı, 1997", correct: "Titanic", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
+            { type: "emoji", difficulty: "easy", text: "🤡🕺🔫", hint: "Merdiven Dansı", correct: "Joker", options: ["Joker", "The Dark Knight", "Batman", "Suicide Squad"] },
+            { type: "emoji", difficulty: "easy", text: "🦁👑🐗", hint: "Hakuna Matata", correct: "The Lion King", options: ["The Lion King", "Madagascar", "Jungle Book", "Tarzan"] },
+            { type: "emoji", difficulty: "easy", text: "🍫🏃🍤", hint: "Run Forrest Run", correct: "Forrest Gump", options: ["Forrest Gump", "Big", "Cast Away", "Rain Man"] },
+            { type: "emoji", difficulty: "easy", text: "🕶️👽🔫", hint: "Hafıza Silici, Ajanlar", correct: "Men in Black", options: ["Men in Black", "Alien", "Mars Attacks!", "E.T."] },
+            { type: "emoji", difficulty: "easy", text: "🎸💀🌼", hint: "Meksika, Ölüler Günü", correct: "Coco", options: ["Coco", "Book of Life", "Encanto", "Soul"] },
+            { type: "emoji", difficulty: "easy", text: "🎲🦁🐒", hint: "Tehlikeli Masa Oyunu", correct: "Jumanji", options: ["Jumanji", "Zathura", "Jungle Cruise", "Night at the Museum"] },
+            { type: "emoji", difficulty: "easy", text: "🚗⚡🕰️", hint: "88 Mil, Doktor", correct: "Back to the Future", options: ["Back to the Future", "Ferris Bueller's Day Off", "Ghostbusters", "Teen Wolf"] },
+            { type: "emoji", difficulty: "easy", text: "👻🚫🚙", hint: "Kimi arayacaksın?", correct: "Ghostbusters", options: ["Ghostbusters", "Beetlejuice", "Casper", "Gremlins"] },
+            { type: "emoji", difficulty: "easy", text: "🐍🤠👢", hint: "Oyuncağımın altında yılan var!", correct: "Toy Story", options: ["Toy Story", "Cars", "Monsters Inc.", "Finding Nemo"] },
+            { type: "emoji", difficulty: "easy", text: "🐀👨‍🍳🍲", hint: "Herkes yemek yapabilir", correct: "Ratatouille", options: ["Ratatouille", "Flushed Away", "Stuart Little", "Garfield"] },
+            { type: "emoji", difficulty: "easy", text: "👸🍎😴", hint: "Yedi Cüceler", correct: "Snow White and the Seven Dwarfs", options: ["Snow White", "Cinderella", "Sleeping Beauty", "Tangled"] },
+            { type: "emoji", difficulty: "easy", text: "🧙‍♂️💍🌋", hint: "Orta Dünya, Kardeşlik", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "The Hobbit", "Harry Potter", "Narnia"] },
+            { type: "emoji", difficulty: "easy", text: "🕷️🕸️🏙️", hint: "Büyük güç büyük sorumluluk", correct: "Spider-Man", options: ["Spider-Man", "Batman", "Superman", "Iron Man"] },
+
+
+
+            { type: "emoji", difficulty: "hard", text: "💊🕶️💻", hint: "Kırmızı Hap", correct: "The Matrix", options: ["The Matrix", "John Wick", "Inception", "Blade Runner"] },
+            { type: "emoji", difficulty: "hard", text: "👻🚫lz", hint: "Kimi arayacaksın?", correct: "Ghostbusters", options: ["Ghostbusters", "Casper", "Beetlejuice", "Men in Black"] },
+            { type: "emoji", difficulty: "hard", text: "🦖🦕🚙", hint: "Bir Park", correct: "Jurassic Park", options: ["Jurassic Park", "Godzilla", "King Kong", "Jumanji"] },
+            { type: "emoji", difficulty: "hard", text: "🥊🐯👀", hint: "Adrian!", correct: "Rocky", options: ["Rocky", "Raging Bull", "Creed", "Million Dollar Baby"] },
+            { type: "emoji", difficulty: "hard", text: "🦈🏖️🩸", hint: "Daaaa-dum...", correct: "Jaws", options: ["Jaws", "The Meg", "Deep Blue Sea", "Piranha"] },
+            { type: "emoji", difficulty: "hard", text: "🏐🏝️📦", hint: "Wilson!", correct: "Cast Away", options: ["Cast Away", "Robinson Crusoe", "Life of Pi", "The Blue Lagoon"] },
+            { type: "emoji", difficulty: "hard", text: "📦😵🌧️", hint: "Kutuda ne var?", correct: "Se7en", options: ["Se7en", "Zodiac", "Fight Club", "Prisoners"] },
+            { type: "emoji", difficulty: "hard", text: "📺👱‍♂️⛵️", hint: "Sahte Hayat, Günaydın!", correct: "The Truman Show", options: ["The Truman Show", "Eternal Sunshine", "Edtv", "Pleasantville"] },
+            { type: "emoji", difficulty: "hard", text: "🧼👊🤫", hint: "İlk kural: Bahsetmek yok", correct: "Fight Club", options: ["Fight Club", "American Psycho", "Snatch", "Pulp Fiction"] },
+            { type: "emoji", difficulty: "hard", text: "👔🪓🎵", hint: "Kartvizit, Huey Lewis", correct: "American Psycho", options: ["American Psycho", "Fight Club", "Nightcrawler", "Joker"] },
+            { type: "emoji", difficulty: "hard", text: "🤫🐑🦋", hint: "Kuzuların Çığlığı", correct: "The Silence of the Lambs", options: ["The Silence of the Lambs", "Hannibal", "Se7en", "Zodiac"] },
+            { type: "emoji", difficulty: "hard", text: "💊🕶️🐇", hint: "Tavşanı izle", correct: "The Matrix", options: ["The Matrix", "Inception", "Blade Runner", "Equilibrium"] },
+            { type: "emoji", difficulty: "hard", text: "🤠⛺️🏔️", hint: "Kovboylar, Yasak Aşk", correct: "Brokeback Mountain", options: ["Brokeback Mountain", "Power of the Dog", "No Country for Old Men", "Moonlight"] },
+            { type: "emoji", difficulty: "hard", text: "👵🚿🔪", hint: "Motel, Anne", correct: "Psycho", options: ["Psycho", "The Birds", "Vertigo", "Halloween"] },
+            { type: "emoji", difficulty: "hard", text: "🌹🥀👹", hint: "Bir masal kadar eski", correct: "Beauty and the Beast", options: ["Beauty and the Beast", "Cinderella", "The Little Mermaid", "Aladdin"] },
+
+
+
+
+            { type: "emoji", difficulty: "expert", text: "🥯👀🪨", hint: "Her Şey, Her Yerde", correct: "Everything Everywhere All At Once", options: ["EEAAO", "Doctor Strange", "The Matrix", "Inception"] },
+            { type: "emoji", difficulty: "expert", text: "🥄☕️🦌", hint: "Hipnoz, Batık Yer", correct: "Get Out", options: ["Get Out", "Us", "Nope", "Candyman"] },
+            { type: "emoji", difficulty: "expert", text: "👽🐙🗣️", hint: "Dilbilimci, Zaman", correct: "Arrival", options: ["Arrival", "Contact", "Interstellar", "Dune"] },
+            { type: "emoji", difficulty: "expert", text: "🥛👁️🎩", hint: "Ludovico Tekniği", correct: "A Clockwork Orange", options: ["A Clockwork Orange", "The Shining", "Full Metal Jacket", "Trainspotting"] },
+            { type: "emoji", difficulty: "expert", text: "👨🏻💻❤️📱", hint: "İşletim Sistemi Aşkı", correct: "Her", options: ["Her", "Ex Machina", "Lost in Translation", "Eternal Sunshine"] },
+            { type: "emoji", difficulty: "expert", text: "🍑🏠🌳", hint: "İtalya, Yaz, Şeftali", correct: "Call Me by Your Name", options: ["Call Me by Your Name", "Moonlight", "Brokeback Mountain", "Love, Simon"] },
+            { type: "emoji", difficulty: "expert", text: "💃🕺🎹", hint: "Los Angeles, Caz", correct: "La La Land", options: ["La La Land", "Whiplash", "A Star Is Born", "Chicago"] },
+            { type: "emoji", difficulty: "expert", text: "🎻🚢🧊", hint: "Batmaz denilen gemi", correct: "Titanic", options: ["Titanic", "Pearl Harbor", "The Notebook", "Romeo + Juliet"] },
+            { type: "emoji", difficulty: "expert", text: "👮‍♂️🚗🚕", hint: "Taksi Şoförü, Mohawk", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Joker", "Drive"] },
+            { type: "emoji", difficulty: "expert", text: "🎹🪖Nazi", hint: "Piyanist, Savaş", correct: "The Pianist", options: ["The Pianist", "Schindler's List", "Life is Beautiful", "Downfall"] },
+            { type: "emoji", difficulty: "expert", text: "👨‍🚀🥔🚀", hint: "Mars'ta Patates", correct: "The Martian", options: ["The Martian", "Interstellar", "Gravity", "Ad Astra"] },
+            { type: "emoji", difficulty: "expert", text: "👴💍🌋", hint: "Kıymetli", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "Harry Potter", "The Hobbit", "Narnia"] },
+            { type: "emoji", difficulty: "expert", text: "🐼👊🍜", hint: "Ejderha Savaşçısı", correct: "Kung Fu Panda", options: ["Kung Fu Panda", "Shrek", "Ice Age", "Madagascar"] },
+            { type: "emoji", difficulty: "expert", text: "🛁🔪🚿", hint: "Motel", correct: "Psycho", options: ["Psycho", "The Shining", "Halloween", "Scream"] },
+            { type: "emoji", difficulty: "expert", text: "🌹🥀👹", hint: "Dans", correct: "Beauty and the Beast", options: ["Beauty and the Beast", "Cinderella", "Sleeping Beauty", "Aladdin"] },
+       
+       // REPLİKLER
+            
+            // ============================================================
+            // 💬 EK REPLİKLER (LETTERBOXD LİSTESİNDEN UYARLAMA)
+            // ============================================================
+
+            // --- 🟢 KOLAY (EASY) ---
+            { type: "quote", difficulty: "easy", text: "Great Scott!", hint: "Doktor, 88 Mil", correct: "Back to the Future", options: ["Back to the Future", "Rick and Morty", "Ghostbusters", "Star Wars"] },
+            { type: "quote", difficulty: "easy", text: "Anyone can cook.", hint: "Fare, Paris", correct: "Ratatouille", options: ["Ratatouille", "Burnt", "Chef", "The Menu"] },
+            { type: "quote", difficulty: "easy", text: "With great power comes great responsibility.", hint: "Ben Amca", correct: "Spider-Man", options: ["Spider-Man", "Batman", "Superman", "Iron Man"] },
+            { type: "quote", difficulty: "easy", text: "Run, Forrest! Run!", hint: "Jenny", correct: "Forrest Gump", options: ["Forrest Gump", "Saving Private Ryan", "Cast Away", "Big"] },
+            { type: "quote", difficulty: "easy", text: "You are a sad, strange little man and you have my pity.", hint: "Uzay Polisi, Kovboy", correct: "Toy Story", options: ["Toy Story", "Shrek", "Monsters Inc.", "Finding Nemo"] },
+            { type: "quote", difficulty: "easy", text: "I make this look good.", hint: "Ajan J, Takım Elbise", correct: "Men in Black", options: ["Men in Black", "Bad Boys", "Independence Day", "Wild Wild West"] },
+            { type: "quote", difficulty: "easy", text: "Wilson! I'm sorry, Wilson!", hint: "Issız Ada, Voleybol Topu", correct: "Cast Away", options: ["Cast Away", "The Terminal", "Forrest Gump", "Captain Phillips"] },
+            { type: "quote", difficulty: "easy", text: "You shall not pass!", hint: "Gandalf, Köprü", correct: "The Lord of the Rings: The Fellowship of the Ring", options: ["The Lord of the Rings", "The Hobbit", "Harry Potter", "Game of Thrones"] },
+            { type: "quote", difficulty: "easy", text: "I'm the king of the world!", hint: "Gemi, Okyanus", correct: "Titanic", options: ["Titanic", "The Great Gatsby", "Romeo + Juliet", "Avatar"] },
+            { type: "quote", difficulty: "easy", text: "Mirror mirror on the wall, who is the fairest of them all?", hint: "Kötü Kraliçe", correct: "Snow White and the Seven Dwarfs", options: ["Snow White", "Cinderella", "Maleficent", "Tangled"] },
+
+            // --- 🟡 ZOR (HARD) ---
+            { type: "quote", difficulty: "hard", text: "I have to return some videotapes.", hint: "Patrick Bateman, Kartvizit", correct: "American Psycho", options: ["American Psycho", "Nightcrawler", "Fight Club", "Joker"] },
+            { type: "quote", difficulty: "hard", text: "Seize your moment.", hint: "Meksika, Müzik", correct: "Coco", options: ["Coco", "Soul", "Inside Out", "Book of Life"] },
+            { type: "quote", difficulty: "hard", text: "In case I don't see you... good afternoon, good evening, and good night!", hint: "Sahte Dünya", correct: "The Truman Show", options: ["The Truman Show", "Eternal Sunshine", "Bruce Almighty", "Yes Man"] },
+            { type: "quote", difficulty: "hard", text: "A census taker once tried to test me. I ate his liver with some fava beans and a nice Chianti.", hint: "Hannibal Lecter", correct: "The Silence of the Lambs", options: ["The Silence of the Lambs", "Se7en", "Zodiac", "Red Dragon"] },
+            { type: "quote", difficulty: "hard", text: "Ernest Hemingway once wrote, 'The world is a fine place and worth fighting for.' I agree with the second part.", hint: "Dedektif Somerset", correct: "Se7en", options: ["Se7en", "Fight Club", "Zodiac", "The Game"] },
+            { type: "quote", difficulty: "hard", text: "Here's to the ones who dream, foolish as they may seem.", hint: "Emma Stone, Audition", correct: "La La Land", options: ["La La Land", "Whiplash", "A Star Is Born", "Moulin Rouge!"] },
+            { type: "quote", difficulty: "hard", text: "Tale as old as time.", hint: "Çaydanlık", correct: "Beauty and the Beast", options: ["Beauty and the Beast", "Cinderella", "The Little Mermaid", "Aladdin"] },
+            { type: "quote", difficulty: "hard", text: "A boy's best friend is his mother.", hint: "Norman Bates", correct: "Psycho", options: ["Psycho", "The Birds", "Halloween", "Friday the 13th"] },
+            { type: "quote", difficulty: "hard", text: "I wish I knew how to quit you.", hint: "Kovboylar, Çadır", correct: "Brokeback Mountain", options: ["Brokeback Mountain", "Call Me by Your Name", "Moonlight", "God's Own Country"] },
+            { type: "quote", difficulty: "hard", text: "In the jungle, you must wait, until the dice read five or eight.", hint: "Davul sesi", correct: "Jumanji", options: ["Jumanji", "Zathura", "Indiana Jones", "Jungle Cruise"] },
+
+            // --- 🔴 UZMAN (EXPERT) ---
+            { type: "quote", difficulty: "expert", text: "Be kind, for everyone you meet is fighting a hard battle.", hint: "Çoklu Evren, Çamaşırhane", correct: "Everything Everywhere All At Once", options: ["EEAAO", "The Matrix", "Doctor Strange", "Eternal Sunshine"] },
+            { type: "quote", difficulty: "expert", text: "I think anybody who falls in love is a freak. It's a crazy thing to do.", hint: "Yapay Zeka Aşkı", correct: "Her", options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
+            { type: "quote", difficulty: "expert", text: "Is it better to be feared or respected? I say, is it too much to ask for both?", hint: "Tony Stark", correct: "Iron Man", options: ["Iron Man", "The Avengers", "Captain America", "Batman Begins"] },
+            { type: "quote", difficulty: "expert", text: "Now you're in the Sunken Place.", hint: "Hipnoz, Kaşık Sesi", correct: "Get Out", options: ["Get Out", "Us", "Nope", "Midsommar"] },
+            { type: "quote", difficulty: "expert", text: "Despite knowing the journey... and where it leads... I embrace it.", hint: "Dilbilimci, Uzaylılar", correct: "Arrival", options: ["Arrival", "Interstellar", "Contact", "Dune"] },
+            { type: "quote", difficulty: "expert", text: "I was cured all right!", hint: "Alex DeLarge", correct: "A Clockwork Orange", options: ["A Clockwork Orange", "Trainspotting", "The Shining", "Full Metal Jacket"] },
+            { type: "quote", difficulty: "expert", text: "Call me by your name and I'll call you by mine.", hint: "İtalya, Yaz, Elio", correct: "Call Me by Your Name", options: ["Call Me by Your Name", "Moonlight", "Portrait of a Lady on Fire", "Love, Simon"] },
+            { type: "quote", difficulty: "expert", text: "Music was my refuge. I could crawl into the space between the notes and curl my back to loneliness.", hint: "Soykırım, Piyano", correct: "The Pianist", options: ["The Pianist", "Schindler's List", "Life is Beautiful", "The Green Mile"] },
+            { type: "quote", difficulty: "expert", text: "Loneliness has followed me my whole life, everywhere.", hint: "Taksi Şoförü", correct: "Taxi Driver", options: ["Taxi Driver", "Joker", "Nightcrawler", "Drive"] },
+            { type: "quote", difficulty: "expert", text: "We came, we saw, we kicked its ass!", hint: "Hayalet Avcıları", correct: "Ghostbusters", options: ["Ghostbusters", "Men in Black", "Beetlejuice", "Zombieland"] },
 
             // FİLMLER
-            { type: "movie", genre: "scifi", difficulty: "hard", hint: "Replikant", correct: "Blade Runner", poster: "https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_.jpg", colors: ["#F28C0F", "#D35400", "#E67E22", "#003B59", "#000000", "#A67A53", "#5E6C6F", "#17202A"], options: ["Blade Runner", "Dune", "Alien", "Total Recall"] },
-            { type: "movie", genre: "cult", difficulty: "expert", hint: "Terence Davies, 1992", correct: "The Long Day Closes", poster: "https://a.ltrbxd.com/resized/film-poster/1/5/6/7/7/15677-the-long-day-closes-0-2000-0-3000-crop.jpg?v=0b103e1bee", colors: ["#1c1c1c", "#3e3e3e", "#7f6a55", "#a38b6d", "#d9c6a5", "#f2e5ce", "#5a4a3a", "#2b221b"], options: ["The Long Day Closes", "Distant Voices, Still Lives", "The Deep Blue Sea", "Sunset Song"] },
-    
-            // --- 🟢 KOLAY (POPÜLER KÜLTLER) ---
+
+           // ==============================================
+        // 🎬 CINEPALETTE: DEVASA VERİTABANI (FULL PACK)
+        // ==============================================
+        
+            // ============================================================
+            // 👻 MEVCUT KORKU & GERİLİM (SENİN LİSTEN - KORUNANLAR)
+            // ============================================================
+           
             { type: "movie", genre: "horror", difficulty: "easy", hint: "Jack Nicholson, Balta, Otel", correct: "The Shining", poster: "https://m.media-amazon.com/images/M/MV5BZWFlYmY2MGEtZjVkYS00YzU4LTg0YjQtYzY1ZGE3NTA5NGQxXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", colors: ["#F4D03F", "#D35400", "#17202A", "#641E16", "#922B21", "#FDFEFE", "#000000", "#B03A2E"], options: ["The Shining", "Doctor Sleep", "Misery", "1408"] },
             { type: "movie", genre: "horror", difficulty: "easy", hint: "Alfred Hitchcock, Duş Sahnesi", correct: "Psycho", poster: "https://m.media-amazon.com/images/M/MV5BNTQwNDM1YzItNDAxZC00NWY2LTk0M2UtNDIwNWI5OGUyNWUxXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#4D4D4D", "#666666", "#808080", "#999999", "#FFFFFF"], options: ["Psycho", "The Birds", "Vertigo", "Rear Window"] },
             { type: "movie", genre: "horror", difficulty: "easy", hint: "Uzaylı, Ripley, Kedi", correct: "Alien", poster: "https://m.media-amazon.com/images/M/MV5BOGQzZTBjMjQtOTVmMS00NGE5LWEyYmMtOGQ1ZGZjNmRkYjFhXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_.jpg", colors: ["#000000", "#0B1808", "#142510", "#1E3319", "#294223", "#D4E157", "#CDDC39", "#FFFFFF"], options: ["Alien", "Aliens", "Prometheus", "The Thing"] },
@@ -323,8 +448,6 @@
             { type: "movie", genre: "horror", difficulty: "easy", hint: "Köpekbalığı, Yaz", correct: "Jaws", poster: "https://m.media-amazon.com/images/M/MV5BMmVmODY1MzEtYTMwZC00MzNhLWFkNDMtZjAwM2EwODUxZTA5XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg", colors: ["#000000", "#154360", "#1F618D", "#2980B9", "#5499C7", "#AED6F1", "#FDFEFE", "#C0392B"], options: ["Jaws", "The Meg", "Deep Blue Sea", "Piranha"] },
             { type: "movie", genre: "horror", difficulty: "easy", hint: "Palyaço Pennywise", correct: "It", poster: "https://m.media-amazon.com/images/M/MV5BZDVkZmI0YzAtNzdjYi00ZjhhLWE1ODEtMWMzMWMzNDA0NmQ4XkEyXkFqcGdeQXVyNzYzODM3Mzg@._V1_.jpg", colors: ["#000000", "#17202A", "#FFFFFF", "#FDFEFE", "#C0392B", "#922B21", "#F1C40F", "#D35400"], options: ["It", "Joker", "Poltergeist", "Annabelle"] },
             { type: "movie", genre: "horror", difficulty: "easy", hint: "Elektrikli Testere, Teksas", correct: "The Texas Chain Saw Massacre", poster: "https://m.media-amazon.com/images/M/MV5BOGZmYzVkMmItM2NiOS00MDI3LWI4ZWQtMTg0YWZkODRkMmViXkEyXkFqcGdeQXVyODY0NzcxNw@@._V1_.jpg", colors: ["#F9E79F", "#F7DC6F", "#F1C40F", "#D35400", "#BA4A00", "#6E2C00", "#000000", "#FFFFFF"], options: ["The Texas Chain Saw Massacre", "Halloween", "Friday the 13th", "Hostel"] },
-
-            // --- 🟡 ZOR (SİNEFİL FAVORİLERİ) ---
             { type: "movie", genre: "horror", difficulty: "hard", hint: "Antarktika, Köpek, Taklitçi", correct: "The Thing", poster: "https://m.media-amazon.com/images/M/MV5BNGViZWZmM2EtNGYzZi00ZDAyLTk3YjYtRJk4NDpnYzE3NzI3XkEyXkFqcGdeQXVyMjg2MTMyNTM@._V1_.jpg", colors: ["#000000", "#17202A", "#212F3C", "#283747", "#2E86C1", "#3498DB", "#85C1E9", "#FFFFFF"], options: ["The Thing", "The Fly", "Alien", "Invasion of the Body Snatchers"] },
             { type: "movie", genre: "horror", difficulty: "hard", hint: "Ari Aster, Aile, Minyatür", correct: "Hereditary", poster: "https://m.media-amazon.com/images/M/MV5BOTU5MDg3NzYyN15BMl5BanBnXkFtZTgwMDI3MzQ2NTM@._V1_.jpg", colors: ["#000000", "#2E1611", "#502318", "#6E2C00", "#873600", "#A04000", "#D35400", "#F5B041"], options: ["Hereditary", "Midsommar", "The Witch", "Sinister"] },
             { type: "movie", genre: "horror", difficulty: "hard", hint: "Jordan Peele, Hipnoz, Çay", correct: "Get Out", poster: "https://m.media-amazon.com/images/M/MV5BMjUxMDQwNjcyNl5BMl5BanBnXkFtZTgwNzE4MTE3MTI@._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#999999", "#FFFFFF", "#2E4053", "#17202A", "#5D6D7E"], options: ["Get Out", "Us", "Nope", "Candyman"] },
@@ -335,8 +458,6 @@
             { type: "movie", genre: "horror", difficulty: "hard", hint: "Gündüz Korkusu, Çiçekler", correct: "Midsommar", poster: "https://m.media-amazon.com/images/M/MV5BM2Q1ZWUxZjItM2YxZC00NTQxLTgzNmQtYTAxZWM3YjU5NDY2XkEyXkFqcGdeQXVyMTAxNzQ1NzI@._V1_.jpg", colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Ritual"] },
             { type: "movie", genre: "horror", difficulty: "hard", hint: "Kulübe, Kitap, Elektrikli Testere", correct: "The Evil Dead", poster: "https://m.media-amazon.com/images/M/MV5BODc2MmVjZmItMjAzMS00MmQ3LWE1ZjktODFhY2FiNmYyNjYxXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", colors: ["#000000", "#1A1A1A", "#641E16", "#922B21", "#C0392B", "#E74C3C", "#F1948A", "#FFFFFF"], options: ["The Evil Dead", "Evil Dead 2", "Army of Darkness", "Drag Me to Hell"] },
             { type: "movie", genre: "horror", difficulty: "hard", hint: "Japonya, Kaset, Kuyu", correct: "Ringu", poster: "https://m.media-amazon.com/images/M/MV5BNTU4NzkyM2ItYzFhNy00M2E0LWE4YjMtMTc5YTEzODM4MDZlXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg", colors: ["#000000", "#17202A", "#283747", "#5D6D7E", "#AEB6BF", "#2ECC71", "#145A32", "#FFFFFF"], options: ["Ringu", "The Ring", "Ju-on", "Dark Water"] },
-            
-            // --- 🔴 UZMAN (EXPERT - ARTHOUSE & CLASSIC) ---
             { type: "movie", genre: "horror", difficulty: "expert", hint: "Dario Argento, Cadı Okulu, Neon", correct: "Suspiria", poster: "https://m.media-amazon.com/images/M/MV5BMjM0NjMzMTRjMF5BMl5BanBnXkFtZTgwOTY3Mzc3MjI@._V1_.jpg", colors: ["#4A235A", "#6C3483", "#8E44AD", "#C0392B", "#E74C3C", "#2E86C1", "#3498DB", "#000000"], options: ["Suspiria", "Inferno", "Deep Red", "Black Swan"] },
             { type: "movie", genre: "horror", difficulty: "expert", hint: "Roman Polanski, Hamilelik", correct: "Rosemary's Baby", poster: "https://m.media-amazon.com/images/M/MV5BODJkZTZhMWItMDI3Yy00ZWZlLTk4NjQtOTI1ZjIyM2ZlYzQwXkEyXkFqcGdeQXVyMTA0MjU0Ng@@._V1_.jpg", colors: ["#000000", "#111111", "#1E3319", "#2D4A22", "#3D612D", "#4E7939", "#FFFFFF", "#D5D8DC"], options: ["Rosemary's Baby", "The Omen", "The Exorcist", "Hereditary"] },
             { type: "movie", genre: "horror", difficulty: "expert", hint: "Fransız, Vejetaryen, Yamyam", correct: "Raw", poster: "https://m.media-amazon.com/images/M/MV5BMGRjYjY2ZTMtZWNkNy00YzUzLTk2NzQtZGFhYmY5NmY5NzcxXkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg", colors: ["#000000", "#17202A", "#641E16", "#922B21", "#C0392B", "#1E8449", "#27AE60", "#FFFFFF"], options: ["Raw", "Titane", "Martyrs", "Climax"] },
@@ -344,16 +465,56 @@
             { type: "movie", genre: "horror", difficulty: "expert", hint: "Fransız, Yüzsüz Kadın", correct: "Eyes Without a Face", poster: "https://m.media-amazon.com/images/M/MV5BMDY0MzI2MGYtMDk2MC00NGE4LThkMDItMDYwYzQxM2RiN2FiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", colors: ["#000000", "#1A1A1A", "#333333", "#CCCCCC", "#E0E0E0", "#F2F2F2", "#FFFFFF", "#FFD700"], options: ["Eyes Without a Face", "Diabolique", "The Skin I Live In", "Repulsion"] },
             { type: "movie", genre: "horror", difficulty: "expert", hint: "Isabelle Adjani, Metro, Delilik", correct: "Possession", poster: "https://m.media-amazon.com/images/M/MV5BMTY5MjI3MTQxMF5BMl5BanBnXkFtZTgwNjU1MTY3MjE@._V1_.jpg", colors: ["#000000", "#17202A", "#1B4F72", "#2874A6", "#3498DB", "#85C1E9", "#D6EAF8", "#FFFFFF"], options: ["Possession", "Repulsion", "The Tenant", "Antichrist"] },
             { type: "movie", genre: "horror", difficulty: "expert", hint: "Siyah Beyaz, Deniz Feneri", correct: "The Lighthouse", poster: "https://m.media-amazon.com/images/M/MV5BZmE0MGJhNmYtOWRmNS00YjUxLTg4NmItOWMyY2QzZTAzMTEwXkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#4D4D4D", "#666666", "#808080", "#999999", "#FFFFFF"], options: ["The Lighthouse", "The Witch", "A Field in England", "Nosferatu"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "David Lynch, Radyatördeki Kadın", correct: "Eraserhead", poster: "https://m.media-amazon.com/images/M/MV5BMzQxNzQzOTQ5Nl5BMl5BanBnXkFtZTgwMjE5MzIxNzE@._V1_.jpg", colors: ["#000000", "#0F0F0F", "#1F1F1F", "#2F2F2F", "#3F3F3F", "#4F4F4F", "#5F5F5F", "#FFFFFF"], options: ["Eraserhead", "Blue Velvet", "Mulholland Drive", "Pi"] },
+            { type: "movie", genre: "horror", difficulty: "expert", hint: "David Lynch, Bebek, Radyatör", correct: "Eraserhead", poster: "https://m.media-amazon.com/images/M/MV5BMzQxNzQzOTQ5Nl5BMl5BanBnXkFtZTgwMjE5MzIxNzE@._V1_.jpg", colors: ["#000000", "#0F0F0F", "#1F1F1F", "#2F2F2F", "#3F3F3F", "#4F4F4F", "#5F5F5F", "#FFFFFF"], options: ["Eraserhead", "Blue Velvet", "Mulholland Drive", "Pi"] },
             { type: "movie", genre: "horror", difficulty: "expert", hint: "Avusturya, Aile Tatili, Kumanda", correct: "Funny Games", poster: "https://m.media-amazon.com/images/M/MV5BMTg4NjE1MDM2N15BMl5BanBnXkFtZTgwODM2NTM0MzE@._V1_.jpg", colors: ["#FFFFFF", "#FDFEFE", "#F7F9F9", "#E5E8E8", "#D7DBDD", "#BDC3C7", "#A93226", "#922B21"], options: ["Funny Games", "The Strangers", "Eden Lake", "Martyrs"] },
             { type: "movie", genre: "horror", difficulty: "expert", hint: "Bebek Bakıcısı, Telefon", correct: "Black Christmas", poster: "https://m.media-amazon.com/images/M/MV5BMTU4MzYwMjQ3Nl5BMl5BanBnXkFtZTgwMTgwNTk0NjE@._V1_.jpg", colors: ["#000000", "#17202A", "#641E16", "#922B21", "#C0392B", "#F1948A", "#FFFFFF", "#27AE60"], options: ["Black Christmas", "Halloween", "Scream", "When a Stranger Calls"] },
+
+            // ============================================================
+            // 💬 KATEGORİ: REPLİKLER (QUOTES) - YENİLER EKLENDİ
+            // ============================================================
             
-            // SNAPSHOTS
-            { genre: "snapshot", difficulty: "hard", hint: "Kore, Çekiç", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
-            
-            // EMOJI
-            { type: "emoji", difficulty: "easy", text: "🎈🏠👴", hint: "Pixar, Uçan Ev", correct: "Up", options: ["Up", "Inside Out", "Coco", "Soul"] }
+            // --- KOLAY ---
+            { type: "quote", difficulty: "easy", text: "I'll be back.", hint: "Terminator", correct: "The Terminator", options: ["The Terminator", "Predator", "Commando", "Total Recall"] },
+            { type: "quote", difficulty: "easy", text: "May the Force be with you.", hint: "Star Wars", correct: "Star Wars", options: ["Star Wars", "Star Trek", "Dune", "Avatar"] },
+            { type: "quote", difficulty: "easy", text: "My precious.", hint: "Gollum", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "The Hobbit", "Harry Potter", "Narnia"] },
+            { type: "quote", difficulty: "easy", text: "To infinity and beyond!", hint: "Buzz Lightyear", correct: "Toy Story", options: ["Toy Story", "Cars", "Wall-E", "Up"] },
+            { type: "quote", difficulty: "easy", text: "I see dead people.", hint: "Hayaletler", correct: "The Sixth Sense", options: ["The Sixth Sense", "The Others", "Poltergeist", "Insidious"] },
+            { type: "quote", difficulty: "easy", text: "I am your father.", hint: "Darth Vader", correct: "Star Wars: The Empire Strikes Back", options: ["Star Wars: The Empire Strikes Back", "Star Wars: A New Hope", "Star Wars: Return of the Jedi", "Dune"] },
+            { type: "quote", difficulty: "easy", text: "Why so serious?", hint: "Joker", correct: "The Dark Knight", options: ["The Dark Knight", "Joker", "Batman Begins", "Suicide Squad"] },
+            { type: "quote", difficulty: "easy", text: "Bond. James Bond.", hint: "Ajan 007", correct: "Dr. No", options: ["Dr. No", "Goldfinger", "Casino Royale", "Skyfall"] },
+            { type: "quote", difficulty: "easy", text: "Houston, we have a problem.", hint: "Uzay", correct: "Apollo 13", options: ["Apollo 13", "Gravity", "The Martian", "First Man"] },
+            { type: "quote", difficulty: "easy", text: "There's no place like home.", hint: "Dorothy", correct: "The Wizard of Oz", options: ["The Wizard of Oz", "Mary Poppins", "Alice in Wonderland", "Sound of Music"] },
+
+            // --- ZOR ---
+            { type: "quote", difficulty: "hard", text: "I drink your milkshake!", hint: "Petrol", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "The Master"] },
+            { type: "quote", difficulty: "hard", text: "Say hello to my little friend!", hint: "Tony Montana", correct: "Scarface", options: ["Scarface", "The Godfather", "Goodfellas", "Carlito's Way"] },
+            { type: "quote", difficulty: "hard", text: "You talking to me?", hint: "Travis Bickle", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Mean Streets", "The King of Comedy"] },
+            { type: "quote", difficulty: "hard", text: "Here's Johnny!", hint: "Jack Torrance", correct: "The Shining", options: ["The Shining", "Misery", "Psycho", "One Flew Over the Cuckoo's Nest"] },
+            { type: "quote", difficulty: "hard", text: "I'm gonna make him an offer he can't refuse.", hint: "Don Corleone", correct: "The Godfather", options: ["The Godfather", "Goodfellas", "Casino", "A Bronx Tale"] },
+            { type: "quote", difficulty: "hard", text: "The first rule of Fight Club is: You do not talk about Fight Club.", hint: "Tyler Durden", correct: "Fight Club", options: ["Fight Club", "Se7en", "Snatch", "American History X"] },
+            { type: "quote", difficulty: "hard", text: "Frankly, my dear, I don't give a damn.", hint: "Rhett Butler", correct: "Gone with the Wind", options: ["Gone with the Wind", "Casablanca", "Citizen Kane", "Ben-Hur"] },
+            { type: "quote", difficulty: "hard", text: "You can't handle the truth!", hint: "Mahkeme", correct: "A Few Good Men", options: ["A Few Good Men", "Top Gun", "Rain Man", "Born on the Fourth of July"] },
+            { type: "quote", difficulty: "hard", text: "I love the smell of napalm in the morning.", hint: "Vietnam", correct: "Apocalypse Now", options: ["Apocalypse Now", "Full Metal Jacket", "Platoon", "The Deer Hunter"] },
+            { type: "quote", difficulty: "hard", text: "What's in the box?", hint: "Brad Pitt", correct: "Se7en", options: ["Se7en", "Fight Club", "Zodiac", "Prisoners"] },
+
+            // --- UZMAN ---
+            { type: "quote", difficulty: "expert", text: "All those moments will be lost in time, like tears in rain.", hint: "Roy Batty", correct: "Blade Runner", options: ["Blade Runner", "2001: A Space Odyssey", "Alien", "Dune"] },
+            { type: "quote", difficulty: "expert", text: "I have always depended on the kindness of strangers.", hint: "Blanche DuBois", correct: "A Streetcar Named Desire", options: ["A Streetcar Named Desire", "Cat on a Hot Tin Roof", "Gone with the Wind", "Rebel Without a Cause"] },
+            { type: "quote", difficulty: "expert", text: "Forget it, Jake. It's Chinatown.", hint: "Dedektif", correct: "Chinatown", options: ["Chinatown", "L.A. Confidential", "The Maltese Falcon", "Double Indemnity"] },
+            { type: "quote", difficulty: "expert", text: "Open the pod bay doors, HAL.", hint: "Yapay Zeka", correct: "2001: A Space Odyssey", options: ["2001: A Space Odyssey", "Solaris", "Moon", "Ex Machina"] },
+            { type: "quote", difficulty: "expert", text: "I'm as mad as hell, and I'm not going to take this anymore!", hint: "Howard Beale", correct: "Network", options: ["Network", "Dog Day Afternoon", "Taxi Driver", "All the President's Men"] },
+            { type: "quote", difficulty: "expert", text: "Attica! Attica!", hint: "Banka Soygunu", correct: "Dog Day Afternoon", options: ["Dog Day Afternoon", "Serpico", "The French Connection", "Mean Streets"] },
+            { type: "quote", difficulty: "expert", text: "I am big. It's the pictures that got small.", hint: "Norma Desmond", correct: "Sunset Boulevard", options: ["Sunset Boulevard", "All About Eve", "Double Indemnity", "Some Like It Hot"] },
+            { type: "quote", difficulty: "expert", text: "Gentlemen, you can't fight in here! This is the War Room!", hint: "Dr. Strangelove", correct: "Dr. Strangelove", options: ["Dr. Strangelove", "Full Metal Jacket", "Paths of Glory", "The Great Dictator"] },
+            { type: "quote", difficulty: "expert", text: "Get busy living, or get busy dying.", hint: "Andy Dufresne", correct: "The Shawshank Redemption", options: ["The Shawshank Redemption", "The Green Mile", "Stand by Me", "Forrest Gump"] },
+            { type: "quote", difficulty: "expert", text: "Keep your friends close, but your enemies closer.", hint: "Michael Corleone", correct: "The Godfather Part II", options: ["The Godfather Part II", "The Godfather", "Goodfellas", "Scarface"] },
+
+       
+       
+       
         ];
+
+
 
         // --- DEĞİŞKENLER ---
         let myName="", myRoomCode="", myId="", isHost=false;
