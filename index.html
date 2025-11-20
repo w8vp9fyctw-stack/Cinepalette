@@ -104,17 +104,17 @@
             width: 100%; 
             height: 100%; 
             object-fit: contain;
-            filter: blur(20px) brightness(0.6); 
+            filter: blur(20px)
             transform: scale(1.1);
             opacity: 0; 
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
         }
         
         .loaded { opacity: 1 !important; }
 
         /* Net Hal */
         .revealed { 
-            filter: blur(0) brightness(1) !important;
+            filter: blur(0) !important;
             transform: scale(1) !important;
             transition: filter 0.8s ease-out, transform 0.8s ease-out;
         }
@@ -438,23 +438,33 @@
             if(currentQIndex >= gameQuestions.length) currentQIndex = 0;
             const q = gameQuestions[currentQIndex];
             
+            // UI Temizliği
             document.getElementById('hint-display').innerText = "";
             document.getElementById('btn-hint').disabled = false;
-            const optBox = document.getElementById('options-box'); optBox.innerHTML='';
+            document.getElementById('options-box').innerHTML = "";
             document.getElementById('feedback-display').innerText = "";
             document.getElementById('feedback-display').className = "";
 
             const pImg = document.getElementById('game-poster');
             const sImg = document.getElementById('game-snapshot');
             
-            // Sıfırla
-            pImg.className = ""; sImg.className = "";
-            pImg.src = ""; sImg.src = "";
+            // 1. GÖRSELİ SIFIRLA (Anında bulanıklaş ve gizlen)
+            // 'revealed' sınıfını kaldırıyoruz, CSS transition olmadığı için anında blur olur.
+            pImg.className = ""; 
+            sImg.className = "";
             
-            const onLoad = (e) => e.target.classList.add('loaded');
-            pImg.onload = onLoad;
-            sImg.onload = onLoad;
+            // 2. Eski resim kalıntısını temizle (Flash etkisini önler)
+            pImg.src = "";
+            sImg.src = "";
 
+            // Resim yüklendiğinde görünür yap (Fade-in)
+            const onImgLoad = (e) => {
+                e.target.classList.add('loaded');
+            };
+            pImg.onload = onImgLoad;
+            sImg.onload = onImgLoad;
+
+            // İçerik Doldurma
             if(currentMode === 'quote') {
                 document.getElementById('game-quote').innerText = `"${q.text}"`;
             } else if (currentMode === 'snapshot') {
@@ -468,60 +478,53 @@
                 });
             }
 
-            // ŞIKLARI KARIŞTIR
-            let shuffledOptions = [...q.options];
-            shuffledOptions.sort(() => Math.random() - 0.5);
-
-            shuffledOptions.forEach(opt=>{
-                const btn=document.createElement('div'); 
-                btn.className='opt-btn'; 
-                btn.innerText=opt;
+            q.options.forEach(opt=>{
+                const btn=document.createElement('div'); btn.className='opt-btn'; btn.innerText=opt;
                 btn.onclick = ()=>checkAnswer(opt, q.correct, btn);
-                optBox.appendChild(btn);
+                document.getElementById('options-box').appendChild(btn);
             });
         }
 
         function checkAnswer(sel, corr, btn) {
             if(!isPlaying) return;
-            
-            const allBtns = document.querySelectorAll('.opt-btn');
-            allBtns.forEach(b=>b.style.pointerEvents='none');
+            document.querySelectorAll('.opt-btn').forEach(b=>b.style.pointerEvents='none');
 
             const fb = document.getElementById('feedback-display');
 
             if(sel===corr) {
-                // DOĞRU
+                // DOĞRU CEVAP
                 score+=10; document.getElementById('score-display').innerText=score;
                 btn.classList.add('btn-correct');
                 
                 fb.innerText = "DOĞRU";
                 fb.className = "status-correct";
                 
-                if(currentMode==='movie') document.getElementById('game-poster').className = "revealed";
-                if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "revealed";
+                // Resmi Netleştir
+                if(currentMode==='movie') document.getElementById('game-poster').classList.add('revealed');
+                if(currentMode==='snapshot') document.getElementById('game-snapshot').classList.add('revealed');
                 
+                // SÜRE AYARI: Burada 2500ms (2.5 saniye) bekletiyoruz.
+                // Poster netleşecek ve ekranda kalacak.
                 setTimeout(()=>{ 
-                    if(isPlaying){ currentQIndex++; loadQuestion(); } 
+                    if(isPlaying){
+                        currentQIndex++; 
+                        loadQuestion(); 
+                    } 
                 }, 2500);
+
             } else {
-                // YANLIŞ
+                // YANLIŞ CEVAP
                 btn.classList.add('btn-wrong');
                 fb.innerText = "YANLIŞ";
                 fb.className = "status-wrong";
-
-                // DOĞRU CEVABI GÖSTER
-                allBtns.forEach(b => {
-                    if(b.innerText === corr) {
-                        b.classList.add('btn-correct');
-                    }
-                });
                 
-                if(currentMode==='movie') document.getElementById('game-poster').className = "revealed";
-                if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "revealed";
-
+                // Yanlışta daha hızlı geçebiliriz (1 saniye)
                 setTimeout(()=>{ 
-                    if(isPlaying){ currentQIndex++; loadQuestion(); } 
-                }, 2500); 
+                    if(isPlaying){
+                        currentQIndex++; 
+                        loadQuestion(); 
+                    } 
+                }, 1000);
             }
         }
 
