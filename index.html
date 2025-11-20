@@ -156,12 +156,12 @@
         <div style="width:100%; margin-bottom: 20px;">
             <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">OYUN MODU</label>
             <select id="genre-select" onchange="uiUpdate()">
-                <option value="mix">🎲 KARIŞIK (Hepsi)</option>
-                <option value="snapshot">🖼️ TEK KARE (Zor Mod)</option>
-                <option value="quote">💬 REPLİKLER (Zor Seviye)</option>
-                <option value="palettes">🎨 RENK PALETİ</option>
-                <option value="cult">🍷 KÜLT & ARTHOUSE</option>
-                <option value="scifi">🚀 BİLİM KURGU</option>
+                <option value="mix"> KARIŞIK (Hepsi)</option>
+                <option value="snapshot"> TEK KARE (Zor Mod)</option>
+                <option value="quote"> REPLİKLER (Zor Seviye)</option>
+                <option value="palettes"> RENK PALETİ</option>
+                <option value="cult"> KÜLT & ARTHOUSE</option>
+                <option value="scifi"> BİLİM KURGU</option>
             </select>
             
             <div id="visual-setting">
@@ -174,8 +174,8 @@
             </div>
         </div>
 
-        <button onclick="startSinglePlayerGame()">⭐ TEK KİŞİLİK FİLM KEYFİ</button>
-        <button class="btn-multiplayer-toggle" onclick="toggleMultiplayer()">👥 ARKADAŞLARLA OYNA</button>
+        <button onclick="startSinglePlayerGame()"> TEK KİŞİLİK FİLM KEYFİ</button>
+        <button class="btn-multiplayer-toggle" onclick="toggleMultiplayer()"> ARKADAŞLARLA OYNA</button>
 
         <div id="multiplayer-panel">
             <div style="display:flex; gap:10px;">
@@ -504,7 +504,7 @@
                 // SÜRE AYARI: 4000ms (4 Saniye) yaptık
                 setTimeout(()=>{ 
                     if(isPlaying){ currentQIndex++; loadQuestion(); } 
-                }, 4000);
+                }, 2500);
             } else {
                 // YANLIŞ BİLİNDİ
                 btn.classList.add('btn-wrong');
@@ -525,7 +525,7 @@
                 // SÜRE AYARI: Yanlışta da 4 saniye beklesin
                 setTimeout(()=>{ 
                     if(isPlaying){ currentQIndex++; loadQuestion(); } 
-                }, 4000); 
+                }, 2500); 
             }
         }
 
