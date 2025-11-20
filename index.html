@@ -45,6 +45,26 @@
         .active { display: flex; flex-direction: column; align-items: center; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* --- EMOJI MODU --- */
+        #emoji-view { 
+            display: none; 
+            width: 100%; 
+            height: 100%; 
+            justify-content: center; 
+            align-items: center; 
+            background: radial-gradient(circle, #222 0%, #000 100%);
+        }
+        .emoji-text { 
+            font-size: 5rem; /* Kocaman Emojiler */
+            letter-spacing: 15px; 
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
         /* INPUT & BUTONLAR */
         input, select {
             width: 100%; padding: 12px; background: #141414; border: 1px solid #333;
@@ -170,6 +190,7 @@
         <div style="width:100%; margin-bottom: 20px;">
             <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">OYUN MODU</label>
             <select id="genre-select" onchange="uiUpdate()">
+                <option value="emoji">EMOJİ BULMACA</option>
                 <option value="mix">KARIŞIK</option>
                 <option value="snapshot">TEK KARE</option>
                 <option value="quote">REPLİKLER</option>
@@ -219,6 +240,7 @@
         <div id="feedback-display"></div>
 
         <div class="media-container">
+            <div id="emoji-view"><div class="emoji-text" id="game-emoji"></div></div>
             <div id="poster-view"><img id="game-poster" src=""></div>
             <div id="snapshot-view"><img id="game-snapshot" src=""></div> 
             <div id="quote-view"><div class="quote-text" id="game-quote"></div></div>
@@ -269,6 +291,33 @@
 
         // --- VERİTABANI ---
         const database = [
+
+
+        // ============================================================
+            // 🧩 KATEGORİ: EMOJI BULMACA
+            // ============================================================
+            { type: "emoji", text: "🎈🏠👴", hint: "Pixar, Uçan Ev", correct: "Up", options: ["Up", "Inside Out", "Coco", "Soul"] },
+            { type: "emoji", text: "🚢❄️💔", hint: "Buzdağı, 1997", correct: "Titanic", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
+            { type: "emoji", text: "🤡🕺🔫", hint: "Merdiven Dansı, DC", correct: "Joker", options: ["Joker", "The Dark Knight", "Batman", "Suicide Squad"] },
+            { type: "emoji", text: "🍫🏃🍤", hint: "Run Forrest Run!", correct: "Forrest Gump", options: ["Forrest Gump", "Big", "Cast Away", "Rain Man"] },
+            { type: "emoji", text: "💊🕶️💻", hint: "Kırmızı Hap mı Mavi Hap mı?", correct: "The Matrix", options: ["The Matrix", "John Wick", "Inception", "Blade Runner"] },
+            { type: "emoji", text: "🦁👑🐗", hint: "Hakuna Matata", correct: "The Lion King", options: ["The Lion King", "Madagascar", "Jungle Book", "Tarzan"] },
+            { type: "emoji", text: "👻🚫lz", hint: "Kimi arayacaksın?", correct: "Ghostbusters", options: ["Ghostbusters", "Casper", "Beetlejuice", "Men in Black"] },
+            { type: "emoji", text: "🦖🦕🚙", hint: "Bir Park, 65 Milyon Yıl", correct: "Jurassic Park", options: ["Jurassic Park", "Godzilla", "King Kong", "Jumanji"] },
+            { type: "emoji", text: "🕷️🕸️🏙️", hint: "Büyük Güç Büyük Sorumluluk", correct: "Spider-Man", options: ["Spider-Man", "Batman", "Superman", "Iron Man"] },
+            { type: "emoji", text: "🧙‍♂️💍🌋", hint: "Orta Dünya", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "Harry Potter", "The Hobbit", "Narnia"] },
+            { type: "emoji", text: "👽🚲🌕", hint: "Telefon... Eve...", correct: "E.T. the Extra-Terrestrial", options: ["E.T.", "Alien", "Super 8", "Wall-E"] },
+            { type: "emoji", text: "🥊🐯👀", hint: "Adrian!", correct: "Rocky", options: ["Rocky", "Raging Bull", "Creed", "Million Dollar Baby"] },
+            { type: "emoji", text: "🦈🏖️🩸", hint: "Daaaa-dum...", correct: "Jaws", options: ["Jaws", "The Meg", "Deep Blue Sea", "Piranha"] },
+            { type: "emoji", text: "👦🏠😱", hint: "Evde Tek Başına", correct: "Home Alone", options: ["Home Alone", "Richie Rich", "Elf", "The Santa Clause"] },
+            { type: "emoji", text: "🚓👮‍♂️🍩", hint: "Eğitim Günü değil, Polis Akademisi", correct: "Police Academy", options: ["Police Academy", "Bad Boys", "Lethal Weapon", "Rush Hour"] },
+            { type: "emoji", text: "🐼👊🍜", hint: "Ejderha Savaşçısı", correct: "Kung Fu Panda", options: ["Kung Fu Panda", "Shrek", "Ice Age", "Madagascar"] },
+            { type: "emoji", text: "🐀👨‍🍳🍲", hint: "Herkes yemek yapabilir", correct: "Ratatouille", options: ["Ratatouille", "Flushed Away", "Stuart Little", "Garfield"] },
+            { type: "emoji", text: "🎻🚢🏴‍☠️", hint: "Karayipler", correct: "Pirates of the Caribbean", options: ["Pirates of the Caribbean", "Peter Pan", "Hook", "Treasure Planet"] },
+            { type: "emoji", text: "🐍🤠👢", hint: "Oyuncağımın altında yılan var!", correct: "Toy Story", options: ["Toy Story", "Cars", "Monsters Inc.", "Finding Nemo"] },
+            { type: "emoji", text: "🕯️🕰️🫖", hint: "Güzel ve Çirkin", correct: "Beauty and the Beast", options: ["Beauty and the Beast", "Cinderella", "Sleeping Beauty", "Aladdin"] },
+            
+            
             // LETTERBOXD ÖRNEĞİ (Amazon Linki ile)
             { type: "movie", genre: "cult", hint: "Terence Davies, 1992", correct: "The Long Day Closes", poster: "https://a.ltrbxd.com/resized/film-poster/1/5/6/7/7/15677-the-long-day-closes-0-2000-0-3000-crop.jpg?v=0b103e1bee", colors: ["#1c1c1c", "#3e3e3e", "#7f6a55", "#a38b6d", "#d9c6a5", "#f2e5ce", "#5a4a3a", "#2b221b"], options: ["The Long Day Closes", "Distant Voices, Still Lives", "The Deep Blue Sea", "Sunset Song"] },
 
@@ -316,7 +365,9 @@
 
         function uiUpdate() {
             const g = document.getElementById('genre-select').value;
-            document.getElementById('visual-setting').style.display = (g === 'quote' || g === 'snapshot') ? 'none' : 'block';
+            // Quote, Snapshot ve Emoji modlarında görünüm ayarını gizle
+            const hideVisuals = (g === 'quote' || g === 'snapshot' || g === 'emoji');
+            document.getElementById('visual-setting').style.display = hideVisuals ? 'none' : 'block';
         }
         function generateCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
 
@@ -387,13 +438,17 @@
         function startGameByHost() { db.ref('rooms/'+myRoomCode).update({status:"playing"}); }
 
         // --- OYUN MOTORU ---
-        function startGame(cfg) {
+       function startGame(cfg) {
+            // 1. FİLTRELEME KISMI
             if(cfg.genre === 'quote') {
                 currentMode = 'quote';
                 gameQuestions = database.filter(q => q.type === 'quote');
             } else if (cfg.genre === 'snapshot') {
                 currentMode = 'snapshot';
                 gameQuestions = database.filter(q => q.genre === 'snapshot');
+            } else if (cfg.genre === 'emoji') { // <--- YENİ EKLENEN KISIM
+                currentMode = 'emoji';
+                gameQuestions = database.filter(q => q.type === 'emoji');
             } else {
                 currentMode = 'movie';
                 let pool = database.filter(q => q.type === 'movie' && q.genre !== 'snapshot');
@@ -401,14 +456,17 @@
                 gameQuestions = pool;
             }
             
+            // (Oyun başlatma kodlarının devamı...)
             gameQuestions = gameQuestions.sort(()=>Math.random()-0.5);
             if(gameQuestions.length===0) { alert("Bu kategoride yeterli soru yok!"); return; }
 
             showScreen('screen-game');
             currentQIndex=0; score=0; isPlaying=true; totalTime=60;
 
+            // 2. GÖRÜNÜM AYARLAMA KISMI
             document.getElementById('quote-view').style.display = (currentMode==='quote')?'flex':'none';
             document.getElementById('snapshot-view').style.display = (currentMode==='snapshot')?'block':'none';
+            document.getElementById('emoji-view').style.display = (currentMode==='emoji')?'flex':'none'; // <--- YENİ
             
             const pView = document.getElementById('palette-view');
             const posView = document.getElementById('poster-view');
@@ -423,6 +481,7 @@
             startTimer();
             loadQuestion();
         }
+    
 
         function startTimer() {
             const t = document.getElementById('timer-display');
@@ -461,13 +520,11 @@
         }
 
         function loadQuestion() {
-            // Yeni soruya geçtiğimizde süreyi tekrar başlat (eğer oyun bitmediyse)
-            if(isPlaying) startTimer();
-
+            // (Başlangıç kodları aynı...)
             if(currentQIndex >= gameQuestions.length) currentQIndex = 0;
             const q = gameQuestions[currentQIndex];
             
-            // Reset
+            // Reset işlemleri aynı...
             document.getElementById('hint-display').innerText = "";
             document.getElementById('btn-hint').disabled = false;
             const optBox = document.getElementById('options-box'); optBox.innerHTML='';
@@ -477,17 +534,17 @@
             const pImg = document.getElementById('game-poster');
             const sImg = document.getElementById('game-snapshot');
             
-            // Önce sıfırla ve gizle
+            // Resim temizleme kodları aynı...
             pImg.className = ""; sImg.className = "";
-            pImg.classList.remove('loaded'); sImg.classList.remove('loaded');
             pImg.src = ""; sImg.src = "";
-
             const onLoad = (e) => e.target.classList.add('loaded');
-            pImg.onload = onLoad;
-            sImg.onload = onLoad;
+            pImg.onload = onLoad; sImg.onload = onLoad;
 
+            // --- İÇERİK DOLDURMA KISMI ---
             if(currentMode === 'quote') {
                 document.getElementById('game-quote').innerText = `"${q.text}"`;
+            } else if (currentMode === 'emoji') { // <--- YENİ
+                document.getElementById('game-emoji').innerText = q.text;
             } else if (currentMode === 'snapshot') {
                 sImg.src = q.snapshot;
             } else {
@@ -498,6 +555,19 @@
                     pView.appendChild(d);
                 });
             }
+            
+            // (Şık karıştırma kodları aynı...)
+             let shuffledOptions = [...q.options];
+            shuffledOptions.sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach(opt=>{
+                const btn=document.createElement('div'); 
+                btn.className='opt-btn'; 
+                btn.innerText=opt;
+                btn.onclick = ()=>checkAnswer(opt, q.correct, btn);
+                optBox.appendChild(btn);
+            });
+        }
 
             // Şıkları Karıştır
             let shuffledOptions = [...q.options];
