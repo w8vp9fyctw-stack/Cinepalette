@@ -45,26 +45,6 @@
         .active { display: flex; flex-direction: column; align-items: center; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- EMOJI MODU --- */
-        #emoji-view { 
-            display: none; 
-            width: 100%; 
-            height: 100%; 
-            justify-content: center; 
-            align-items: center; 
-            background: radial-gradient(circle, #222 0%, #000 100%);
-        }
-        .emoji-text { 
-            font-size: 5rem; /* Kocaman Emojiler */
-            letter-spacing: 15px; 
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
         /* INPUT & BUTONLAR */
         input, select {
             width: 100%; padding: 12px; background: #141414; border: 1px solid #333;
@@ -116,7 +96,7 @@
         
         #poster-view, #snapshot-view { 
             width: 100%; 
-            height: 40vh; /* Ekranın %40'ı kadar */
+            height: 40vh; 
             max-height: 400px; 
             display: none; position: relative; background: black; overflow: hidden;
         }
@@ -126,17 +106,14 @@
             width: 100%; 
             height: 100%; 
             object-fit: contain;
-            /* Varsayılan: Bulanık */
             filter: blur(20px) brightness(0.6); 
             transform: scale(1.1);
-            opacity: 0; /* Yüklenene kadar gizli */
-            transition: opacity 0.3s ease-in; /* Sadece görünürlük animasyonu */
+            opacity: 0; 
+            transition: opacity 0.3s ease-in; 
         }
         
-        /* Resim yüklendiğinde eklenecek sınıf */
         .loaded { opacity: 1 !important; }
 
-        /* Net Hal (Animasyonlu) */
         .revealed { 
             filter: blur(0) brightness(1) !important;
             transform: scale(1) !important;
@@ -149,20 +126,35 @@
         #quote-view { display: none; padding: 30px 20px; text-align: center; background: radial-gradient(circle, #1a1a1a 0%, #000000 100%); width: 100%; height: 100%; justify-content: center; align-items: center; }
         .quote-text { font-family: 'Georgia', serif; font-size: 1.2rem; font-style: italic; line-height: 1.4; color: #e0e0e0; }
         
+        /* --- EMOJI MODU --- */
+        #emoji-view { 
+            display: none; 
+            width: 100%; 
+            height: 100%; 
+            justify-content: center; 
+            align-items: center; 
+            background: radial-gradient(circle, #222 0%, #000 100%);
+            min-height: 200px;
+        }
+        .emoji-text { 
+            font-size: 4rem; 
+            letter-spacing: 10px; 
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
         .timer-display { font-family: 'Bebas Neue'; font-size: 2.5rem; line-height: 1; }
         .timer-display.danger { color: #ff0000; animation: pulse 0.5s infinite; }
         .hint-btn { background: #e5c1001a; color: var(--text-gold); border: 1px solid var(--text-gold); width: auto; padding: 6px 10px; font-size: 0.75rem; margin: 0; }
-        .hint-text {
-            width: 100%; 
-            text-align: center; 
-            color: #aaa; 
-            font-size: 1rem; 
-            font-style: italic; 
-            margin-bottom: 10px; 
-            min-height: 20px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        
+        .hint-text { 
+            width: 100%; text-align: center; color: #aaa; font-size: 1rem; 
+            font-style: italic; margin-bottom: 10px; min-height: 20px; 
+            display: flex; align-items: center; justify-content: center;
         }
 
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
@@ -187,30 +179,51 @@
     <div id="screen-login" class="screen active">
         <input type="text" id="username" placeholder="Sinefil Adın">
         
-        <div style="width:100%; margin-bottom: 20px;">
-            <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">OYUN MODU</label>
-            <select id="genre-select" onchange="uiUpdate()">
-                <option value="emoji">EMOJİ BULMACA</option>
-                <option value="mix">KARIŞIK</option>
-                <option value="snapshot">TEK KARE</option>
-                <option value="quote">REPLİKLER</option>
-                <option value="palettes">RENK PALETİ</option>
-                <option value="cult">KÜLT & ARTHOUSE</option>
-                <option value="scifi">BİLİM KURGU</option>
-            </select>
+       <div style="width:100%; margin-bottom: 20px; display:flex; flex-direction:column; gap:15px;">
+            
+            <div>
+                <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">ZORLUK DERECESİ</label>
+                <select id="difficulty-select">
+                    <option value="all">KARIŞIK (Hepsi)</option>
+                    <option value="easy">KOLAY (Popüler)</option>
+                    <option value="hard">ZOR (Sinefil)</option>
+                    <option value="expert">ÇOK ZOR (Uzman)</option>
+                </select>
+            </div>
+
+            <div>
+                <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">OYUN MODU</label>
+                <select id="mode-select" onchange="uiUpdate()">
+                    <option value="classic">KLASİK (Poster & Palet)</option>
+                    <option value="snapshot">TEK KARE (Snapshot)</option>
+                    <option value="quote">REPLİK BULMACA</option>
+                    <option value="emoji">EMOJİ BULMACA</option>
+                </select>
+            </div>
+
+            <div id="genre-group">
+                <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">FİLM TÜRÜ</label>
+                <select id="genre-select">
+                    <option value="mix">KARIŞIK TÜR</option>
+                    <option value="scifi">BİLİM KURGU</option>
+                    <option value="horror">KORKU & GERİLİM</option>
+                    <option value="cult">KÜLT & ARTHOUSE</option>
+                    <option value="action">AKSİYON</option>
+                </select>
+            </div>
             
             <div id="visual-setting">
-                <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">GÖRÜNÜM</label>
+                <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">GÖRÜNÜM TİPİ</label>
                 <select id="visual-select">
-                    <option value="both">Palet + Bulanık Poster</option>
+                    <option value="both">Palet + Flu Poster</option>
                     <option value="palette">Sadece Renk Paleti</option>
-                    <option value="poster">Sadece Bulanık Poster</option>
+                    <option value="poster">Sadece Flu Poster</option>
                 </select>
             </div>
         </div>
 
-        <button onclick="startSinglePlayerGame()"> TEK KİŞİLİK FİLM KEYFİ</button>
-        <button class="btn-multiplayer-toggle" onclick="toggleMultiplayer()"> ARKADAŞLARLA OYNA</button>
+        <button onclick="startSinglePlayerGame()">TEK KİŞİLİK FİLM KEYFİ</button>
+        <button class="btn-multiplayer-toggle" onclick="toggleMultiplayer()">ARKADAŞLARLA OYNA</button>
 
         <div id="multiplayer-panel">
             <div style="display:flex; gap:10px;">
@@ -291,58 +304,19 @@
 
         // --- VERİTABANI ---
         const database = [
-
-
-        // ============================================================
-            // 🧩 KATEGORİ: EMOJI BULMACA
-            // ============================================================
-            { type: "emoji", text: "🎈🏠👴", hint: "Pixar, Uçan Ev", correct: "Up", options: ["Up", "Inside Out", "Coco", "Soul"] },
-            { type: "emoji", text: "🚢❄️💔", hint: "Buzdağı, 1997", correct: "Titanic", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
-            { type: "emoji", text: "🤡🕺🔫", hint: "Merdiven Dansı, DC", correct: "Joker", options: ["Joker", "The Dark Knight", "Batman", "Suicide Squad"] },
-            { type: "emoji", text: "🍫🏃🍤", hint: "Run Forrest Run!", correct: "Forrest Gump", options: ["Forrest Gump", "Big", "Cast Away", "Rain Man"] },
-            { type: "emoji", text: "💊🕶️💻", hint: "Kırmızı Hap mı Mavi Hap mı?", correct: "The Matrix", options: ["The Matrix", "John Wick", "Inception", "Blade Runner"] },
-            { type: "emoji", text: "🦁👑🐗", hint: "Hakuna Matata", correct: "The Lion King", options: ["The Lion King", "Madagascar", "Jungle Book", "Tarzan"] },
-            { type: "emoji", text: "👻🚫lz", hint: "Kimi arayacaksın?", correct: "Ghostbusters", options: ["Ghostbusters", "Casper", "Beetlejuice", "Men in Black"] },
-            { type: "emoji", text: "🦖🦕🚙", hint: "Bir Park, 65 Milyon Yıl", correct: "Jurassic Park", options: ["Jurassic Park", "Godzilla", "King Kong", "Jumanji"] },
-            { type: "emoji", text: "🕷️🕸️🏙️", hint: "Büyük Güç Büyük Sorumluluk", correct: "Spider-Man", options: ["Spider-Man", "Batman", "Superman", "Iron Man"] },
-            { type: "emoji", text: "🧙‍♂️💍🌋", hint: "Orta Dünya", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "Harry Potter", "The Hobbit", "Narnia"] },
-            { type: "emoji", text: "👽🚲🌕", hint: "Telefon... Eve...", correct: "E.T. the Extra-Terrestrial", options: ["E.T.", "Alien", "Super 8", "Wall-E"] },
-            { type: "emoji", text: "🥊🐯👀", hint: "Adrian!", correct: "Rocky", options: ["Rocky", "Raging Bull", "Creed", "Million Dollar Baby"] },
-            { type: "emoji", text: "🦈🏖️🩸", hint: "Daaaa-dum...", correct: "Jaws", options: ["Jaws", "The Meg", "Deep Blue Sea", "Piranha"] },
-            { type: "emoji", text: "👦🏠😱", hint: "Evde Tek Başına", correct: "Home Alone", options: ["Home Alone", "Richie Rich", "Elf", "The Santa Clause"] },
-            { type: "emoji", text: "🚓👮‍♂️🍩", hint: "Eğitim Günü değil, Polis Akademisi", correct: "Police Academy", options: ["Police Academy", "Bad Boys", "Lethal Weapon", "Rush Hour"] },
-            { type: "emoji", text: "🐼👊🍜", hint: "Ejderha Savaşçısı", correct: "Kung Fu Panda", options: ["Kung Fu Panda", "Shrek", "Ice Age", "Madagascar"] },
-            { type: "emoji", text: "🐀👨‍🍳🍲", hint: "Herkes yemek yapabilir", correct: "Ratatouille", options: ["Ratatouille", "Flushed Away", "Stuart Little", "Garfield"] },
-            { type: "emoji", text: "🎻🚢🏴‍☠️", hint: "Karayipler", correct: "Pirates of the Caribbean", options: ["Pirates of the Caribbean", "Peter Pan", "Hook", "Treasure Planet"] },
-            { type: "emoji", text: "🐍🤠👢", hint: "Oyuncağımın altında yılan var!", correct: "Toy Story", options: ["Toy Story", "Cars", "Monsters Inc.", "Finding Nemo"] },
-            { type: "emoji", text: "🕯️🕰️🫖", hint: "Güzel ve Çirkin", correct: "Beauty and the Beast", options: ["Beauty and the Beast", "Cinderella", "Sleeping Beauty", "Aladdin"] },
-            
-            
-            // LETTERBOXD ÖRNEĞİ (Amazon Linki ile)
-            { type: "movie", genre: "cult", hint: "Terence Davies, 1992", correct: "The Long Day Closes", poster: "https://a.ltrbxd.com/resized/film-poster/1/5/6/7/7/15677-the-long-day-closes-0-2000-0-3000-crop.jpg?v=0b103e1bee", colors: ["#1c1c1c", "#3e3e3e", "#7f6a55", "#a38b6d", "#d9c6a5", "#f2e5ce", "#5a4a3a", "#2b221b"], options: ["The Long Day Closes", "Distant Voices, Still Lives", "The Deep Blue Sea", "Sunset Song"] },
-
-            // SNAPSHOTS (TEK KARE)
-            { type: "movie", genre: "snapshot", hint: "Kore, Çekiç", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
-            { type: "movie", genre: "snapshot", hint: "Uzay, Monolit", correct: "2001: A Space Odyssey", snapshot: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Gravity"] },
-            { type: "movie", genre: "snapshot", hint: "Reality Show, Merdiven", correct: "The Truman Show", snapshot: "https://m.media-amazon.com/images/M/MV5BMDIzODcyY2EtMmY2MC00ZWVlLTgwMzAtMjQwOWUyNmJjNTYyXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_.jpg", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Yes Man"] },
-            { type: "movie", genre: "snapshot", hint: "Western, Düello", correct: "The Good, the Bad and the Ugly", snapshot: "https://m.media-amazon.com/images/M/MV5BNjgyMTM1YjAtOGMxYS00NWRlLTk4ZmItY2Q2M2RkOTY3MTQ2XkEyXkFqcGdeQXVyMTA3MDExNDEw._V1_.jpg", options: ["The Good, the Bad and the Ugly", "Django", "Unforgiven", "Once Upon a Time in the West"] },
-            { type: "movie", genre: "snapshot", hint: "Sarı Eşofman, Motor", correct: "Kill Bill: Vol. 1", snapshot: "https://m.media-amazon.com/images/M/MV5BNzM3NDFhYTAtYmU5Mi00NGRmLTljYjgtMDkyODQ4MjNkMGY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Death Proof", "Sin City"] },
-            
             // REPLİKLER
-            { type: "quote", text: "I drink your milkshake!", hint: "Petrol Arayışı", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "Lincoln"] },
-            { type: "quote", text: "Tears in rain.", hint: "Replikant", correct: "Blade Runner", options: ["Blade Runner", "Dune", "Alien", "Total Recall"] },
-            { type: "quote", text: "I'm gonna make him an offer he can't refuse.", hint: "Mafya", correct: "The Godfather", options: ["The Godfather", "Goodfellas", "Scarface", "Casino"] },
-            { type: "quote", text: "Here's looking at you, kid.", hint: "Savaş, Aşk", correct: "Casablanca", options: ["Casablanca", "Citizen Kane", "Gone with the Wind", "Roman Holiday"] },
-            { type: "quote", text: "You talkin' to me?", hint: "Taksi Şoförü", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Joker", "King of Comedy"] },
+            { type: "quote", difficulty: "easy", text: "May the Force be with you.", hint: "Yıldız Savaşları", correct: "Star Wars", options: ["Star Wars", "Star Trek", "Dune", "Avatar"] },
+            { type: "quote", difficulty: "hard", text: "I drink your milkshake!", hint: "Petrol Arayışı", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "Lincoln"] },
+
+            // FİLMLER
+            { type: "movie", genre: "scifi", difficulty: "hard", hint: "Replikant", correct: "Blade Runner", poster: "https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_.jpg", colors: ["#F28C0F", "#D35400", "#E67E22", "#003B59", "#000000", "#A67A53", "#5E6C6F", "#17202A"], options: ["Blade Runner", "Dune", "Alien", "Total Recall"] },
+            { type: "movie", genre: "cult", difficulty: "expert", hint: "Terence Davies, 1992", correct: "The Long Day Closes", poster: "https://a.ltrbxd.com/resized/film-poster/1/5/6/7/7/15677-the-long-day-closes-0-2000-0-3000-crop.jpg?v=0b103e1bee", colors: ["#1c1c1c", "#3e3e3e", "#7f6a55", "#a38b6d", "#d9c6a5", "#f2e5ce", "#5a4a3a", "#2b221b"], options: ["The Long Day Closes", "Distant Voices, Still Lives", "The Deep Blue Sea", "Sunset Song"] },
             
-            // FİLMLER (Poster + Renk) - Amazon Linkleri
-            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://m.media-amazon.com/images/M/MV5BMjA1Nzk0OTM2OF5BMl5BanBnXkFtZTgwNjU2NjEwMDE@._V1_.jpg", colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
-            { type: "movie", genre: "scifi", hint: "Kara Delik", correct: "Interstellar", poster: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "Arrival"] },
-            { type: "movie", genre: "cult", hint: "Miami, Büyüme", correct: "Moonlight", poster: "https://m.media-amazon.com/images/M/MV5BNzQxNTIyODAxMV5BMl5BanBnXkFtZTgwNzQyMDA3OTE@._V1_.jpg", colors: ["#000000", "#0B0B3B", "#101050", "#1A237E", "#303F9F", "#3F51B5", "#283593", "#C5CAE9"], options: ["Moonlight", "Pariah", "Boyz n the Hood", "Green Book"] },
-            { type: "movie", genre: "palettes", hint: "Çöl, Meteor", correct: "Asteroid City", poster: "https://m.media-amazon.com/images/M/MV5BNDJjZTZhOXEtZSEyYi00MzJlLWEwNTAtM2JjOTg5ODg0NDExXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg", colors: ["#FAD7A0", "#F8C471", "#F5B041", "#F39C12", "#5DADE2", "#3498DB", "#2E86C1", "#D6EAF8"], options: ["Asteroid City", "Moonrise Kingdom", "The Royal Tenenbaums", "Nope"] },
-            { type: "movie", genre: "horror", hint: "Gündüz Korkusu", correct: "Midsommar", poster: "https://m.media-amazon.com/images/M/MV5BM2Q1ZWUxZjItM2YxZC00NTQxLTgzNmQtYTAxZWM3YjU5NDY2XkEyXkFqcGdeQXVyMTAxNzQ1NzI@._V1_.jpg", colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Witch"] },
-            { type: "movie", genre: "scifi", hint: "Neon, Cyberpunk", correct: "Blade Runner 2049", poster: "https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_.jpg", colors: ["#F28C0F", "#D35400", "#E67E22", "#003B59", "#000000", "#A67A53", "#5E6C6F", "#17202A"], options: ["Blade Runner 2049", "Tron: Legacy", "Dune", "Oblivion"] },
-            { type: "movie", genre: "cult", hint: "Dans, Ucuz Roman", correct: "Pulp Fiction", poster: "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", colors: ["#000000", "#17202A", "#B03A2E", "#E74C3C", "#F1C40F", "#F39C12", "#F4D03F", "#FFFFFF"], options: ["Pulp Fiction", "Reservoir Dogs", "Kill Bill", "Jackie Brown"] }
+            // SNAPSHOTS
+            { genre: "snapshot", difficulty: "hard", hint: "Kore, Çekiç", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
+            
+            // EMOJI
+            { type: "emoji", difficulty: "easy", text: "🎈🏠👴", hint: "Pixar, Uçan Ev", correct: "Up", options: ["Up", "Inside Out", "Coco", "Soul"] }
         ];
 
         // --- DEĞİŞKENLER ---
@@ -350,7 +324,6 @@
         let gameQuestions=[], currentQIndex=0, score=0, timerInterval;
         let totalTime=60, isPlaying=false, currentMode="movie";
 
-        // --- UI YÖNETİMİ ---
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -364,17 +337,92 @@
         function showLeaderboardScreen() { showScreen('screen-leaderboard'); }
 
         function uiUpdate() {
-            const g = document.getElementById('genre-select').value;
-            // Quote, Snapshot ve Emoji modlarında görünüm ayarını gizle
-            const hideVisuals = (g === 'quote' || g === 'snapshot' || g === 'emoji');
-            document.getElementById('visual-setting').style.display = hideVisuals ? 'none' : 'block';
+            const mode = document.getElementById('mode-select').value;
+            
+            // 1. Tür Seçimi sadece 'classic' veya 'snapshot' modunda mantıklı
+            const showGenre = (mode === 'classic' || mode === 'snapshot');
+            document.getElementById('genre-group').style.display = showGenre ? 'block' : 'none';
+
+            // 2. Görünüm ayarı sadece 'classic' modunda mantıklı
+            const showVisual = (mode === 'classic');
+            document.getElementById('visual-setting').style.display = showVisual ? 'block' : 'none';
         }
+
+        function startGame(config) {
+            const selectedDiff = config ? config.difficulty : document.getElementById('difficulty-select').value;
+            const selectedMode = config ? config.mode : document.getElementById('mode-select').value;
+            const selectedGenre = config ? config.genre : document.getElementById('genre-select').value;
+            const selectedVisual = config ? config.visual : document.getElementById('visual-select').value;
+
+            // --- FİLTRELEME ---
+            let pool = database;
+
+            // 1. Mod Filtresi
+            if (selectedMode === 'quote') {
+                currentMode = 'quote';
+                pool = pool.filter(q => q.type === 'quote');
+            } else if (selectedMode === 'emoji') {
+                currentMode = 'emoji';
+                pool = pool.filter(q => q.type === 'emoji');
+            } else if (selectedMode === 'snapshot') {
+                currentMode = 'snapshot';
+                pool = pool.filter(q => q.genre === 'snapshot');
+            } else {
+                currentMode = 'movie';
+                pool = pool.filter(q => q.type === 'movie' && q.genre !== 'snapshot');
+            }
+
+            // 2. Tür Filtresi (Sadece Klasik ve Snapshot için)
+            if (selectedGenre !== 'mix' && (selectedMode === 'classic' || selectedMode === 'snapshot')) {
+                 if (currentMode === 'movie' || currentMode === 'snapshot') {
+                    // Veritabanında tür verisi eksikse diye kontrol ekleyebiliriz, şimdilik direkt filtreliyoruz
+                    pool = pool.filter(q => q.genre === selectedGenre || (currentMode==='snapshot' && q.genre==='snapshot')); 
+                }
+            }
+
+            // 3. Zorluk Filtresi
+            if (selectedDiff !== 'all') {
+                pool = pool.filter(q => q.difficulty === selectedDiff);
+            }
+            
+            // Hata Kontrolü
+            if(pool.length === 0) { 
+                alert("Bu kriterlere uygun soru bulunamadı! Veritabanı genişletilmeli veya filtre değiştirilmeli."); 
+                return; 
+            }
+
+            // Başlat
+            gameQuestions = pool.sort(()=>Math.random()-0.5);
+            showScreen('screen-game');
+            currentQIndex=0; score=0; isPlaying=true; totalTime=60;
+
+            // Görünüm Ayarları
+            document.getElementById('quote-view').style.display = (currentMode==='quote')?'flex':'none';
+            document.getElementById('snapshot-view').style.display = (currentMode==='snapshot')?'block':'none';
+            document.getElementById('emoji-view').style.display = (currentMode==='emoji')?'flex':'none';
+
+            const pView = document.getElementById('palette-view');
+            const posView = document.getElementById('poster-view');
+            
+            posView.style.display = 'none'; pView.style.display = 'none';
+
+            if(currentMode === 'movie') {
+                if(selectedVisual === 'both' || selectedVisual === 'poster') posView.style.display = 'block';
+                if(selectedVisual === 'both' || selectedVisual === 'palette') pView.style.display = 'flex';
+            }
+
+            startTimer();
+            loadQuestion();
+        }
+        
         function generateCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
 
         function startSinglePlayerGame() {
             myName = document.getElementById('username').value.trim() || "Sinefil";
             isMultiplayer = false;
             const config = {
+                difficulty: document.getElementById('difficulty-select').value,
+                mode: document.getElementById('mode-select').value,
                 genre: document.getElementById('genre-select').value,
                 visual: document.getElementById('visual-select').value
             };
@@ -392,6 +440,8 @@
             if(!myName) return alert("İsim gerekli!");
             
             const config = {
+                difficulty: document.getElementById('difficulty-select').value,
+                mode: document.getElementById('mode-select').value,
                 genre: document.getElementById('genre-select').value,
                 visual: document.getElementById('visual-select').value
             };
@@ -437,52 +487,6 @@
         }
         function startGameByHost() { db.ref('rooms/'+myRoomCode).update({status:"playing"}); }
 
-        // --- OYUN MOTORU ---
-       function startGame(cfg) {
-            // 1. FİLTRELEME KISMI
-            if(cfg.genre === 'quote') {
-                currentMode = 'quote';
-                gameQuestions = database.filter(q => q.type === 'quote');
-            } else if (cfg.genre === 'snapshot') {
-                currentMode = 'snapshot';
-                gameQuestions = database.filter(q => q.genre === 'snapshot');
-            } else if (cfg.genre === 'emoji') { // <--- YENİ EKLENEN KISIM
-                currentMode = 'emoji';
-                gameQuestions = database.filter(q => q.type === 'emoji');
-            } else {
-                currentMode = 'movie';
-                let pool = database.filter(q => q.type === 'movie' && q.genre !== 'snapshot');
-                if(cfg.genre !== 'mix' && cfg.genre !== 'palettes') pool = pool.filter(q => q.genre === cfg.genre);
-                gameQuestions = pool;
-            }
-            
-            // (Oyun başlatma kodlarının devamı...)
-            gameQuestions = gameQuestions.sort(()=>Math.random()-0.5);
-            if(gameQuestions.length===0) { alert("Bu kategoride yeterli soru yok!"); return; }
-
-            showScreen('screen-game');
-            currentQIndex=0; score=0; isPlaying=true; totalTime=60;
-
-            // 2. GÖRÜNÜM AYARLAMA KISMI
-            document.getElementById('quote-view').style.display = (currentMode==='quote')?'flex':'none';
-            document.getElementById('snapshot-view').style.display = (currentMode==='snapshot')?'block':'none';
-            document.getElementById('emoji-view').style.display = (currentMode==='emoji')?'flex':'none'; // <--- YENİ
-            
-            const pView = document.getElementById('palette-view');
-            const posView = document.getElementById('poster-view');
-            
-            posView.style.display = 'none'; pView.style.display = 'none';
-
-            if(currentMode === 'movie') {
-                if(cfg.visual === 'both' || cfg.visual === 'poster') posView.style.display = 'block';
-                if(cfg.visual === 'both' || cfg.visual === 'palette') pView.style.display = 'flex';
-            }
-
-            startTimer();
-            loadQuestion();
-        }
-    
-
         function startTimer() {
             const t = document.getElementById('timer-display');
             t.innerText = totalTime; t.classList.remove('danger');
@@ -494,37 +498,42 @@
             },1000);
         }
         
-        function stopTimer() {
-            clearInterval(timerInterval);
-        }
+        function stopTimer() { clearInterval(timerInterval); }
 
         function exitGame() {
             if(confirm("Çıkmak istediğine emin misin?")) location.reload();
         }
-
-       function useHint() {
-            // Süre 5 saniyeden fazlaysa ipucu ver
+function useHint() {
+            // Eğer süre 5 saniyeden azsa ipucu verip oyunu bitirmesin diye kontrol ediyoruz
             if (totalTime > 5) {
-                totalTime -= 5; // Cezayı uygula
+                totalTime -= 5; // Süreden 5 saniye düş
+                
+                // Yeni süreyi hemen ekrana yaz (Gecikme olmasın)
                 document.getElementById('timer-display').innerText = totalTime;
                 
-                // Sadece metni göster
+                // Görsel ceza efekti (Kırmızı yanıp sönsün)
+                const tBox = document.getElementById('timer-display');
+                tBox.classList.add('danger');
+                setTimeout(() => tBox.classList.remove('danger'), 500);
+
+                // İpucu metnini göster
                 document.getElementById('hint-display').innerText = gameQuestions[currentQIndex].hint;
                 
                 // Butonu devre dışı bırak
                 document.getElementById('btn-hint').disabled = true;
 
-                // BURADAKİ POSTERİ NETLEŞTİREN KODLAR SİLİNDİ.
-                // Artık resim bulanık kalmaya devam edecek.
+                // NOT: Burada stopTimer() veya clearInterval() YOK.
+                // Sayaç arka planda tıkır tıkır işlemeye devam eder.
             }
         }
+        
 
         function loadQuestion() {
-            // (Başlangıç kodları aynı...)
+            if(isPlaying) startTimer();
             if(currentQIndex >= gameQuestions.length) currentQIndex = 0;
             const q = gameQuestions[currentQIndex];
             
-            // Reset işlemleri aynı...
+            // UI Reset
             document.getElementById('hint-display').innerText = "";
             document.getElementById('btn-hint').disabled = false;
             const optBox = document.getElementById('options-box'); optBox.innerHTML='';
@@ -534,16 +543,17 @@
             const pImg = document.getElementById('game-poster');
             const sImg = document.getElementById('game-snapshot');
             
-            // Resim temizleme kodları aynı...
             pImg.className = ""; sImg.className = "";
+            pImg.classList.remove('loaded'); sImg.classList.remove('loaded');
             pImg.src = ""; sImg.src = "";
+
             const onLoad = (e) => e.target.classList.add('loaded');
             pImg.onload = onLoad; sImg.onload = onLoad;
 
-            // --- İÇERİK DOLDURMA KISMI ---
+            // İçerik Doldurma
             if(currentMode === 'quote') {
                 document.getElementById('game-quote').innerText = `"${q.text}"`;
-            } else if (currentMode === 'emoji') { // <--- YENİ
+            } else if (currentMode === 'emoji') {
                 document.getElementById('game-emoji').innerText = q.text;
             } else if (currentMode === 'snapshot') {
                 sImg.src = q.snapshot;
@@ -556,19 +566,6 @@
                 });
             }
             
-            // (Şık karıştırma kodları aynı...)
-             let shuffledOptions = [...q.options];
-            shuffledOptions.sort(() => Math.random() - 0.5);
-
-            shuffledOptions.forEach(opt=>{
-                const btn=document.createElement('div'); 
-                btn.className='opt-btn'; 
-                btn.innerText=opt;
-                btn.onclick = ()=>checkAnswer(opt, q.correct, btn);
-                optBox.appendChild(btn);
-            });
-        }
-
             // Şıkları Karıştır
             let shuffledOptions = [...q.options];
             shuffledOptions.sort(() => Math.random() - 0.5);
@@ -580,14 +577,12 @@
                 btn.onclick = ()=>checkAnswer(opt, q.correct, btn);
                 optBox.appendChild(btn);
             });
-        
+        }
 
         function checkAnswer(sel, corr, btn) {
             if(!isPlaying) return;
-            
-            // CEVAP VERİLDİĞİ AN SÜREYİ DURDUR
             stopTimer();
-
+            
             const allBtns = document.querySelectorAll('.opt-btn');
             allBtns.forEach(b=>b.style.pointerEvents='none');
 
@@ -596,35 +591,23 @@
             if(sel===corr) {
                 score+=10; document.getElementById('score-display').innerText=score;
                 btn.classList.add('btn-correct');
-                
                 fb.innerText = "DOĞRU";
                 fb.className = "status-correct";
             } else {
                 btn.classList.add('btn-wrong');
                 fb.innerText = "YANLIŞ";
                 fb.className = "status-wrong";
-                // Doğruyu Göster
-                allBtns.forEach(b => {
-                    if(b.innerText === corr) b.classList.add('btn-correct');
-                });
+                allBtns.forEach(b => { if(b.innerText === corr) b.classList.add('btn-correct'); });
             }
             
-            // Posteri her durumda netleştir (Doğru da olsa yanlış da olsa görsün)
             if(currentMode==='movie') document.getElementById('game-poster').className = "revealed loaded";
             if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "revealed loaded";
 
-            // 4 Saniye bekle (Süre durmuş halde), sonra yeni soruya geç
-            setTimeout(()=>{ 
-                if(isPlaying){
-                    currentQIndex++; 
-                    loadQuestion(); 
-                } 
-            }, 4000);
+            setTimeout(()=>{ if(isPlaying){ currentQIndex++; loadQuestion(); } }, 4000);
         }
 
         function finishGame() {
             isPlaying=false; clearInterval(timerInterval);
-            
             if(isMultiplayer) {
                 db.ref(`rooms/${myRoomCode}/players/${myId}`).update({score:score, status:"finished"});
                 const r = db.ref(`rooms/${myRoomCode}/players`);
