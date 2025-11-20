@@ -443,15 +443,20 @@
             if(confirm("Çıkmak istediğine emin misin?")) location.reload();
         }
 
-        function useHint() {
-            if(totalTime > 5) {
-                totalTime -= 5;
-                document.getElementById('timer-display').innerText=totalTime;
-                document.getElementById('hint-display').innerText = gameQuestions[currentQIndex].hint;
-                document.getElementById('btn-hint').disabled = true;
+       function useHint() {
+            // Süre 5 saniyeden fazlaysa ipucu ver
+            if (totalTime > 5) {
+                totalTime -= 5; // Cezayı uygula
+                document.getElementById('timer-display').innerText = totalTime;
                 
-                if(currentMode==='movie') document.getElementById('game-poster').className = "revealed";
-                if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "revealed";
+                // Sadece metni göster
+                document.getElementById('hint-display').innerText = gameQuestions[currentQIndex].hint;
+                
+                // Butonu devre dışı bırak
+                document.getElementById('btn-hint').disabled = true;
+
+                // BURADAKİ POSTERİ NETLEŞTİREN KODLAR SİLİNDİ.
+                // Artık resim bulanık kalmaya devam edecek.
             }
         }
 
