@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- GENEL TASARIM (RESET) --- */
+        /* --- GENEL TASARIM --- */
         :root {
             --primary-red: #E50914;
             --bg-dark: #141414;
             --card-bg: #1f1f1f;
             --text-main: #ffffff;
             --text-muted: #b3b3b3;
-            --correct: #46d369;
-            --wrong: #e50914;
+            --correct-green: #46d369;
+            --wrong-red: #ff4b4b;
         }
 
         * { box-sizing: border-box; }
@@ -34,24 +34,23 @@
             overflow-x: hidden;
         }
 
-        /* HEADER */
         h1 {
             font-family: 'Bebas Neue', sans-serif;
             color: var(--primary-red);
-            font-size: 4rem;
+            font-size: 3.5rem;
             margin: 20px 0 5px 0;
             letter-spacing: 2px;
             text-shadow: 0 4px 15px rgba(229, 9, 20, 0.6);
         }
+        
         .tagline {
             color: var(--text-muted);
             font-size: 1rem;
             letter-spacing: 5px;
             text-transform: uppercase;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
-        /* EKRANLAR (SCREENS) */
         .screen {
             display: none;
             width: 90%;
@@ -59,220 +58,167 @@
             flex-direction: column;
             gap: 15px;
             animation: fadeIn 0.5s ease;
+            padding-bottom: 40px;
         }
         .screen.active { display: flex; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- GİRİŞ EKRANI ÖZEL TASARIMI --- */
+        /* --- GİRİŞ EKRANI DÜZELTMELERİ --- */
+        
+        /* Ana Input */
         .input-box {
-            width: 100%;
-            padding: 15px;
-            background: #000;
-            border: 2px solid #333;
-            color: #fff;
-            font-family: 'Bebas Neue';
-            font-size: 1.5rem;
-            text-align: center;
-            border-radius: 8px;
-            letter-spacing: 1px;
+            width: 100%; padding: 15px; background: #000; border: 2px solid #333;
+            color: #fff; font-family: 'Montserrat', sans-serif; font-weight: bold;
+            font-size: 1.2rem; text-align: center; border-radius: 10px;
         }
         .input-box:focus { border-color: var(--primary-red); outline: none; }
 
         /* Sekmeler (Tabs) */
-        .tabs {
-            display: flex;
-            background: #000;
-            border-radius: 8px;
-            padding: 4px;
-            margin-bottom: 10px;
-        }
+        .tabs { display: flex; background: #000; border-radius: 10px; padding: 5px; border: 1px solid #333; }
         .tab-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: transparent;
-            color: #666;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: 0.3s;
+            flex: 1; padding: 12px; border: none; background: transparent;
+            color: #666; font-weight: bold; cursor: pointer; border-radius: 8px; transition: 0.3s;
         }
-        .tab-btn.active {
-            background: #333;
-            color: #fff;
-        }
+        .tab-btn.active { background: #222; color: #fff; }
 
-        /* Mod Kartları (Yatay Kaydırma) */
+        /* Mod Seçici (Yatay) */
         .mode-scroll {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            scrollbar-width: none; /* Firefox gizle */
+            display: flex; gap: 10px; overflow-x: auto; padding: 5px;
+            scrollbar-width: none; /* Firefox */
         }
-        .mode-scroll::-webkit-scrollbar { display: none; } /* Chrome gizle */
+        .mode-scroll::-webkit-scrollbar { display: none; } /* Chrome */
 
         .mode-card {
-            min-width: 85px;
-            height: 85px;
+            min-width: 90px; height: 90px;
             background: var(--card-bg);
-            border: 2px solid transparent;
+            border: 2px solid transparent; /* Kenarlık için yer ayır */
             border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s;
+            /* HATA DÜZELTME: Kesilmeyi önlemek için overflow visible */
+            overflow: visible; 
         }
-        .mode-card span { font-size: 1.8rem; margin-bottom: 5px; }
-        .mode-card p { font-size: 0.65rem; margin: 0; font-weight: bold; text-transform: uppercase; }
         
+        .mode-card:hover { background: #2a2a2a; }
+        
+        /* Seçili Mod (Kırmızı Işık Düzeltmesi) */
         .mode-card.selected {
-            background: rgba(229, 9, 20, 0.15);
+            background: rgba(229, 9, 20, 0.1);
             border-color: var(--primary-red);
             color: var(--primary-red);
-            transform: scale(1.05);
+            /* Box shadow kaldırıldı, sadece border ve renk değişimi yeterli */
         }
+        
+        .mode-icon { font-size: 2rem; margin-bottom: 5px; }
+        .mode-name { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
 
-        /* Ayarlar Butonu ve Paneli */
+        /* Ayarlar (Accordion) */
         .settings-toggle {
-            background: transparent;
-            border: 1px dashed #444;
-            color: #888;
-            padding: 12px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 8px;
+            background: transparent; border: 1px dashed #444; color: #888;
+            padding: 12px; font-size: 0.8rem; cursor: pointer; width: 100%; border-radius: 10px;
         }
         .settings-panel {
-            display: none;
-            background: #0f0f0f;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            flex-direction: column;
-            gap: 10px;
+            display: none; background: #0f0f0f; padding: 15px;
+            border-radius: 10px; border: 1px solid #333; flex-direction: column; gap: 10px;
         }
         .settings-panel.open { display: flex; }
+        .settings-panel select { width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; }
 
-        .settings-panel select {
-            width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px;
+        /* BAŞLAT BUTONU (Ortalama Düzeltildi) */
+        #single-area, #multi-area {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* İçerikleri ortala */
         }
 
-        /* BAŞLAT BUTONU */
         .start-btn {
-            background: var(--primary-red);
-            color: white;
-            border: none;
-            padding: 18px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            border-radius: 8px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
-            transition: 0.2s;
+            background: var(--primary-red); color: white; border: none;
+            padding: 15px 40px; font-size: 1.2rem; font-weight: 800;
+            border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
+            box-shadow: 0 5px 20px rgba(229, 9, 20, 0.3); transition: 0.2s;
+            display: block; /* Blok element yap */
+            width: 100%; /* Mobilde tam genişlik */
         }
-        .start-btn:hover { transform: scale(1.02); }
+        .start-btn:hover { transform: translateY(-2px); }
 
-        /* Multiplayer Alanı */
-        .multi-area { display: none; flex-direction: column; gap: 10px; }
-        .row { display: flex; gap: 10px; }
-
-        /* --- OYUN ALANI TASARIMI --- */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; }
-        .btn-quit { background: transparent; border: 1px solid #444; color: #aaa; padding: 5px 15px; border-radius: 20px; cursor: pointer; }
+        /* --- OYUN ALANI (ESKİ VE STABİL YAPI) --- */
+        .top-hud { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px; }
+        .btn-exit { background: transparent; border: 1px solid #444; color: #aaa; padding: 5px 15px; border-radius: 20px; cursor: pointer; }
         .score-box { background: #222; padding: 5px 15px; border-radius: 20px; font-weight: bold; color: var(--text-gold); border: 1px solid #333; }
 
-        /* GÖRSEL KUTUSU */
-        .media-box {
-            width: 100%;
-            height: 45vh; /* Ekranın yarısı kadar */
-            max-height: 450px;
-            background: #000;
-            border: 1px solid #333;
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Geri Bildirim (Resmin Üstünde Sabit Alan) */
+        #feedback-display {
+            width: 100%; text-align: center; font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem; height: 40px; margin-bottom: 5px; opacity: 0; transition: opacity 0.2s;
+        }
+        .status-correct { color: var(--correct-green); opacity: 1 !important; }
+        .status-wrong { color: var(--wrong-red); opacity: 1 !important; }
+
+        /* Görsel Kutusu */
+        .media-container {
+            width: 100%; height: 40vh; max-height: 400px;
+            background: #000; border: 1px solid #333; border-radius: 12px;
+            overflow: hidden; position: relative; display: flex; justify-content: center; align-items: center;
         }
 
-        /* --- KESKİN PİKSEL EFEKTİ (Düzeltilmiş) --- */
+        #poster-view, #snapshot-view, #quote-view, #emoji-view {
+            width: 100%; height: 100%; display: none;
+        }
+
+        /* BLUR EFEKTİ (Geri Geldi) */
         #game-poster, #game-snapshot {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            
-            /* PİKSEL GÖRÜNÜMÜ İÇİN KRİTİK AYARLAR */
-            image-rendering: pixelated;       /* Chrome/Opera */
-            image-rendering: crisp-edges;     /* Firefox */
-            
-            /* Fiziksel Küçültme ve Büyütme */
-            transform-origin: center center;
-            transform: scale(1); /* Normalde tam boy */
-            transition: filter 0.3s;
+            width: 100%; height: 100%; object-fit: contain;
+            filter: blur(20px) brightness(0.7); /* Varsayılan Bulanık */
+            transform: scale(1.1);
+            opacity: 0; transition: opacity 0.3s ease; /* Sadece belirme efekti */
         }
-
-        /* JavaScript ile ekleyeceğimiz sınıf: PİKSELLİ MOD */
-        .pixel-mode {
-            /* Resmi %5 boyutunda render edip, CSS ile 20 kat büyütüyoruz */
-            /* Bu sayede gerçek mozaik kareleri oluşur */
-            width: 5% !important;
-            height: 5% !important; 
-            transform: scale(20) !important; 
-        }
-
-        /* NET MOD */
-        .reveal-mode {
-            width: 100% !important;
-            height: 100% !important;
-            transform: scale(1) !important;
-            filter: none !important;
-            image-rendering: auto !important; /* Pikselliği kapat, yumuşat */
-        }
-        /* ----------------------------------------- */
-
-        #quote-view, #emoji-view { display: none; text-align: center; padding: 20px; width: 100%; }
-        .quote-text { font-family: 'Georgia', serif; font-size: 1.3rem; font-style: italic; line-height: 1.5; }
-        .emoji-text { font-size: 4rem; letter-spacing: 10px; animation: float 3s infinite ease-in-out; }
         
-        #palette-view { display: none; width: 100%; height: 60px; }
-        .color-strip { flex: 1; height: 100%; }
+        /* Netleşme Sınıfı */
+        .revealed {
+            filter: blur(0) brightness(1) !important;
+            transform: scale(1) !important;
+            transition: filter 1s ease, transform 1s ease; /* Yavaşça netleşsin */
+        }
+        
+        .loaded { opacity: 1 !important; }
 
+        /* Diğer Modlar */
+        .quote-text { 
+            font-family: 'Georgia', serif; font-size: 1.3rem; font-style: italic; color: #eee; 
+            height: 100%; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center;
+        }
+        .emoji-text {
+            font-size: 4rem; letter-spacing: 10px; animation: float 3s infinite ease-in-out;
+            height: 100%; display: flex; align-items: center; justify-content: center;
+        }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        /* Alt Kısım */
-        .timer-bar { font-family: 'Bebas Neue'; font-size: 3rem; text-align: left; }
-        .hint-btn { float: right; background: rgba(255,215,0,0.1); border: 1px solid gold; color: gold; padding: 5px 10px; cursor: pointer; }
-        .hint-text { text-align: center; color: #aaa; font-style: italic; min-height: 20px; margin-bottom: 10px; }
+        /* Alt Kontroller */
+        .controls { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; width: 100%; }
+        .timer-display { font-family: 'Bebas Neue'; font-size: 2.5rem; }
+        .timer-display.danger { color: #ff4b4b; animation: pulse 0.5s infinite; }
+        .hint-btn { background: rgba(255,215,0,0.1); border: 1px solid gold; color: gold; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+        .hint-text { width: 100%; text-align: center; color: #aaa; font-style: italic; min-height: 20px; margin-bottom: 10px; }
 
         /* Şıklar */
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .opt-btn {
-            background: #1a1a1a; border: 1px solid #333; color: #ccc;
-            padding: 15px; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        .opt-btn { 
+            background: #1a1a1a; border: 1px solid #333; color: #ccc; padding: 15px; 
+            border-radius: 8px; cursor: pointer; font-size: 0.9rem; 
             display: flex; align-items: center; justify-content: center; text-align: center;
         }
         .opt-btn:hover { background: #2a2a2a; color: #fff; }
         
-        .correct { background: var(--correct) !important; color: #000 !important; border-color: var(--correct) !important; font-weight: bold; }
-        .wrong { background: var(--wrong) !important; color: #fff !important; opacity: 0.5; }
+        .btn-correct { background: var(--correct-green) !important; color: #000 !important; font-weight: bold; }
+        .btn-wrong { background: var(--wrong-red) !important; color: #fff !important; opacity: 0.5; }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* Bildirim */
-        #feedback { 
-            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
-            font-family: 'Bebas Neue'; font-size: 4rem; text-shadow: 0 5px 20px black;
-            display: none; z-index: 10; pointer-events: none;
-        }
-        .fb-green { color: var(--correct); display: block !important; }
-        .fb-red { color: var(--wrong); display: block !important; }
-
+        /* Tablo */
+        table { width: 100%; border-collapse: collapse; color: #aaa; }
+        td, th { padding: 10px; border-bottom: 1px solid #333; }
     </style>
 </head>
 <body>
@@ -282,7 +228,7 @@
 
     <div id="screen-login" class="screen active">
         
-        <input type="text" id="username" class="input-box" placeholder="OYUNCU ADI">
+        <input type="text" id="username" class="input-box" placeholder="OYUNCU İSMİ">
 
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('single')">TEK KİŞİLİK</button>
@@ -291,53 +237,72 @@
 
         <div class="mode-scroll">
             <input type="hidden" id="mode-select" value="mix">
-            <div class="mode-card selected" onclick="selectMode('mix', this)"><span>🎲</span><p>Karışık</p></div>
-            <div class="mode-card" onclick="selectMode('snapshot', this)"><span>📸</span><p>Tek Kare</p></div>
-            <div class="mode-card" onclick="selectMode('quote', this)"><span>💬</span><p>Replik</p></div>
-            <div class="mode-card" onclick="selectMode('palettes', this)"><span>🎨</span><p>Palet</p></div>
-            <div class="mode-card" onclick="selectMode('emoji', this)"><span>🧩</span><p>Emoji</p></div>
+            
+            <div class="mode-card selected" onclick="selectMode('mix', this)">
+                <span class="mode-icon">🎲</span>
+                <span class="mode-name">Karışık</span>
+            </div>
+            <div class="mode-card" onclick="selectMode('snapshot', this)">
+                <span class="mode-icon">📸</span>
+                <span class="mode-name">Tek Kare</span>
+            </div>
+            <div class="mode-card" onclick="selectMode('quote', this)">
+                <span class="mode-icon">💬</span>
+                <span class="mode-name">Replik</span>
+            </div>
+            <div class="mode-card" onclick="selectMode('palettes', this)">
+                <span class="mode-icon">🎨</span>
+                <span class="mode-name">Palet</span>
+            </div>
+            <div class="mode-card" onclick="selectMode('emoji', this)">
+                <span class="mode-icon">🧩</span>
+                <span class="mode-name">Emoji</span>
+            </div>
         </div>
 
-        <div class="settings-toggle" onclick="toggleSettings()">⚙️ ZORLUK & TÜR AYARLARI</div>
+        <div class="settings-toggle" onclick="toggleSettings()">⚙️ ZORLUK VE TÜR AYARLARI</div>
+        
         <div class="settings-panel" id="settings-panel">
-            <label>Zorluk:</label>
+            <label style="color:#666; font-size:0.8rem;">ZORLUK</label>
             <select id="difficulty-select">
-                <option value="all">Hepsi</option>
-                <option value="easy">Kolay</option>
-                <option value="hard">Zor</option>
-                <option value="expert">Uzman</option>
+                <option value="all">KARIŞIK (Hepsi)</option>
+                <option value="easy">KOLAY (Popüler)</option>
+                <option value="hard">ZOR (Sinefil)</option>
+                <option value="expert">ÇOK ZOR (Uzman)</option>
             </select>
-            <label>Tür:</label>
+
+            <label style="color:#666; font-size:0.8rem;">FİLM TÜRÜ</label>
             <select id="genre-select">
-                <option value="mix">Tüm Türler</option>
-                <option value="horror">Korku</option>
-                <option value="scifi">Bilim Kurgu</option>
-                <option value="cult">Kült</option>
-                <option value="action">Aksiyon</option>
+                <option value="mix">TÜM TÜRLER</option>
+                <option value="scifi">BİLİM KURGU</option>
+                <option value="horror">KORKU</option>
+                <option value="cult">KÜLT</option>
+                <option value="action">AKSİYON</option>
             </select>
+            
             <div id="visual-setting">
-                <label>Görünüm:</label>
+                <label style="color:#666; font-size:0.8rem;">GÖRÜNÜM</label>
                 <select id="visual-select">
-                    <option value="both">Palet + Pikselli</option>
-                    <option value="poster">Sadece Pikselli</option>
-                    <option value="palette">Sadece Palet</option>
+                    <option value="both">Palet + Flu Poster</option>
+                    <option value="palette">Sadece Renk Paleti</option>
+                    <option value="poster">Sadece Flu Poster</option>
                 </select>
             </div>
         </div>
 
-        <div id="single-area">
+        <div id="single-area" style="margin-top:20px;">
             <button class="start-btn" onclick="startSinglePlayerGame()">BAŞLAT</button>
         </div>
 
-        <div id="multi-area" class="multi-area">
+        <div id="multi-area" style="display:none; margin-top:20px; width:100%; flex-direction:column; gap:10px;">
             <button class="start-btn" style="background:#333;" onclick="createRoom()">YENİ ODA KUR</button>
-            <div class="row">
-                <input type="text" id="room-code-input" class="input-box" style="font-size:1rem; padding:10px;" placeholder="Oda Kodu">
-                <button class="start-btn" style="margin:0; width:40%; font-size:1rem;" onclick="joinRoom()">KATIL</button>
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="room-code-input" class="input-box" style="font-size:1rem; padding:12px;" placeholder="Oda Kodu">
+                <button class="start-btn" style="width:40%; font-size:1rem; padding:12px;" onclick="joinRoom()">KATIL</button>
             </div>
         </div>
-        
-        <button class="settings-toggle" style="border:none; text-align:center;" onclick="showLeaderboardScreen()">🏆 LİDERLER</button>
+
+        <button class="btn-exit" style="margin-top:20px; border:none; color:#666; width:100%;" onclick="showLeaderboardScreen()">🏆 LİDERLER TABLOSU</button>
     </div>
 
     <div id="screen-lobby" class="screen">
@@ -349,22 +314,24 @@
     </div>
 
     <div id="screen-game" class="screen">
-        <div class="top-bar">
-            <button class="btn-quit" onclick="exitGame()">✕</button>
+        <div class="top-hud">
+            <button class="btn-exit" onclick="exitGame()">✕ Çıkış</button>
             <div class="score-box"><span id="score-display">0</span> Puan</div>
         </div>
 
-        <div class="media-box">
-            <div id="feedback"></div>
-            <img id="game-poster" src="" class="pixel-mode">
-            <img id="game-snapshot" src="" class="pixel-mode" style="display:none;">
+        <div id="feedback-display"></div>
+
+        <div class="media-container">
+            <div id="poster-view"><img id="game-poster" src=""></div>
+            <div id="snapshot-view"><img id="game-snapshot" src=""></div> 
             
             <div id="quote-view"><div class="quote-text" id="game-quote"></div></div>
             <div id="emoji-view"><div class="emoji-text" id="game-emoji"></div></div>
+            
             <div id="palette-view"></div>
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+        <div class="controls">
             <div class="timer-display" id="timer-display">60</div>
             <button class="hint-btn" id="btn-hint" onclick="useHint()">💡 İPUCU (-5sn)</button>
         </div>
@@ -375,18 +342,18 @@
     </div>
 
     <div id="screen-result" class="screen">
-        <h2 style="text-align:center; font-family:'Bebas Neue'">FİNAL</h2>
-        <table id="result-table" style="width:100%; text-align:left; color:#aaa;">
-            <thead><tr><th>#</th><th>İsim</th><th>Puan</th></tr></thead>
+        <h2 style="text-align:center; font-family:'Bebas Neue'">SONUÇLAR</h2>
+        <table id="result-table">
+            <thead><tr><th>#</th><th>Oyuncu</th><th>Puan</th></tr></thead>
             <tbody></tbody>
         </table>
-        <button class="start-btn" style="background:#333" onclick="location.reload()">MENÜYE DÖN</button>
+        <button class="start-btn" style="background:#333; margin-top:20px;" onclick="location.reload()">ANA MENÜ</button>
     </div>
 
     <div id="screen-leaderboard" class="screen">
         <h2 style="text-align:center; font-family:'Bebas Neue'">LİDERLER</h2>
         <p style="text-align:center; color:#666;">Global skorlar yükleniyor...</p>
-        <button class="start-btn" style="background:#333" onclick="showScreen('screen-login')">GERİ</button>
+        <button class="start-btn" style="background:#333; margin-top:20px;" onclick="showScreen('screen-login')">GERİ DÖN</button>
     </div>
 
     <script>
@@ -402,20 +369,29 @@
         };
         let db; let isMultiplayer = false;
 
-        // VERİTABANI (Yedeklenmiş Tam Liste)
+        // VERİTABANI (KARIŞIK TAM LİSTE)
         const database = [
+            // SNAPSHOTS
+            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Kore, Çekiç", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
+            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Uzay, Monolit", correct: "2001: A Space Odyssey", snapshot: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Gravity"] },
+            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Mermi, Matrix", correct: "The Matrix", snapshot: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg", options: ["The Matrix", "John Wick", "Constantine", "Equilibrium"] },
+            
+            // QUOTES
+            { type: "quote", difficulty: "hard", text: "I drink your milkshake!", hint: "Petrol", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "Lincoln"] },
+            { type: "quote", difficulty: "easy", text: "May the Force be with you.", hint: "Jedi", correct: "Star Wars", options: ["Star Wars", "Star Trek", "Dune", "Avatar"] },
+            { type: "quote", difficulty: "hard", text: "Here's Johnny!", hint: "Otel, Balta", correct: "The Shining", options: ["The Shining", "Misery", "Psycho", "Doctor Sleep"] },
+
+            // MOVIES (POSTER)
+            { type: "movie", genre: "scifi", difficulty: "hard", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://m.media-amazon.com/images/M/MV5BMjA1Nzk0OTM2OF5BMl5BanBnXkFtZTgwNjU2NjEwMDE@._V1_.jpg", colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
+            { type: "movie", genre: "scifi", difficulty: "easy", hint: "Kara Delik", correct: "Interstellar", poster: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "Arrival"] },
             { type: "movie", genre: "cult", difficulty: "expert", hint: "Terence Davies, 1992", correct: "The Long Day Closes", poster: "https://a.ltrbxd.com/resized/film-poster/1/5/6/7/7/15677-the-long-day-closes-0-2000-0-3000-crop.jpg?v=0b103e1bee", colors: ["#1c1c1c", "#3e3e3e", "#7f6a55", "#a38b6d", "#d9c6a5", "#f2e5ce", "#5a4a3a", "#2b221b"], options: ["The Long Day Closes", "Distant Voices, Still Lives", "The Deep Blue Sea", "Sunset Song"] },
-            { type: "movie", genre: "snapshot", hint: "Kore, Çekiç", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "Parasite", "The Handmaiden", "The Chaser"] },
-            { type: "movie", genre: "snapshot", hint: "Uzay, Monolit", correct: "2001: A Space Odyssey", snapshot: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Gravity"] },
-            { type: "quote", text: "I drink your milkshake!", hint: "Petrol", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "Lincoln"] },
-            { type: "quote", text: "May the Force be with you.", hint: "Jedi", correct: "Star Wars", options: ["Star Wars", "Star Trek", "Dune", "Avatar"] },
-            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://m.media-amazon.com/images/M/MV5BMjA1Nzk0OTM2OF5BMl5BanBnXkFtZTgwNjU2NjEwMDE@._V1_.jpg", colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
-            { type: "movie", genre: "scifi", hint: "Kara Delik", correct: "Interstellar", poster: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "Arrival"] },
-            { type: "emoji", text: "🎈🏠👴", hint: "Pixar, Uçan Ev", correct: "Up", options: ["Up", "Inside Out", "Coco", "Soul"] },
-            { type: "emoji", text: "🚢❄️💔", hint: "Buzdağı", correct: "Titanic", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] }
+            
+            // EMOJI
+            { type: "emoji", difficulty: "easy", text: "🎈🏠👴", hint: "Pixar, Uçan Ev", correct: "Up", options: ["Up", "Inside Out", "Coco", "Soul"] },
+            { type: "emoji", difficulty: "easy", text: "🚢❄️💔", hint: "Buzdağı", correct: "Titanic", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] }
         ];
 
-        // VARIABLES
+        // DEĞİŞKENLER
         let myName="", myRoomCode="", myId="", isHost=false;
         let gameQuestions=[], currentQIndex=0, score=0, timerInterval;
         let totalTime=60, isPlaying=false, currentMode="movie";
@@ -427,28 +403,33 @@
         }
 
         function switchTab(tab) {
+            const singleArea = document.getElementById('single-area');
+            const multiArea = document.getElementById('multi-area');
             const btns = document.querySelectorAll('.tab-btn');
-            const single = document.getElementById('single-area');
-            const multi = document.getElementById('multi-area');
-
+            
             if(tab === 'single') {
-                btns[0].classList.add('active'); btns[1].classList.remove('active');
-                single.style.display='block'; multi.style.display='none';
+                singleArea.style.display = 'flex';
+                multiArea.style.display = 'none';
+                btns[0].classList.add('active');
+                btns[1].classList.remove('active');
             } else {
-                btns[0].classList.remove('active'); btns[1].classList.add('active');
-                single.style.display='none'; multi.style.display='flex';
+                singleArea.style.display = 'none';
+                multiArea.style.display = 'flex';
+                btns[0].classList.remove('active');
+                btns[1].classList.add('active');
             }
         }
 
-        function selectMode(val, el) {
-            document.getElementById('mode-select').value = val;
-            document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));
+        function selectMode(mode, el) {
+            document.getElementById('mode-select').value = mode;
+            document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             uiUpdate();
         }
 
         function toggleSettings() {
-            document.getElementById('settings-panel').classList.toggle('open');
+            const panel = document.getElementById('settings-panel');
+            panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
         }
 
         function uiUpdate() {
@@ -457,26 +438,31 @@
             vis.style.display = (g === 'quote' || g === 'snapshot' || g === 'emoji') ? 'none' : 'block';
         }
 
-        function generateCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
-
         // OYUN BAŞLATMA
         function startSinglePlayerGame() {
             myName = document.getElementById('username').value.trim() || "Sinefil";
             isMultiplayer = false;
-            startGame();
+            const config = {
+                mode: document.getElementById('mode-select').value,
+                genre: document.getElementById('genre-select').value,
+                difficulty: document.getElementById('difficulty-select').value,
+                visual: document.getElementById('visual-select').value
+            };
+            startGame(config);
         }
 
-        // FIREBASE & MULTIPLAYER
+        // FIREBASE
+        function generateCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
         function initFirebase() {
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             if (!db) db = firebase.database();
         }
-
+        
         function createRoom() {
             initFirebase();
             myName = document.getElementById('username').value.trim();
             if(!myName) return alert("İsim gir!");
-            myRoomCode = generateCode(); isHost = true; isMultiplayer = true;
+            myRoomCode = generateCode(); isHost=true; isMultiplayer=true;
             db.ref('rooms/'+myRoomCode).set({status:"lobby", createdAt:Date.now()});
             joinMyOwnRoom();
         }
@@ -485,75 +471,83 @@
             initFirebase();
             myName = document.getElementById('username').value.trim();
             myRoomCode = document.getElementById('room-code-input').value.trim();
-            if(!myName || !myRoomCode) return alert("Eksik bilgi!");
-            
-            db.ref('rooms/'+myRoomCode).get().then(snap=>{
-                if(snap.exists() && snap.val().status==="lobby") joinMyOwnRoom();
-                else alert("Oda yok!");
-            });
+            if(!myName || !myRoomCode) return alert("Bilgi eksik!");
+            db.ref('rooms/'+myRoomCode).get().then(s=>{ if(s.exists()) joinMyOwnRoom(); else alert("Oda yok!"); });
         }
 
         function joinMyOwnRoom() {
             const ref = db.ref(`rooms/${myRoomCode}/players`).push();
-            myId = ref.key;
-            ref.set({name:myName, score:0, status:"waiting"});
-            setupLobby();
-        }
-
-        function setupLobby() {
+            myId = ref.key; ref.set({name:myName, score:0});
             showScreen('screen-lobby');
             document.getElementById('display-room-code').innerText = myRoomCode;
             if(isHost) document.getElementById('host-controls').style.display='block';
+            else document.getElementById('guest-msg').style.display='block';
             
-            const roomRef = db.ref('rooms/'+myRoomCode);
-            roomRef.child('players').on('value', s=>{
+            // Listener
+            db.ref('rooms/'+myRoomCode+'/players').on('value', s=>{
                 const l=document.getElementById('player-list'); l.innerHTML='';
-                if(s.val()) Object.values(s.val()).forEach(p=>l.innerHTML+=`<li>${p.name} <span style="color:gold">${p.score}</span></li>`);
+                if(s.val()) Object.values(s.val()).forEach(p=>l.innerHTML+=`<li>${p.name}</li>`);
             });
-            roomRef.child('status').on('value', s=>{
-                if(s.val()==='playing') startGame();
-            });
+            db.ref('rooms/'+myRoomCode+'/status').on('value', s=>{ if(s.val()==='playing') startGame({}); });
         }
+        
         function startGameByHost() { db.ref('rooms/'+myRoomCode).update({status:"playing"}); }
 
-        // OYUN MANTIĞI
-        function startGame() {
-            const mode = document.getElementById('mode-select').value;
-            const genre = document.getElementById('genre-select').value;
-            const visual = document.getElementById('visual-select').value;
-
+        // OYUN MOTORU
+        function startGame(cfg) {
             // Filtreleme
+            const mode = cfg.mode || "mix"; 
+            const genre = cfg.genre || "mix";
+            const diff = cfg.difficulty || "all";
+            const visual = cfg.visual || "both";
+
             let pool = database;
-            if(mode === 'quote') { currentMode = 'quote'; pool = pool.filter(q=>q.type==='quote'); }
-            else if(mode === 'emoji') { currentMode = 'emoji'; pool = pool.filter(q=>q.type==='emoji'); }
-            else if(mode === 'snapshot') { currentMode = 'snapshot'; pool = pool.filter(q=>q.genre==='snapshot'); }
+
+            // 1. Mod
+            if(mode === 'quote') pool = pool.filter(q => q.type === 'quote');
+            else if(mode === 'emoji') pool = pool.filter(q => q.type === 'emoji');
+            else if(mode === 'snapshot') pool = pool.filter(q => q.genre === 'snapshot');
+            else if(mode === 'palettes') pool = pool.filter(q => q.genre === 'palettes' || q.type === 'movie'); // Genişletilebilir
             else { 
-                currentMode = 'movie'; 
-                pool = pool.filter(q=>q.type==='movie' && q.genre!=='snapshot');
-                if(genre!=='mix') pool = pool.filter(q=>q.genre===genre);
+                // Klasik (Movie)
+                pool = pool.filter(q => q.type === 'movie' && q.genre !== 'snapshot'); 
+            }
+
+            // 2. Tür
+            if(mode === 'classic' && genre !== 'mix') {
+                pool = pool.filter(q => q.genre === genre);
+            }
+
+            // 3. Zorluk
+            if(diff !== 'all') {
+                pool = pool.filter(q => q.difficulty === diff);
             }
 
             gameQuestions = pool.sort(()=>Math.random()-0.5);
-            if(gameQuestions.length===0) { alert("Soru yok!"); return; }
+            if(gameQuestions.length === 0) { alert("Soru bulunamadı!"); return; }
 
             showScreen('screen-game');
-            currentQIndex=0; score=0; isPlaying=true; totalTime=60;
+            currentQIndex = 0; score = 0; isPlaying = true; totalTime = 60;
 
-            // Görünüm Ayarı
-            document.getElementById('quote-view').style.display = (currentMode==='quote')?'block':'none';
+            // Görünüm Ayarla
+            if(mode==='quote') currentMode='quote';
+            else if(mode==='emoji') currentMode='emoji';
+            else if(mode==='snapshot') currentMode='snapshot';
+            else currentMode='movie';
+
+            document.getElementById('quote-view').style.display = (currentMode==='quote')?'flex':'none';
             document.getElementById('emoji-view').style.display = (currentMode==='emoji')?'flex':'none';
+            document.getElementById('snapshot-view').style.display = (currentMode==='snapshot')?'block':'none';
             
             const pImg = document.getElementById('game-poster');
-            const sImg = document.getElementById('game-snapshot');
             const pView = document.getElementById('palette-view');
+            
+            pImg.style.display = 'none';
+            pView.style.display = 'none';
 
-            pImg.style.display='none'; sImg.style.display='none'; pView.style.display='none';
-
-            if(currentMode==='movie') {
+            if(currentMode === 'movie') {
                 if(visual==='both' || visual==='poster') pImg.style.display='block';
                 if(visual==='both' || visual==='palette') pView.style.display='flex';
-            } else if(currentMode==='snapshot') {
-                sImg.style.display='block';
             }
 
             startTimer();
@@ -563,110 +557,115 @@
         function startTimer() {
             clearInterval(timerInterval);
             const t = document.getElementById('timer-display');
+            t.innerText = totalTime;
             timerInterval = setInterval(()=>{
                 totalTime--; t.innerText=totalTime;
-                if(totalTime<=10) t.classList.add('danger');
                 if(totalTime<=0) finishGame();
-            },1000);
+            }, 1000);
         }
 
         function useHint() {
-            if(totalTime>5) {
-                totalTime-=5; 
-                document.getElementById('timer-display').innerText=totalTime;
-                document.getElementById('hint-display').innerText=gameQuestions[currentQIndex].hint;
-                document.getElementById('btn-hint').disabled=true;
+            if(totalTime > 5) {
+                totalTime -= 5;
+                document.getElementById('timer-display').innerText = totalTime;
+                document.getElementById('hint-display').innerText = gameQuestions[currentQIndex].hint;
+                document.getElementById('btn-hint').disabled = true;
+                // Hint'te resim açılmasın (İsteğin üzerine iptal edildi)
             }
         }
 
         function loadQuestion() {
-            if(currentQIndex>=gameQuestions.length) currentQIndex=0;
+            if(!isPlaying) return;
+            if(currentQIndex >= gameQuestions.length) currentQIndex = 0;
             const q = gameQuestions[currentQIndex];
-            
-            // Reset UI
+
+            // UI Reset
             document.getElementById('hint-display').innerText="";
             document.getElementById('btn-hint').disabled=false;
             document.getElementById('options-box').innerHTML="";
-            document.getElementById('feedback').style.display="none";
+            document.getElementById('feedback-display').innerText="";
+            document.getElementById('feedback-display').className="";
 
             const pImg = document.getElementById('game-poster');
             const sImg = document.getElementById('game-snapshot');
 
-            // GÖRSEL SIFIRLAMA VE PİKSEL MODU
-            pImg.src=""; sImg.src="";
-            pImg.className="pixel-mode"; sImg.className="pixel-mode";
-            
-            if(currentMode==='movie') pImg.src=q.poster;
-            if(currentMode==='snapshot') sImg.src=q.snapshot;
-            if(currentMode==='quote') document.getElementById('game-quote').innerText=`"${q.text}"`;
-            if(currentMode==='emoji') document.getElementById('game-emoji').innerText=q.text;
+            // Resim Reset (Flash önleme)
+            pImg.classList.remove('revealed', 'loaded'); 
+            sImg.classList.remove('revealed', 'loaded');
+            pImg.src = ""; sImg.src = "";
 
-            // Palet
-            if(q.colors) {
-                const pal = document.getElementById('palette-view'); pal.innerHTML="";
-                q.colors.forEach(c=>{
+            const onLoad = (e) => e.target.classList.add('loaded');
+            pImg.onload = onLoad; sImg.onload = onLoad;
+
+            if(currentMode==='quote') document.getElementById('game-quote').innerText = `"${q.text}"`;
+            else if(currentMode==='emoji') document.getElementById('game-emoji').innerText = q.text;
+            else if(currentMode==='snapshot') sImg.src = q.snapshot;
+            else {
+                pImg.src = q.poster;
+                // Palet
+                const pv = document.getElementById('palette-view'); pv.innerHTML="";
+                if(q.colors) q.colors.forEach(c=>{
                     let d=document.createElement('div'); d.className='color-strip'; d.style.backgroundColor=c;
-                    pal.appendChild(d);
+                    pv.appendChild(d);
                 });
             }
 
             // Şıklar
             let opts = [...q.options].sort(()=>Math.random()-0.5);
-            opts.forEach(o=>{
+            opts.forEach(o => {
                 let btn = document.createElement('div'); btn.className='opt-btn'; btn.innerText=o;
-                btn.onclick=()=>checkAnswer(o, q.correct, btn);
+                btn.onclick = ()=>checkAnswer(o, q.correct, btn);
                 document.getElementById('options-box').appendChild(btn);
             });
-
-            if(isPlaying) startTimer();
         }
 
         function checkAnswer(sel, corr, btn) {
             if(!isPlaying) return;
-            clearInterval(timerInterval);
             
-            document.querySelectorAll('.opt-btn').forEach(b=>b.style.pointerEvents='none');
-            const fb = document.getElementById('feedback');
-            const allBtns = document.querySelectorAll('.opt-btn');
+            // Süreyi durdurma (İstek üzerine sadece yeni soruya geçince devam edecek)
+            clearInterval(timerInterval); 
 
-            if(sel===corr) {
-                score+=10; document.getElementById('score-display').innerText=score;
-                btn.classList.add('correct');
-                fb.innerText="DOĞRU"; fb.className="fb-green";
-                
-                // Netleştir
-                if(currentMode==='movie') document.getElementById('game-poster').className="reveal-mode";
-                if(currentMode==='snapshot') document.getElementById('game-snapshot').className="reveal-mode";
+            const allBtns = document.querySelectorAll('.opt-btn');
+            allBtns.forEach(b=>b.style.pointerEvents='none');
+            
+            const fb = document.getElementById('feedback-display');
+
+            if(sel === corr) {
+                score += 10; document.getElementById('score-display').innerText=score;
+                btn.classList.add('btn-correct');
+                fb.innerText="DOĞRU"; fb.className="status-correct";
             } else {
-                btn.classList.add('wrong');
-                fb.innerText="YANLIŞ"; fb.className="fb-red";
-                // Doğruyu göster
-                allBtns.forEach(b=>{ if(b.innerText===corr) b.classList.add('correct'); });
-                
-                // Yanlışta da resmi göster
-                if(currentMode==='movie') document.getElementById('game-poster').className="reveal-mode";
-                if(currentMode==='snapshot') document.getElementById('game-snapshot').className="reveal-mode";
+                btn.classList.add('btn-wrong');
+                fb.innerText="YANLIŞ"; fb.className="status-wrong";
+                allBtns.forEach(b=>{ if(b.innerText===corr) b.classList.add('btn-correct'); });
             }
-            
-            fb.style.display="block";
-            
+
+            // Resmi Netleştir
+            if(currentMode==='movie') document.getElementById('game-poster').classList.add('revealed');
+            if(currentMode==='snapshot') document.getElementById('game-snapshot').classList.add('revealed');
+
+            // 4 Saniye bekle, sonra devam
             setTimeout(()=>{
-                if(isPlaying){ currentQIndex++; loadQuestion(); }
-            }, 3000);
+                if(isPlaying) {
+                    currentQIndex++;
+                    startTimer(); // Süreyi tekrar başlat
+                    loadQuestion();
+                }
+            }, 4000);
         }
 
         function finishGame() {
-            isPlaying=false; clearInterval(timerInterval);
-            if(isMultiplayer) {
-                db.ref(`rooms/${myRoomCode}/players/${myId}`).update({score:score, status:"finished"});
-            }
-            // Lokal gösterim
-            const t = document.querySelector('#result-table tbody'); t.innerHTML=`<tr><td>1</td><td>${myName}</td><td>${score}</td></tr>`;
+            isPlaying = false; clearInterval(timerInterval);
+            if(isMultiplayer) db.ref(`rooms/${myRoomCode}/players/${myId}`).update({score:score});
+            
+            // Sonuç Ekranı
+            const t = document.querySelector('#result-table tbody');
+            t.innerHTML = `<tr><td>1</td><td>${myName}</td><td>${score}</td></tr>`;
             showScreen('screen-result');
         }
 
         function showLeaderboardScreen() { showScreen('screen-leaderboard'); }
-        function exitGame() { if(confirm("Çıkmak istediğine emin misin?")) location.reload(); }
+        function exitGame() { if(confirm("Çıkış?")) location.reload(); }
 
     </script>
 </body>
