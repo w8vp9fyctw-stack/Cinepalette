@@ -124,28 +124,39 @@
         }
         .start-btn:hover { transform: translateY(-2px); }
 
-        /* --- OYUN ALANI (SIKILAŞTIRILMIŞ) --- */
-        .top-hud { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 5px; }
-        .btn-exit { background: transparent; border: 1px solid #444; color: #aaa; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; }
-        .score-box { background: #222; padding: 5px 12px; border-radius: 20px; font-weight: bold; color: var(--text-gold); border: 1px solid #333; font-size: 0.9rem; }
+        /* --- OYUN ALANI (GÜNCELLENMİŞ YERLEŞİM) --- */
+        
+        /* 1. Üst Barı Biraz Aşağı Aldık */
+        .top-hud { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            width: 100%; 
+            margin-bottom: 10px; 
+            margin-top: 15px; /* Eklenen boşluk */
+        }
+        
+        .btn-exit { background: transparent; border: 1px solid #444; color: #aaa; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; }
+        .score-box { background: #222; padding: 8px 20px; border-radius: 20px; font-weight: bold; color: var(--text-gold); border: 1px solid #333; font-size: 1rem; }
 
+        /* Geri Bildirim */
         #feedback-display {
             width: 100%; text-align: center; font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem; height: 35px; margin-bottom: 0; opacity: 0; transition: opacity 0.2s;
+            font-size: 2.5rem; height: 40px; margin-bottom: 5px; opacity: 0; transition: opacity 0.2s;
         }
-        .status-correct { color: var(--correct-green); opacity: 1 !important; }
-        .status-wrong { color: var(--wrong-red); opacity: 1 !important; }
 
-        /* Medya Kutusu */
+        /* 2. Ortadaki Ekranı Büyüttük */
         .media-container {
             width: 100%; 
-            height: 40vh; max-height: 380px; /* Maksimum yükseklik biraz kısıldı */
-            background: #000; border: 1px solid #333; border-radius: 12px;
+            height: 50vh; /* Yükseklik arttırıldı (Daha büyük ekran) */
+            max-height: 500px;
+            background: #000; border: 1px solid #333; border-radius: 16px;
             overflow: hidden; position: relative; 
             display: flex; justify-content: center; align-items: center;
-            margin-bottom: 5px; /* Alt boşluk azaltıldı */
+            margin-bottom: 5px;
         }
 
+        /* Görsel Ayarları */
         #poster-view, #snapshot-view { width: 100%; height: 100%; display: none; }
         #game-poster, #game-snapshot {
             width: 100%; height: 100%; object-fit: contain;
@@ -164,54 +175,53 @@
             width: 100%; height: 100%; 
             display: none; 
             flex-direction: column; justify-content: center; align-items: center;
-            padding: 15px; text-align: center;
+            padding: 20px; text-align: center;
             background: radial-gradient(circle, #1a1a1a 0%, #000000 100%);
         }
         
-        .quote-text { font-family: 'Georgia', serif; font-size: 1.2rem; font-style: italic; color: #eee; line-height: 1.4; }
-        .emoji-text { font-size: 4rem; letter-spacing: 5px; animation: float 3s infinite ease-in-out; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        #palette-view {
-            width: 100%; height: 100%; display: none; flex-direction: row;
-        }
+        .quote-text { font-family: 'Georgia', serif; font-size: 1.5rem; font-style: italic; color: #eee; line-height: 1.4; }
+        .emoji-text { font-size: 5rem; letter-spacing: 5px; animation: float 3s infinite ease-in-out; }
+        
+        #palette-view { width: 100%; height: 100%; display: none; flex-direction: row; }
         .color-strip { flex: 1; height: 100%; }
 
-        /* Kontroller (Sıkılaştırıldı) */
-        .controls { display: flex; justify-content: space-between; align-items: center; margin: 5px 0; width: 100%; }
-        .timer-display { font-family: 'Bebas Neue'; font-size: 2.2rem; line-height: 1; }
+        /* 3. Süre ve İpucu Butonunu Büyüttük */
+        .controls { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin: 5px 0; width: 100%; 
+        }
+        .timer-display { 
+            font-family: 'Bebas Neue'; 
+            font-size: 3.5rem; /* Süre yazısı büyüdü */
+            line-height: 1;
+        }
         .timer-display.danger { color: #ff4b4b; animation: pulse 0.5s infinite; }
-        .hint-btn { background: rgba(255,215,0,0.1); border: 1px solid gold; color: gold; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; }
+        
+        .hint-btn { 
+            background: rgba(255,215,0,0.15); border: 1px solid gold; color: gold; 
+            padding: 10px 20px; /* Buton büyüdü */
+            border-radius: 8px; cursor: pointer; 
+            font-size: 1rem; font-weight: bold; 
+        }
         
         .hint-text { 
-            width: 100%; text-align: center; color: #aaa; font-size: 0.9rem; 
-            font-style: italic; margin-bottom: 8px; min-height: 18px; 
+            width: 100%; text-align: center; color: #aaa; font-size: 1rem; 
+            font-style: italic; margin-bottom: 5px; min-height: 20px; 
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* Cevap Butonları (Daha Yakın ve Kompakt) */
+        /* 4. Şıkları Sıkılaştırdık */
         .options-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 8px; /* Butonlar arası boşluk azaltıldı */
-            width: 100%; 
+            display: grid; grid-template-columns: 1fr 1fr; 
+            gap: 10px; width: 100%; margin-top: 5px; 
         }
         .opt-btn { 
             background: #1a1a1a; border: 1px solid #333; color: #ccc; 
-            padding: 12px; /* Buton içi boşluk azaltıldı */
-            border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;
-            display: flex; align-items: center; justify-content: center; text-align: center;
-            min-height: 50px;
+            padding: 15px; border-radius: 10px; cursor: pointer; 
+            font-size: 1rem; display: flex; align-items: center; justify-content: center; text-align: center;
+            min-height: 60px; /* Butonlar biraz daha dolgun */
         }
-        .opt-btn:hover { background: #2a2a2a; color: #fff; }
-        
-        .btn-correct { background: var(--correct-green) !important; color: #000 !important; font-weight: bold; }
-        .btn-wrong { background: var(--wrong-red) !important; color: #fff !important; opacity: 0.5; }
-        
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-        table { width: 100%; border-collapse: collapse; color: #aaa; }
-        td, th { padding: 10px; border-bottom: 1px solid #333; }
+        .opt-btn:hover { background: #2a2a2a; color: #fff; border-color: #555; }
     </style>
 </head>
 <body>
@@ -566,7 +576,7 @@
        
        
         ];
-        
+
         // VARIABLES
         let myName="", myRoomCode="", myId="", isHost=false;
         let gameQuestions=[], currentQIndex=0, score=0, timerInterval;
