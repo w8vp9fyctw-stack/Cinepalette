@@ -9,65 +9,270 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- YENİ GİRİŞ EKRANI TASARIMI --- */
-        .login-container { width: 100%; display: flex; flex-direction: column; gap: 15px; }
-        
+        /* --- GENEL TASARIM (RESET) --- */
+        :root {
+            --primary-red: #E50914;
+            --bg-dark: #141414;
+            --card-bg: #1f1f1f;
+            --text-main: #ffffff;
+            --text-muted: #b3b3b3;
+            --correct: #46d369;
+            --wrong: #e50914;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--primary-red);
+            font-size: 4rem;
+            margin: 20px 0 5px 0;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 15px rgba(229, 9, 20, 0.6);
+        }
+        .tagline {
+            color: var(--text-muted);
+            font-size: 1rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        /* EKRANLAR (SCREENS) */
+        .screen {
+            display: none;
+            width: 90%;
+            max-width: 500px;
+            flex-direction: column;
+            gap: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+        .screen.active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- GİRİŞ EKRANI ÖZEL TASARIMI --- */
+        .input-box {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            border: 2px solid #333;
+            color: #fff;
+            font-family: 'Bebas Neue';
+            font-size: 1.5rem;
+            text-align: center;
+            border-radius: 8px;
+            letter-spacing: 1px;
+        }
+        .input-box:focus { border-color: var(--primary-red); outline: none; }
+
         /* Sekmeler (Tabs) */
-        .tabs { display: flex; background: #111; border-radius: 10px; padding: 5px; margin-bottom: 15px; border: 1px solid #333; }
-        .tab-btn { 
-            flex: 1; padding: 12px; border: none; background: transparent; color: #666; 
-            font-weight: bold; cursor: pointer; border-radius: 8px; transition: 0.3s;
+        .tabs {
+            display: flex;
+            background: #000;
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 10px;
         }
-        .tab-btn.active-tab { background: #222; color: var(--primary-red); box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: #666;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+        .tab-btn.active {
+            background: #333;
+            color: #fff;
+        }
 
-        /* Mod Seçici (Yatay Butonlar) */
-        .mode-selector { 
-            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; 
-            scrollbar-width: none; /* Firefox */
+        /* Mod Kartları (Yatay Kaydırma) */
+        .mode-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: none; /* Firefox gizle */
         }
-        .mode-selector::-webkit-scrollbar { display: none; } /* Chrome */
-        
+        .mode-scroll::-webkit-scrollbar { display: none; } /* Chrome gizle */
+
         .mode-card {
-            min-width: 80px; flex: 1; padding: 15px 10px; 
-            background: rgba(255,255,255,0.05); border: 1px solid transparent; 
-            border-radius: 12px; cursor: pointer; text-align: center; transition: 0.2s;
-            display: flex; flex-direction: column; align-items: center; gap: 5px;
+            min-width: 85px;
+            height: 85px;
+            background: var(--card-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
         }
-        .mode-card:hover { background: rgba(255,255,255,0.1); }
-        .mode-card.selected { 
-            border-color: var(--primary-red); background: rgba(216, 31, 38, 0.1); 
-            color: var(--primary-red); transform: translateY(-2px);
+        .mode-card span { font-size: 1.8rem; margin-bottom: 5px; }
+        .mode-card p { font-size: 0.65rem; margin: 0; font-weight: bold; text-transform: uppercase; }
+        
+        .mode-card.selected {
+            background: rgba(229, 9, 20, 0.15);
+            border-color: var(--primary-red);
+            color: var(--primary-red);
+            transform: scale(1.05);
         }
-        .mode-icon { font-size: 1.5rem; margin-bottom: 5px; display: block; }
-        .mode-name { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
 
-        /* Gizli Ayarlar Paneli */
+        /* Ayarlar Butonu ve Paneli */
         .settings-toggle {
-            background: transparent; color: #888; border: 1px dashed #444; 
-            padding: 10px; font-size: 0.8rem; width: 100%; margin-top: 10px;
+            background: transparent;
+            border: 1px dashed #444;
+            color: #888;
+            padding: 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 8px;
         }
         .settings-panel {
-            display: none; background: #0f0f0f; padding: 15px; 
-            border-radius: 10px; margin-top: 10px; border: 1px solid #333;
+            display: none;
+            background: #0f0f0f;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            flex-direction: column;
+            gap: 10px;
         }
-        .settings-panel.open { display: block; animation: fadeIn 0.3s; }
+        .settings-panel.open { display: flex; }
 
-        /* Input ve Büyük Buton */
-        .main-input { 
-            font-size: 1.1rem; text-align: center; letter-spacing: 1px; 
-            background: #1a1a1a; border: 2px solid #333; padding: 15px;
+        .settings-panel select {
+            width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px;
         }
-        .main-input:focus { border-color: var(--primary-red); }
 
-        .play-btn { 
-            font-size: 1.2rem; padding: 20px; background: var(--primary-red); 
-            box-shadow: 0 5px 20px rgba(216, 31, 38, 0.4); 
-            margin-top: 10px;
+        /* BAŞLAT BUTONU */
+        .start-btn {
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+            transition: 0.2s;
         }
+        .start-btn:hover { transform: scale(1.02); }
 
         /* Multiplayer Alanı */
-        .multi-area { display: none; flex-direction: column; gap: 10px; animation: fadeIn 0.3s; }
-        .join-row { display: flex; gap: 10px; }
+        .multi-area { display: none; flex-direction: column; gap: 10px; }
+        .row { display: flex; gap: 10px; }
+
+        /* --- OYUN ALANI TASARIMI --- */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; }
+        .btn-quit { background: transparent; border: 1px solid #444; color: #aaa; padding: 5px 15px; border-radius: 20px; cursor: pointer; }
+        .score-box { background: #222; padding: 5px 15px; border-radius: 20px; font-weight: bold; color: var(--text-gold); border: 1px solid #333; }
+
+        /* GÖRSEL KUTUSU */
+        .media-box {
+            width: 100%;
+            height: 45vh; /* Ekranın yarısı kadar */
+            max-height: 450px;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- KESKİN PİKSEL EFEKTİ (Düzeltilmiş) --- */
+        #game-poster, #game-snapshot {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            
+            /* PİKSEL GÖRÜNÜMÜ İÇİN KRİTİK AYARLAR */
+            image-rendering: pixelated;       /* Chrome/Opera */
+            image-rendering: crisp-edges;     /* Firefox */
+            
+            /* Fiziksel Küçültme ve Büyütme */
+            transform-origin: center center;
+            transform: scale(1); /* Normalde tam boy */
+            transition: filter 0.3s;
+        }
+
+        /* JavaScript ile ekleyeceğimiz sınıf: PİKSELLİ MOD */
+        .pixel-mode {
+            /* Resmi %5 boyutunda render edip, CSS ile 20 kat büyütüyoruz */
+            /* Bu sayede gerçek mozaik kareleri oluşur */
+            width: 5% !important;
+            height: 5% !important; 
+            transform: scale(20) !important; 
+        }
+
+        /* NET MOD */
+        .reveal-mode {
+            width: 100% !important;
+            height: 100% !important;
+            transform: scale(1) !important;
+            filter: none !important;
+            image-rendering: auto !important; /* Pikselliği kapat, yumuşat */
+        }
+        /* ----------------------------------------- */
+
+        #quote-view, #emoji-view { display: none; text-align: center; padding: 20px; width: 100%; }
+        .quote-text { font-family: 'Georgia', serif; font-size: 1.3rem; font-style: italic; line-height: 1.5; }
+        .emoji-text { font-size: 4rem; letter-spacing: 10px; animation: float 3s infinite ease-in-out; }
+        
+        #palette-view { display: none; width: 100%; height: 60px; }
+        .color-strip { flex: 1; height: 100%; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* Alt Kısım */
+        .timer-bar { font-family: 'Bebas Neue'; font-size: 3rem; text-align: left; }
+        .hint-btn { float: right; background: rgba(255,215,0,0.1); border: 1px solid gold; color: gold; padding: 5px 10px; cursor: pointer; }
+        .hint-text { text-align: center; color: #aaa; font-style: italic; min-height: 20px; margin-bottom: 10px; }
+
+        /* Şıklar */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .opt-btn {
+            background: #1a1a1a; border: 1px solid #333; color: #ccc;
+            padding: 15px; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+        }
+        .opt-btn:hover { background: #2a2a2a; color: #fff; }
+        
+        .correct { background: var(--correct) !important; color: #000 !important; border-color: var(--correct) !important; font-weight: bold; }
+        .wrong { background: var(--wrong) !important; color: #fff !important; opacity: 0.5; }
+
+        /* Bildirim */
+        #feedback { 
+            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
+            font-family: 'Bebas Neue'; font-size: 4rem; text-shadow: 0 5px 20px black;
+            display: none; z-index: 10; pointer-events: none;
+        }
+        .fb-green { color: var(--correct); display: block !important; }
+        .fb-red { color: var(--wrong); display: block !important; }
+
     </style>
 </head>
 <body>
@@ -77,461 +282,191 @@
 
     <div id="screen-login" class="screen active">
         
-        <input type="text" id="username" class="main-input" placeholder="OYUNCU İSMİ">
+        <input type="text" id="username" class="input-box" placeholder="OYUNCU ADI">
 
-        <div class="login-container">
-            
-            <div class="tabs">
-                <button class="tab-btn active-tab" onclick="switchTab('single')">TEK KİŞİLİK</button>
-                <button class="tab-btn" onclick="switchTab('multi')">ONLİNE OYNA</button>
-            </div>
-
-            <label style="font-size:0.7rem; color:#666; margin-left:5px;">OYUN MODUNU SEÇ</label>
-            <div class="mode-selector">
-                <input type="hidden" id="mode-select" value="mix">
-                
-                <div class="mode-card selected" onclick="selectMode('mix', this)">
-                    <span class="mode-icon">🎲</span>
-                    <span class="mode-name">Karışık</span>
-                </div>
-                <div class="mode-card" onclick="selectMode('snapshot', this)">
-                    <span class="mode-icon">🖼️</span>
-                    <span class="mode-name">Tek Kare</span>
-                </div>
-                <div class="mode-card" onclick="selectMode('quote', this)">
-                    <span class="mode-icon">💬</span>
-                    <span class="mode-name">Replik</span>
-                </div>
-                <div class="mode-card" onclick="selectMode('palettes', this)">
-                    <span class="mode-icon">🎨</span>
-                    <span class="mode-name">Palet</span>
-                </div>
-                <div class="mode-card" onclick="selectMode('emoji', this)">
-                    <span class="mode-icon">🧩</span>
-                    <span class="mode-name">Emoji</span>
-                </div>
-            </div>
-
-            <button class="settings-toggle" onclick="toggleSettings()">⚙️ ZORLUK VE TÜR AYARLARI</button>
-            
-            <div id="settings-panel" class="settings-panel">
-                <label style="font-size:0.7rem; color:#aaa;">ZORLUK</label>
-                <select id="difficulty-select" style="margin-bottom:10px;">
-                    <option value="all">KARIŞIK (Hepsi)</option>
-                    <option value="easy">KOLAY (Popüler)</option>
-                    <option value="hard">ZOR (Sinefil)</option>
-                    <option value="expert">ÇOK ZOR (Uzman)</option>
-                </select>
-
-                <label style="font-size:0.7rem; color:#aaa;">FİLM TÜRÜ</label>
-                <select id="genre-select" style="margin-bottom:10px;">
-                    <option value="mix">TÜM TÜRLER</option>
-                    <option value="scifi">BİLİM KURGU</option>
-                    <option value="horror">KORKU</option>
-                    <option value="cult">KÜLT</option>
-                </select>
-
-                <label style="font-size:0.7rem; color:#aaa;">GÖRÜNÜM</label>
-                <select id="visual-select">
-                    <option value="both">Palet + Poster</option>
-                    <option value="palette">Sadece Palet</option>
-                    <option value="poster">Sadece Poster</option>
-                </select>
-            </div>
-
-            <div id="single-area">
-                <button class="play-btn" onclick="startSinglePlayerGame()">BAŞLAT</button>
-            </div>
-
-            <div id="multi-area" class="multi-area">
-                <button class="btn-secondary" style="background:var(--primary-red); color:white;" onclick="createRoom()">YENİ ODA KUR</button>
-                <div style="text-align:center; color:#666; font-size:0.8rem;">- VEYA -</div>
-                <div class="join-row">
-                    <input type="text" id="room-code-input" placeholder="Oda Kodu" style="margin:0; text-align:center;">
-                    <button class="btn-secondary" style="width:40%; margin:0;" onclick="joinRoom()">KATIL</button>
-                </div>
-            </div>
-
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('single')">TEK KİŞİLİK</button>
+            <button class="tab-btn" onclick="switchTab('multi')">ONLİNE</button>
         </div>
 
-        <button class="btn-exit" style="margin-top:20px; border:none; color:#666;" onclick="showLeaderboardScreen()">🏆 LİDERLER TABLOSU</button>
-    </div>
-    <script>
-        // --- YENİ UI FONKSİYONLARI ---
+        <div class="mode-scroll">
+            <input type="hidden" id="mode-select" value="mix">
+            <div class="mode-card selected" onclick="selectMode('mix', this)"><span>🎲</span><p>Karışık</p></div>
+            <div class="mode-card" onclick="selectMode('snapshot', this)"><span>📸</span><p>Tek Kare</p></div>
+            <div class="mode-card" onclick="selectMode('quote', this)"><span>💬</span><p>Replik</p></div>
+            <div class="mode-card" onclick="selectMode('palettes', this)"><span>🎨</span><p>Palet</p></div>
+            <div class="mode-card" onclick="selectMode('emoji', this)"><span>🧩</span><p>Emoji</p></div>
+        </div>
 
-        function switchTab(tab) {
-            const btns = document.querySelectorAll('.tab-btn');
-            const singleArea = document.getElementById('single-area');
-            const multiArea = document.getElementById('multi-area');
+        <div class="settings-toggle" onclick="toggleSettings()">⚙️ ZORLUK & TÜR AYARLARI</div>
+        <div class="settings-panel" id="settings-panel">
+            <label>Zorluk:</label>
+            <select id="difficulty-select">
+                <option value="all">Hepsi</option>
+                <option value="easy">Kolay</option>
+                <option value="hard">Zor</option>
+                <option value="expert">Uzman</option>
+            </select>
+            <label>Tür:</label>
+            <select id="genre-select">
+                <option value="mix">Tüm Türler</option>
+                <option value="horror">Korku</option>
+                <option value="scifi">Bilim Kurgu</option>
+                <option value="cult">Kült</option>
+                <option value="action">Aksiyon</option>
+            </select>
+            <div id="visual-setting">
+                <label>Görünüm:</label>
+                <select id="visual-select">
+                    <option value="both">Palet + Pikselli</option>
+                    <option value="poster">Sadece Pikselli</option>
+                    <option value="palette">Sadece Palet</option>
+                </select>
+            </div>
+        </div>
 
-            if(tab === 'single') {
-                btns[0].classList.add('active-tab');
-                btns[1].classList.remove('active-tab');
-                singleArea.style.display = 'block';
-                multiArea.style.display = 'none';
-            } else {
-                btns[0].classList.remove('active-tab');
-                btns[1].classList.add('active-tab');
-                singleArea.style.display = 'none';
-                multiArea.style.display = 'flex';
-            }
-        }
+        <div id="single-area">
+            <button class="start-btn" onclick="startSinglePlayerGame()">BAŞLAT</button>
+        </div>
 
-        function selectMode(modeValue, cardElement) {
-            // Gizli inputu güncelle
-            document.getElementById('mode-select').value = modeValue;
-            
-            // Görsel seçimi güncelle
-            document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
-            cardElement.classList.add('selected');
-
-            // Ayarları tetikle (Gerekirse görünümü gizlemek için)
-            uiUpdate();
-        }
-
-        function toggleSettings() {
-            const panel = document.getElementById('settings-panel');
-            if (panel.style.display === 'block') {
-                panel.style.display = 'none';
-            } else {
-                panel.style.display = 'block';
-            }
-        }
-
-        // Mevcut uiUpdate fonksiyonunu buna göre uyarla:
-        function uiUpdate() {
-            // Artık değer gizli inputtan veya görsel seçimden geliyor
-            const mode = document.getElementById('mode-select').value; 
-            
-            // Görünüm ayarını bazı modlarda gizle
-            const visualSetting = document.getElementById('visual-select').parentElement; // Select'in label'ı ile beraber
-            // (Basitlik için direkt select'i gizleyebiliriz veya üst divi)
-             
-            // İsteğe bağlı: Belli modlarda bazı ayarları deaktif et
-        }
-        // --- VERİTABANI ---
-        const database = [
-            
-            // ============================================================
-            // 🖼️ KATEGORİ: SNAPSHOT (TEK KARE) - YENİLER EKLENDİ
-            // ============================================================
-            
-            // --- KOLAY ---
-            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Gemi, Buzdağı", correct: "Titanic", snapshot: "https://m.media-amazon.com/images/M/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
-            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Aslan, Kaya", correct: "The Lion King", snapshot: "https://m.media-amazon.com/images/M/MV5BMjIwMjE1Nzc4NV5BMl5BanBnXkFtZTgwNDg4OTA1NzM@._V1_.jpg", options: ["The Lion King", "Madagascar", "Jungle Book", "Tarzan"] },
-            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Mavi İnsanlar, Pandora", correct: "Avatar", snapshot: "https://m.media-amazon.com/images/M/MV5BMTYwOTEwNjAzMl5BMl5BanBnXkFtZTcwODc5MTUwMw@@._V1_.jpg", options: ["Avatar", "Guardians of the Galaxy", "Valerian", "Warcraft"] },
-            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Kırmızı Balon", correct: "It", snapshot: "https://a.ltrbxd.com/resized/sm/upload/w3/47/76/am/6uDpMsdn8bbZScDptbika5JEtSH-0-2000-0-3000-crop.jpg?v=ee603d8e3b", options: ["It", "Stranger Things", "Poltergeist", "Annabelle"] },
-            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Mermi, Matrix", correct: "The Matrix", snapshot: "img/matrix.png", options: ["The Matrix", "John Wick", "Constantine", "Equilibrium"] },
-
-            // --- ZOR ---
-            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Kore, Çekiç, Koridor", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
-            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Sarı Eşofman, Motor", correct: "Kill Bill: Vol. 1", snapshot: "https://m.media-amazon.com/images/M/MV5BNzM3NDFhYTAtYmU5Mi00NGRmLTljYjgtMDkyODQ4MjNkMGY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Death Proof", "Sin City"] },
-            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Merdiven, Reality Show", correct: "The Truman Show", snapshot: "https://m.media-amazon.com/images/M/MV5BMDIzODcyY2EtMmY2MC00ZWVlLTgwMzAtMjQwOWUyNmJjNTYyXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_.jpg", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Yes Man"] },
-            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Duş, Bıçak", correct: "Psycho", snapshot: "https://m.media-amazon.com/images/M/MV5BNTQwNDM1YzItNDAxZC00NWY2LTk0M2UtNDIwNWI5OGUyNWUxXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Psycho", "The Birds", "Vertigo", "Rear Window"] },
-            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Dans, Araba", correct: "Grease", snapshot: "https://a.ltrbxd.com/resized/sm/upload/uw/jl/ie/y3/grease-0-2000-0-3000-crop.jpg?v=1e90cafd49", options: ["Grease", "Dirty Dancing", "Footloose", "Hairspray"] },
-
-            // --- UZMAN ---
-            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Monolit, Uzay", correct: "2001: A Space Odyssey", snapshot: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Moon"] },
-            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Satranç, Ölüm", correct: "The Seventh Seal", snapshot: "https://a.ltrbxd.com/resized/film-poster/5/1/6/2/0/51620-the-seventh-seal-0-2000-0-3000-crop.jpg?v=fa1963f0b2", options: ["The Seventh Seal", "Persona", "Wild Strawberries", "8½"] },
-            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Mezarlık, Üçlü Düello", correct: "The Good, the Bad and the Ugly", snapshot: "https://a.ltrbxd.com/resized/film-poster/5/1/6/6/6/51666-the-good-the-bad-and-the-ugly-0-2000-0-3000-crop.jpg?v=9474a84e63", options: ["The Good, the Bad and the Ugly", "Django", "Unforgiven", "Once Upon a Time in the West"] },
-            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Helikopter, Savaş", correct: "Apocalypse Now", snapshot: "https://a.ltrbxd.com/resized/film-poster/2/6/9/0/2690-apocalypse-now-0-2000-0-3000-crop.jpg?v=d4f99c09a3", options: ["Apocalypse Now", "Platoon", "Full Metal Jacket", "The Deer Hunter"] },
-            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Bisiklet, Ay", correct: "E.T. the Extra-Terrestrial", snapshot: "https://m.media-amazon.com/images/M/MV5BMTQ2ODFlMDAtNzdhOC00ZDYzLWE3YTMtNDU4ZGFmZmJmYTczXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", options: ["E.T.", "Close Encounters", "Super 8", "The Iron Giant"] },
-
-            // ============================================================
-            // 🧩 KATEGORİ: EMOJI BULMACA
-            // ============================================================
-            { type: "emoji", difficulty: "easy", text: "🎈🏠👴", hint: "Pixar, Uçan Ev", correct: "Up", options: ["Up", "Inside Out", "Coco", "Soul"] },
-            { type: "emoji", difficulty: "easy", text: "🚢❄️💔", hint: "Buzdağı, 1997", correct: "Titanic", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
-            { type: "emoji", difficulty: "easy", text: "🤡🕺🔫", hint: "Merdiven Dansı", correct: "Joker", options: ["Joker", "The Dark Knight", "Batman", "Suicide Squad"] },
-            { type: "emoji", difficulty: "easy", text: "🦁👑🐗", hint: "Hakuna Matata", correct: "The Lion King", options: ["The Lion King", "Madagascar", "Jungle Book", "Tarzan"] },
-            { type: "emoji", difficulty: "easy", text: "🍫🏃🍤", hint: "Run Forrest Run", correct: "Forrest Gump", options: ["Forrest Gump", "Big", "Cast Away", "Rain Man"] },
-            { type: "emoji", difficulty: "easy", text: "🕶️👽🔫", hint: "Hafıza Silici, Ajanlar", correct: "Men in Black", options: ["Men in Black", "Alien", "Mars Attacks!", "E.T."] },
-            { type: "emoji", difficulty: "easy", text: "🎸💀🌼", hint: "Meksika, Ölüler Günü", correct: "Coco", options: ["Coco", "Book of Life", "Encanto", "Soul"] },
-            { type: "emoji", difficulty: "easy", text: "🎲🦁🐒", hint: "Tehlikeli Masa Oyunu", correct: "Jumanji", options: ["Jumanji", "Zathura", "Jungle Cruise", "Night at the Museum"] },
-            { type: "emoji", difficulty: "easy", text: "🚗⚡🕰️", hint: "88 Mil, Doktor", correct: "Back to the Future", options: ["Back to the Future", "Ferris Bueller's Day Off", "Ghostbusters", "Teen Wolf"] },
-            { type: "emoji", difficulty: "easy", text: "👻🚫🚙", hint: "Kimi arayacaksın?", correct: "Ghostbusters", options: ["Ghostbusters", "Beetlejuice", "Casper", "Gremlins"] },
-            { type: "emoji", difficulty: "easy", text: "🐍🤠👢", hint: "Oyuncağımın altında yılan var!", correct: "Toy Story", options: ["Toy Story", "Cars", "Monsters Inc.", "Finding Nemo"] },
-            { type: "emoji", difficulty: "easy", text: "🐀👨‍🍳🍲", hint: "Herkes yemek yapabilir", correct: "Ratatouille", options: ["Ratatouille", "Flushed Away", "Stuart Little", "Garfield"] },
-            { type: "emoji", difficulty: "easy", text: "👸🍎😴", hint: "Yedi Cüceler", correct: "Snow White and the Seven Dwarfs", options: ["Snow White", "Cinderella", "Sleeping Beauty", "Tangled"] },
-            { type: "emoji", difficulty: "easy", text: "🧙‍♂️💍🌋", hint: "Orta Dünya, Kardeşlik", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "The Hobbit", "Harry Potter", "Narnia"] },
-            { type: "emoji", difficulty: "easy", text: "🕷️🕸️🏙️", hint: "Büyük güç büyük sorumluluk", correct: "Spider-Man", options: ["Spider-Man", "Batman", "Superman", "Iron Man"] },
-
-
-
-            { type: "emoji", difficulty: "hard", text: "💊🕶️💻", hint: "Kırmızı Hap", correct: "The Matrix", options: ["The Matrix", "John Wick", "Inception", "Blade Runner"] },
-            { type: "emoji", difficulty: "hard", text: "👻🚫lz", hint: "Kimi arayacaksın?", correct: "Ghostbusters", options: ["Ghostbusters", "Casper", "Beetlejuice", "Men in Black"] },
-            { type: "emoji", difficulty: "hard", text: "🦖🦕🚙", hint: "Bir Park", correct: "Jurassic Park", options: ["Jurassic Park", "Godzilla", "King Kong", "Jumanji"] },
-            { type: "emoji", difficulty: "hard", text: "🥊🐯👀", hint: "Adrian!", correct: "Rocky", options: ["Rocky", "Raging Bull", "Creed", "Million Dollar Baby"] },
-            { type: "emoji", difficulty: "hard", text: "🦈🏖️🩸", hint: "Daaaa-dum...", correct: "Jaws", options: ["Jaws", "The Meg", "Deep Blue Sea", "Piranha"] },
-            { type: "emoji", difficulty: "hard", text: "🏐🏝️📦", hint: "Wilson!", correct: "Cast Away", options: ["Cast Away", "Robinson Crusoe", "Life of Pi", "The Blue Lagoon"] },
-            { type: "emoji", difficulty: "hard", text: "📦😵🌧️", hint: "Kutuda ne var?", correct: "Se7en", options: ["Se7en", "Zodiac", "Fight Club", "Prisoners"] },
-            { type: "emoji", difficulty: "hard", text: "📺👱‍♂️⛵️", hint: "Sahte Hayat, Günaydın!", correct: "The Truman Show", options: ["The Truman Show", "Eternal Sunshine", "Edtv", "Pleasantville"] },
-            { type: "emoji", difficulty: "hard", text: "🧼👊🤫", hint: "İlk kural: Bahsetmek yok", correct: "Fight Club", options: ["Fight Club", "American Psycho", "Snatch", "Pulp Fiction"] },
-            { type: "emoji", difficulty: "hard", text: "👔🪓🎵", hint: "Kartvizit, Huey Lewis", correct: "American Psycho", options: ["American Psycho", "Fight Club", "Nightcrawler", "Joker"] },
-            { type: "emoji", difficulty: "hard", text: "🤫🐑🦋", hint: "Kuzuların Çığlığı", correct: "The Silence of the Lambs", options: ["The Silence of the Lambs", "Hannibal", "Se7en", "Zodiac"] },
-            { type: "emoji", difficulty: "hard", text: "💊🕶️🐇", hint: "Tavşanı izle", correct: "The Matrix", options: ["The Matrix", "Inception", "Blade Runner", "Equilibrium"] },
-            { type: "emoji", difficulty: "hard", text: "🤠⛺️🏔️", hint: "Kovboylar, Yasak Aşk", correct: "Brokeback Mountain", options: ["Brokeback Mountain", "Power of the Dog", "No Country for Old Men", "Moonlight"] },
-            { type: "emoji", difficulty: "hard", text: "👵🚿🔪", hint: "Motel, Anne", correct: "Psycho", options: ["Psycho", "The Birds", "Vertigo", "Halloween"] },
-            { type: "emoji", difficulty: "hard", text: "🌹🥀👹", hint: "Bir masal kadar eski", correct: "Beauty and the Beast", options: ["Beauty and the Beast", "Cinderella", "The Little Mermaid", "Aladdin"] },
-
-
-
-
-            { type: "emoji", difficulty: "expert", text: "🥯👀🪨", hint: "Her Şey, Her Yerde", correct: "Everything Everywhere All At Once", options: ["EEAAO", "Doctor Strange", "The Matrix", "Inception"] },
-            { type: "emoji", difficulty: "expert", text: "🥄☕️🦌", hint: "Hipnoz, Batık Yer", correct: "Get Out", options: ["Get Out", "Us", "Nope", "Candyman"] },
-            { type: "emoji", difficulty: "expert", text: "👽🐙🗣️", hint: "Dilbilimci, Zaman", correct: "Arrival", options: ["Arrival", "Contact", "Interstellar", "Dune"] },
-            { type: "emoji", difficulty: "expert", text: "🥛👁️🎩", hint: "Ludovico Tekniği", correct: "A Clockwork Orange", options: ["A Clockwork Orange", "The Shining", "Full Metal Jacket", "Trainspotting"] },
-            { type: "emoji", difficulty: "expert", text: "👨🏻💻❤️📱", hint: "İşletim Sistemi Aşkı", correct: "Her", options: ["Her", "Ex Machina", "Lost in Translation", "Eternal Sunshine"] },
-            { type: "emoji", difficulty: "expert", text: "🍑🏠🌳", hint: "İtalya, Yaz, Şeftali", correct: "Call Me by Your Name", options: ["Call Me by Your Name", "Moonlight", "Brokeback Mountain", "Love, Simon"] },
-            { type: "emoji", difficulty: "expert", text: "💃🕺🎹", hint: "Los Angeles, Caz", correct: "La La Land", options: ["La La Land", "Whiplash", "A Star Is Born", "Chicago"] },
-            { type: "emoji", difficulty: "expert", text: "👮‍♂️🚗🚕", hint: "Taksi Şoförü, Mohawk", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Joker", "Drive"] },
-            { type: "emoji", difficulty: "expert", text: "🎹🪖Nazi", hint: "Piyanist, Savaş", correct: "The Pianist", options: ["The Pianist", "Schindler's List", "Life is Beautiful", "Downfall"] },
-            { type: "emoji", difficulty: "expert", text: "👨‍🚀🥔🚀", hint: "Mars'ta Patates", correct: "The Martian", options: ["The Martian", "Interstellar", "Gravity", "Ad Astra"] },
-            { type: "emoji", difficulty: "expert", text: "👴💍🌋", hint: "Kıymetli", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "Harry Potter", "The Hobbit", "Narnia"] },
-            { type: "emoji", difficulty: "expert", text: "🐼👊🍜", hint: "Ejderha Savaşçısı", correct: "Kung Fu Panda", options: ["Kung Fu Panda", "Shrek", "Ice Age", "Madagascar"] },
-            { type: "emoji", difficulty: "expert", text: "🛁🔪🚿", hint: "Motel", correct: "Psycho", options: ["Psycho", "The Shining", "Halloween", "Scream"] },
-            { type: "emoji", difficulty: "expert", text: "🌹🥀👹", hint: "Dans", correct: "Beauty and the Beast", options: ["Beauty and the Beast", "Cinderella", "Sleeping Beauty", "Aladdin"] },
-       
-       // REPLİKLER
-            
-            // ============================================================
-            // 💬 EK REPLİKLER (LETTERBOXD LİSTESİNDEN UYARLAMA)
-            // ============================================================
-
-            // --- 🟢 KOLAY (EASY) ---
-            { type: "quote", difficulty: "easy", text: "Great Scott!", hint: "Doktor, 88 Mil", correct: "Back to the Future", options: ["Back to the Future", "Rick and Morty", "Ghostbusters", "Star Wars"] },
-            { type: "quote", difficulty: "easy", text: "Anyone can cook.", hint: "Fare, Paris", correct: "Ratatouille", options: ["Ratatouille", "Burnt", "Chef", "The Menu"] },
-            { type: "quote", difficulty: "easy", text: "With great power comes great responsibility.", hint: "Ben Amca", correct: "Spider-Man", options: ["Spider-Man", "Batman", "Superman", "Iron Man"] },
-            { type: "quote", difficulty: "easy", text: "Run, Forrest! Run!", hint: "Jenny", correct: "Forrest Gump", options: ["Forrest Gump", "Saving Private Ryan", "Cast Away", "Big"] },
-            { type: "quote", difficulty: "easy", text: "You are a sad, strange little man and you have my pity.", hint: "Uzay Polisi, Kovboy", correct: "Toy Story", options: ["Toy Story", "Shrek", "Monsters Inc.", "Finding Nemo"] },
-            { type: "quote", difficulty: "easy", text: "I make this look good.", hint: "Ajan J, Takım Elbise", correct: "Men in Black", options: ["Men in Black", "Bad Boys", "Independence Day", "Wild Wild West"] },
-            { type: "quote", difficulty: "easy", text: "Wilson! I'm sorry, Wilson!", hint: "Issız Ada, Voleybol Topu", correct: "Cast Away", options: ["Cast Away", "The Terminal", "Forrest Gump", "Captain Phillips"] },
-            { type: "quote", difficulty: "easy", text: "You shall not pass!", hint: "Gandalf, Köprü", correct: "The Lord of the Rings: The Fellowship of the Ring", options: ["The Lord of the Rings", "The Hobbit", "Harry Potter", "Game of Thrones"] },
-            { type: "quote", difficulty: "easy", text: "I'm the king of the world!", hint: "Gemi, Okyanus", correct: "Titanic", options: ["Titanic", "The Great Gatsby", "Romeo + Juliet", "Avatar"] },
-            { type: "quote", difficulty: "easy", text: "Mirror mirror on the wall, who is the fairest of them all?", hint: "Kötü Kraliçe", correct: "Snow White and the Seven Dwarfs", options: ["Snow White", "Cinderella", "Maleficent", "Tangled"] },
-
-            // --- 🟡 ZOR (HARD) ---
-            { type: "quote", difficulty: "hard", text: "I have to return some videotapes.", hint: "Patrick Bateman, Kartvizit", correct: "American Psycho", options: ["American Psycho", "Nightcrawler", "Fight Club", "Joker"] },
-            { type: "quote", difficulty: "hard", text: "Seize your moment.", hint: "Meksika, Müzik", correct: "Coco", options: ["Coco", "Soul", "Inside Out", "Book of Life"] },
-            { type: "quote", difficulty: "hard", text: "In case I don't see you... good afternoon, good evening, and good night!", hint: "Sahte Dünya", correct: "The Truman Show", options: ["The Truman Show", "Eternal Sunshine", "Bruce Almighty", "Yes Man"] },
-            { type: "quote", difficulty: "hard", text: "A census taker once tried to test me. I ate his liver with some fava beans and a nice Chianti.", hint: "Hannibal Lecter", correct: "The Silence of the Lambs", options: ["The Silence of the Lambs", "Se7en", "Zodiac", "Red Dragon"] },
-            { type: "quote", difficulty: "hard", text: "Ernest Hemingway once wrote, 'The world is a fine place and worth fighting for.' I agree with the second part.", hint: "Dedektif Somerset", correct: "Se7en", options: ["Se7en", "Fight Club", "Zodiac", "The Game"] },
-            { type: "quote", difficulty: "hard", text: "Here's to the ones who dream, foolish as they may seem.", hint: "Emma Stone, Audition", correct: "La La Land", options: ["La La Land", "Whiplash", "A Star Is Born", "Moulin Rouge!"] },
-            { type: "quote", difficulty: "hard", text: "Tale as old as time.", hint: "Çaydanlık", correct: "Beauty and the Beast", options: ["Beauty and the Beast", "Cinderella", "The Little Mermaid", "Aladdin"] },
-            { type: "quote", difficulty: "hard", text: "A boy's best friend is his mother.", hint: "Norman Bates", correct: "Psycho", options: ["Psycho", "The Birds", "Halloween", "Friday the 13th"] },
-            { type: "quote", difficulty: "hard", text: "I wish I knew how to quit you.", hint: "Kovboylar, Çadır", correct: "Brokeback Mountain", options: ["Brokeback Mountain", "Call Me by Your Name", "Moonlight", "God's Own Country"] },
-            { type: "quote", difficulty: "hard", text: "In the jungle, you must wait, until the dice read five or eight.", hint: "Davul sesi", correct: "Jumanji", options: ["Jumanji", "Zathura", "Indiana Jones", "Jungle Cruise"] },
-
-            // --- 🔴 UZMAN (EXPERT) ---
-            { type: "quote", difficulty: "expert", text: "Be kind, for everyone you meet is fighting a hard battle.", hint: "Çoklu Evren, Çamaşırhane", correct: "Everything Everywhere All At Once", options: ["EEAAO", "The Matrix", "Doctor Strange", "Eternal Sunshine"] },
-            { type: "quote", difficulty: "expert", text: "I think anybody who falls in love is a freak. It's a crazy thing to do.", hint: "Yapay Zeka Aşkı", correct: "Her", options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
-            { type: "quote", difficulty: "expert", text: "Is it better to be feared or respected? I say, is it too much to ask for both?", hint: "Tony Stark", correct: "Iron Man", options: ["Iron Man", "The Avengers", "Captain America", "Batman Begins"] },
-            { type: "quote", difficulty: "expert", text: "Now you're in the Sunken Place.", hint: "Hipnoz, Kaşık Sesi", correct: "Get Out", options: ["Get Out", "Us", "Nope", "Midsommar"] },
-            { type: "quote", difficulty: "expert", text: "Despite knowing the journey... and where it leads... I embrace it.", hint: "Dilbilimci, Uzaylılar", correct: "Arrival", options: ["Arrival", "Interstellar", "Contact", "Dune"] },
-            { type: "quote", difficulty: "expert", text: "I was cured all right!", hint: "Alex DeLarge", correct: "A Clockwork Orange", options: ["A Clockwork Orange", "Trainspotting", "The Shining", "Full Metal Jacket"] },
-            { type: "quote", difficulty: "expert", text: "Call me by your name and I'll call you by mine.", hint: "İtalya, Yaz, Elio", correct: "Call Me by Your Name", options: ["Call Me by Your Name", "Moonlight", "Portrait of a Lady on Fire", "Love, Simon"] },
-            { type: "quote", difficulty: "expert", text: "Music was my refuge. I could crawl into the space between the notes and curl my back to loneliness.", hint: "Soykırım, Piyano", correct: "The Pianist", options: ["The Pianist", "Schindler's List", "Life is Beautiful", "The Green Mile"] },
-            { type: "quote", difficulty: "expert", text: "Loneliness has followed me my whole life, everywhere.", hint: "Taksi Şoförü", correct: "Taxi Driver", options: ["Taxi Driver", "Joker", "Nightcrawler", "Drive"] },
-            { type: "quote", difficulty: "expert", text: "We came, we saw, we kicked its ass!", hint: "Hayalet Avcıları", correct: "Ghostbusters", options: ["Ghostbusters", "Men in Black", "Beetlejuice", "Zombieland"] },
-
-            // FİLMLER
-
-           // ==============================================
-        // 🎬 CINEPALETTE: DEVASA VERİTABANI (FULL PACK)
-        // ==============================================
+        <div id="multi-area" class="multi-area">
+            <button class="start-btn" style="background:#333;" onclick="createRoom()">YENİ ODA KUR</button>
+            <div class="row">
+                <input type="text" id="room-code-input" class="input-box" style="font-size:1rem; padding:10px;" placeholder="Oda Kodu">
+                <button class="start-btn" style="margin:0; width:40%; font-size:1rem;" onclick="joinRoom()">KATIL</button>
+            </div>
+        </div>
         
-            // ============================================================
-            // 👻 MEVCUT KORKU & GERİLİM (SENİN LİSTEN - KORUNANLAR)
-            // ============================================================
-           
-            { type: "movie", genre: "horror", difficulty: "easy", hint: "Jack Nicholson, Balta, Otel", correct: "The Shining", poster: "https://m.media-amazon.com/images/M/MV5BZWFlYmY2MGEtZjVkYS00YzU4LTg0YjQtYzY1ZGE3NTA5NGQxXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", colors: ["#F4D03F", "#D35400", "#17202A", "#641E16", "#922B21", "#FDFEFE", "#000000", "#B03A2E"], options: ["The Shining", "Doctor Sleep", "Misery", "1408"] },
-            { type: "movie", genre: "horror", difficulty: "easy", hint: "Alfred Hitchcock, Duş Sahnesi", correct: "Psycho", poster: "https://m.media-amazon.com/images/M/MV5BNTQwNDM1YzItNDAxZC00NWY2LTk0M2UtNDIwNWI5OGUyNWUxXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#4D4D4D", "#666666", "#808080", "#999999", "#FFFFFF"], options: ["Psycho", "The Birds", "Vertigo", "Rear Window"] },
-            { type: "movie", genre: "horror", difficulty: "easy", hint: "Uzaylı, Ripley, Kedi", correct: "Alien", poster: "https://m.media-amazon.com/images/M/MV5BOGQzZTBjMjQtOTVmMS00NGE5LWEyYmMtOGQ1ZGZjNmRkYjFhXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_.jpg", colors: ["#000000", "#0B1808", "#142510", "#1E3319", "#294223", "#D4E157", "#CDDC39", "#FFFFFF"], options: ["Alien", "Aliens", "Prometheus", "The Thing"] },
-            { type: "movie", genre: "horror", difficulty: "easy", hint: "Maskeli Katil, Telefon Şakası", correct: "Scream", poster: "https://m.media-amazon.com/images/M/MV5BMjA2NjU5MTg5OF5BMl5BanBnXkFtZTgwOTkyMzQxMDE@._V1_.jpg", colors: ["#000000", "#1C1C1C", "#FFFFFF", "#E74C3C", "#C0392B", "#5D6D7E", "#2E4053", "#17202A"], options: ["Scream", "I Know What You Did Last Summer", "Halloween", "Friday the 13th"] },
-            { type: "movie", genre: "horror", difficulty: "easy", hint: "Küçük Kız, Şeytan Çıkarma", correct: "The Exorcist", poster: "https://a.ltrbxd.com/resized/film-poster/4/7/0/4/8/47048-the-exorcist-0-2000-0-3000-crop.jpg?v=897c9aa211", colors: ["#000000", "#120815", "#2C162E", "#4A235A", "#6C3483", "#884EA0", "#D2B4DE", "#FFFFFF"], options: ["The Exorcist", "The Omen", "Rosemary's Baby", "Poltergeist"] },
-            { type: "movie", genre: "horror", difficulty: "easy", hint: "Kukla, Bisiklet, Oyun", correct: "Saw", poster: "https://m.media-amazon.com/images/M/MV5BMjE4MDYzNDE1OV5BMl5BanBnXkFtZTcwNDY2OTYwNA@@._V1_.jpg", colors: ["#000000", "#1A1A1A", "#FFFFFF", "#99A3A4", "#5DADE2", "#3498DB", "#2874A6", "#1B4F72"], options: ["Saw", "Hostel", "Final Destination", "The Collector"] },
-            { type: "movie", genre: "horror", difficulty: "easy", hint: "Anthony Hopkins, Maske", correct: "The Silence of the Lambs", poster: "https://m.media-amazon.com/images/M/MV5BNjNhZTk0ZmEtNjJhMi00YzFlLWE1MmEtYzM1M2ZmMGMwMTU4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg", colors: ["#000000", "#3E2723", "#6D4C41", "#A1887F", "#D7CCC8", "#880E4F", "#C2185B", "#FFFFFF"], options: ["The Silence of the Lambs", "Hannibal", "Red Dragon", "Se7en"] },
-            { type: "movie", genre: "horror", difficulty: "easy", hint: "Köpekbalığı, Yaz", correct: "Jaws", poster: "https://m.media-amazon.com/images/M/MV5BMmVmODY1MzEtYTMwZC00MzNhLWFkNDMtZjAwM2EwODUxZTA5XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg", colors: ["#000000", "#154360", "#1F618D", "#2980B9", "#5499C7", "#AED6F1", "#FDFEFE", "#C0392B"], options: ["Jaws", "The Meg", "Deep Blue Sea", "Piranha"] },
-            { type: "movie", genre: "horror", difficulty: "easy", hint: "Palyaço Pennywise", correct: "It", poster: "https://m.media-amazon.com/images/M/MV5BZDVkZmI0YzAtNzdjYi00ZjhhLWE1ODEtMWMzMWMzNDA0NmQ4XkEyXkFqcGdeQXVyNzYzODM3Mzg@._V1_.jpg", colors: ["#000000", "#17202A", "#FFFFFF", "#FDFEFE", "#C0392B", "#922B21", "#F1C40F", "#D35400"], options: ["It", "Joker", "Poltergeist", "Annabelle"] },
-            { type: "movie", genre: "horror", difficulty: "easy", hint: "Elektrikli Testere, Teksas", correct: "The Texas Chain Saw Massacre", poster: "https://a.ltrbxd.com/resized/film-poster/3/1/9/8/5/31985-the-texas-chain-saw-massacre-0-2000-0-3000-crop.jpg?v=c63b3f1958", colors: ["#F9E79F", "#F7DC6F", "#F1C40F", "#D35400", "#BA4A00", "#6E2C00", "#000000", "#FFFFFF"], options: ["The Texas Chain Saw Massacre", "Halloween", "Friday the 13th", "Hostel"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Antarktika, Köpek, Taklitçi", correct: "The Thing", poster: "https://a.ltrbxd.com/resized/sm/upload/t3/qn/vs/p5/s5fH3GqFcHbi2F0NSBSh4KRNTc0-0-2000-0-3000-crop.jpg?v=01880125bb", colors: ["#000000", "#17202A", "#212F3C", "#283747", "#2E86C1", "#3498DB", "#85C1E9", "#FFFFFF"], options: ["The Thing", "The Fly", "Alien", "Invasion of the Body Snatchers"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Ari Aster, Aile, Minyatür", correct: "Hereditary", poster: "https://a.ltrbxd.com/resized/film-poster/4/2/4/3/4/8/424348-hereditary-0-2000-0-3000-crop.jpg?v=470e48b681", colors: ["#000000", "#2E1611", "#502318", "#6E2C00", "#873600", "#A04000", "#D35400", "#F5B041"], options: ["Hereditary", "Midsommar", "The Witch", "Sinister"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Jordan Peele, Hipnoz, Çay", correct: "Get Out", poster: "https://a.ltrbxd.com/resized/film-poster/3/5/3/1/1/7/353117-get-out-0-2000-0-3000-crop.jpg?v=136acec030", colors: ["#000000", "#1C1C1C", "#333333", "#999999", "#FFFFFF", "#2E4053", "#17202A", "#5D6D7E"], options: ["Get Out", "Us", "Nope", "Candyman"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Isveç, Vampir Çocuk", correct: "Let the Right One In", poster: "https://a.ltrbxd.com/resized/film-poster/4/3/9/8/9/43989-let-the-right-one-in-0-2000-0-3000-crop.jpg?v=c738641b77", colors: ["#FDFEFE", "#ECF0F1", "#D7DBDD", "#BDC3C7", "#A93226", "#922B21", "#641E16", "#000000"], options: ["Let the Right One In", "Let Me In", "A Girl Walks Home Alone at Night", "Only Lovers Left Alive"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Orman, Cadı, Keçi", correct: "The Witch", poster: "https://a.ltrbxd.com/resized/sm/upload/y2/i8/9s/h1/tNr2KYytArZNSh0K8PUcHU3JnX4-0-2000-0-3000-crop.jpg?v=45f739a242", colors: ["#000000", "#1B2631", "#2E4053", "#566573", "#808B96", "#ABB2B9", "#D5D8DC", "#FDFEFE"], options: ["The Witch", "The Lighthouse", "Hereditary", "Midsommar"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Tren, Zombi, Kore", correct: "Train to Busan", poster: "https://m.media-amazon.com/images/M/MV5BMTkwOTQ4OTg0OV5BMl5BanBnXkFtZTgwMzQyOTM0OTE@._V1_.jpg", colors: ["#17202A", "#1C2833", "#2E86C1", "#3498DB", "#5D6D7E", "#85929E", "#D6EAF8", "#FFFFFF"], options: ["Train to Busan", "World War Z", "Peninsula", "The Host"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "İspanyol, Virüs, Apartman", correct: "REC", poster: "https://a.ltrbxd.com/resized/sm/upload/wc/8v/37/hl/cOW5Oc3vnjD2QgK68BUvm6GGLZ4-0-2000-0-3000-crop.jpg?v=afc2876405", colors: ["#000000", "#1A1A1A", "#145A32", "#1E8449", "#2ECC71", "#F1C40F", "#F4D03F", "#FFFFFF"], options: ["REC", "Quarantine", "28 Days Later", "Cloverfield"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Gündüz Korkusu, Çiçekler", correct: "Midsommar", poster: "https://a.ltrbxd.com/resized/film-poster/4/5/9/5/6/4/459564-midsommar-0-2000-0-3000-crop.jpg?v=ed7b8ded1f", colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Ritual"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Kulübe, Kitap, Elektrikli Testere", correct: "The Evil Dead", poster: "https://a.ltrbxd.com/resized/sm/upload/c7/4g/ae/zn/7cpSdCrBY7UhiygkcP57dpixXsW-0-2000-0-3000-crop.jpg?v=1525e98692", colors: ["#000000", "#1A1A1A", "#641E16", "#922B21", "#C0392B", "#E74C3C", "#F1948A", "#FFFFFF"], options: ["The Evil Dead", "Evil Dead 2", "Army of Darkness", "Drag Me to Hell"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Japonya, Kaset, Kuyu", correct: "Ringu", poster: "https://a.ltrbxd.com/resized/sm/upload/fi/eb/jh/ni/the-ring-0-2000-0-3000-crop.jpg?v=e9d1f52d16", colors: ["#000000", "#17202A", "#283747", "#5D6D7E", "#AEB6BF", "#2ECC71", "#145A32", "#FFFFFF"], options: ["Ringu", "The Ring", "Ju-on", "Dark Water"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Dario Argento, Cadı Okulu, Neon", correct: "Suspiria", poster: "https://m.media-amazon.com/images/M/MV5BMjM0NjMzMTRjMF5BMl5BanBnXkFtZTgwOTY3Mzc3MjI@._V1_.jpg", colors: ["#4A235A", "#6C3483", "#8E44AD", "#C0392B", "#E74C3C", "#2E86C1", "#3498DB", "#000000"], options: ["Suspiria", "Inferno", "Deep Red", "Black Swan"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Roman Polanski, Hamilelik", correct: "Rosemary's Baby", poster: "https://m.media-amazon.com/images/M/MV5BODJkZTZhMWItMDI3Yy00ZWZlLTk4NjQtOTI1ZjIyM2ZlYzQwXkEyXkFqcGdeQXVyMTA0MjU0Ng@@._V1_.jpg", colors: ["#000000", "#111111", "#1E3319", "#2D4A22", "#3D612D", "#4E7939", "#FFFFFF", "#D5D8DC"], options: ["Rosemary's Baby", "The Omen", "The Exorcist", "Hereditary"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Fransız, Vejetaryen, Yamyam", correct: "Raw", poster: "https://m.media-amazon.com/images/M/MV5BMGRjYjY2ZTMtZWNkNy00YzUzLTk2NzQtZGFhYmY5NmY5NzcxXkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg", colors: ["#000000", "#17202A", "#641E16", "#922B21", "#C0392B", "#1E8449", "#27AE60", "#FFFFFF"], options: ["Raw", "Titane", "Martyrs", "Climax"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Japonya, Samuray, Maske", correct: "Onibaba", poster: "https://m.media-amazon.com/images/M/MV5BMTQzMzgzMjU4M15BMl5BanBnXkFtZTgwNDgwOTIwMjE@._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#4D4D4D", "#666666", "#808080", "#999999", "#FFFFFF"], options: ["Onibaba", "Kuroneko", "Kwaidan", "Harakiri"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Fransız, Yüzsüz Kadın", correct: "Eyes Without a Face", poster: "https://m.media-amazon.com/images/M/MV5BMDY0MzI2MGYtMDk2MC00NGE4LThkMDItMDYwYzQxM2RiN2FiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", colors: ["#000000", "#1A1A1A", "#333333", "#CCCCCC", "#E0E0E0", "#F2F2F2", "#FFFFFF", "#FFD700"], options: ["Eyes Without a Face", "Diabolique", "The Skin I Live In", "Repulsion"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Isabelle Adjani, Metro, Delilik", correct: "Possession", poster: "https://m.media-amazon.com/images/M/MV5BMTY5MjI3MTQxMF5BMl5BanBnXkFtZTgwNjU1MTY3MjE@._V1_.jpg", colors: ["#000000", "#17202A", "#1B4F72", "#2874A6", "#3498DB", "#85C1E9", "#D6EAF8", "#FFFFFF"], options: ["Possession", "Repulsion", "The Tenant", "Antichrist"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Siyah Beyaz, Deniz Feneri", correct: "The Lighthouse", poster: "https://m.media-amazon.com/images/M/MV5BZmE0MGJhNmYtOWRmNS00YjUxLTg4NmItOWMyY2QzZTAzMTEwXkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#4D4D4D", "#666666", "#808080", "#999999", "#FFFFFF"], options: ["The Lighthouse", "The Witch", "A Field in England", "Nosferatu"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "David Lynch, Bebek, Radyatör", correct: "Eraserhead", poster: "https://m.media-amazon.com/images/M/MV5BMzQxNzQzOTQ5Nl5BMl5BanBnXkFtZTgwMjE5MzIxNzE@._V1_.jpg", colors: ["#000000", "#0F0F0F", "#1F1F1F", "#2F2F2F", "#3F3F3F", "#4F4F4F", "#5F5F5F", "#FFFFFF"], options: ["Eraserhead", "Blue Velvet", "Mulholland Drive", "Pi"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Avusturya, Aile Tatili, Kumanda", correct: "Funny Games", poster: "https://m.media-amazon.com/images/M/MV5BMTg4NjE1MDM2N15BMl5BanBnXkFtZTgwODM2NTM0MzE@._V1_.jpg", colors: ["#FFFFFF", "#FDFEFE", "#F7F9F9", "#E5E8E8", "#D7DBDD", "#BDC3C7", "#A93226", "#922B21"], options: ["Funny Games", "The Strangers", "Eden Lake", "Martyrs"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Bebek Bakıcısı, Telefon", correct: "Black Christmas", poster: "https://m.media-amazon.com/images/M/MV5BMTU4MzYwMjQ3Nl5BMl5BanBnXkFtZTgwMTgwNTk0NjE@._V1_.jpg", colors: ["#000000", "#17202A", "#641E16", "#922B21", "#C0392B", "#F1948A", "#FFFFFF", "#27AE60"], options: ["Black Christmas", "Halloween", "Scream", "When a Stranger Calls"] },
+        <button class="settings-toggle" style="border:none; text-align:center;" onclick="showLeaderboardScreen()">🏆 LİDERLER</button>
+    </div>
 
-            // ============================================================
-            // 💬 KATEGORİ: REPLİKLER (QUOTES) - YENİLER EKLENDİ
-            // ============================================================
+    <div id="screen-lobby" class="screen">
+        <h2 style="text-align:center">LOBİ</h2>
+        <div id="display-room-code" style="text-align:center; font-size:3rem; color:var(--primary-red); font-family:'Bebas Neue'; letter-spacing:5px;">---</div>
+        <ul id="player-list" style="list-style:none; padding:0;"></ul>
+        <div id="host-controls" style="display:none"><button class="start-btn" onclick="startGameByHost()">HERKES İÇİN BAŞLAT</button></div>
+        <p id="guest-msg" style="text-align:center; color:#666;">Yönetmen bekleniyor...</p>
+    </div>
+
+    <div id="screen-game" class="screen">
+        <div class="top-bar">
+            <button class="btn-quit" onclick="exitGame()">✕</button>
+            <div class="score-box"><span id="score-display">0</span> Puan</div>
+        </div>
+
+        <div class="media-box">
+            <div id="feedback"></div>
+            <img id="game-poster" src="" class="pixel-mode">
+            <img id="game-snapshot" src="" class="pixel-mode" style="display:none;">
             
-            // --- KOLAY ---
-            { type: "quote", difficulty: "easy", text: "I'll be back.", hint: "Terminator", correct: "The Terminator", options: ["The Terminator", "Predator", "Commando", "Total Recall"] },
-            { type: "quote", difficulty: "easy", text: "May the Force be with you.", hint: "Star Wars", correct: "Star Wars", options: ["Star Wars", "Star Trek", "Dune", "Avatar"] },
-            { type: "quote", difficulty: "easy", text: "My precious.", hint: "Gollum", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "The Hobbit", "Harry Potter", "Narnia"] },
-            { type: "quote", difficulty: "easy", text: "To infinity and beyond!", hint: "Buzz Lightyear", correct: "Toy Story", options: ["Toy Story", "Cars", "Wall-E", "Up"] },
-            { type: "quote", difficulty: "easy", text: "I see dead people.", hint: "Hayaletler", correct: "The Sixth Sense", options: ["The Sixth Sense", "The Others", "Poltergeist", "Insidious"] },
-            { type: "quote", difficulty: "easy", text: "I am your father.", hint: "Darth Vader", correct: "Star Wars: The Empire Strikes Back", options: ["Star Wars: The Empire Strikes Back", "Star Wars: A New Hope", "Star Wars: Return of the Jedi", "Dune"] },
-            { type: "quote", difficulty: "easy", text: "Why so serious?", hint: "Joker", correct: "The Dark Knight", options: ["The Dark Knight", "Joker", "Batman Begins", "Suicide Squad"] },
-            { type: "quote", difficulty: "easy", text: "Bond. James Bond.", hint: "Ajan 007", correct: "Dr. No", options: ["Dr. No", "Goldfinger", "Casino Royale", "Skyfall"] },
-            { type: "quote", difficulty: "easy", text: "Houston, we have a problem.", hint: "Uzay", correct: "Apollo 13", options: ["Apollo 13", "Gravity", "The Martian", "First Man"] },
-            { type: "quote", difficulty: "easy", text: "There's no place like home.", hint: "Dorothy", correct: "The Wizard of Oz", options: ["The Wizard of Oz", "Mary Poppins", "Alice in Wonderland", "Sound of Music"] },
+            <div id="quote-view"><div class="quote-text" id="game-quote"></div></div>
+            <div id="emoji-view"><div class="emoji-text" id="game-emoji"></div></div>
+            <div id="palette-view"></div>
+        </div>
 
-            // --- ZOR ---
-            { type: "quote", difficulty: "hard", text: "I drink your milkshake!", hint: "Petrol", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "The Master"] },
-            { type: "quote", difficulty: "hard", text: "Say hello to my little friend!", hint: "Tony Montana", correct: "Scarface", options: ["Scarface", "The Godfather", "Goodfellas", "Carlito's Way"] },
-            { type: "quote", difficulty: "hard", text: "You talking to me?", hint: "Travis Bickle", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Mean Streets", "The King of Comedy"] },
-            { type: "quote", difficulty: "hard", text: "Here's Johnny!", hint: "Jack Torrance", correct: "The Shining", options: ["The Shining", "Misery", "Psycho", "One Flew Over the Cuckoo's Nest"] },
-            { type: "quote", difficulty: "hard", text: "I'm gonna make him an offer he can't refuse.", hint: "Don Corleone", correct: "The Godfather", options: ["The Godfather", "Goodfellas", "Casino", "A Bronx Tale"] },
-            { type: "quote", difficulty: "hard", text: "The first rule of Fight Club is: You do not talk about Fight Club.", hint: "Tyler Durden", correct: "Fight Club", options: ["Fight Club", "Se7en", "Snatch", "American History X"] },
-            { type: "quote", difficulty: "hard", text: "Frankly, my dear, I don't give a damn.", hint: "Rhett Butler", correct: "Gone with the Wind", options: ["Gone with the Wind", "Casablanca", "Citizen Kane", "Ben-Hur"] },
-            { type: "quote", difficulty: "hard", text: "You can't handle the truth!", hint: "Mahkeme", correct: "A Few Good Men", options: ["A Few Good Men", "Top Gun", "Rain Man", "Born on the Fourth of July"] },
-            { type: "quote", difficulty: "hard", text: "I love the smell of napalm in the morning.", hint: "Vietnam", correct: "Apocalypse Now", options: ["Apocalypse Now", "Full Metal Jacket", "Platoon", "The Deer Hunter"] },
-            { type: "quote", difficulty: "hard", text: "What's in the box?", hint: "Brad Pitt", correct: "Se7en", options: ["Se7en", "Fight Club", "Zodiac", "Prisoners"] },
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+            <div class="timer-display" id="timer-display">60</div>
+            <button class="hint-btn" id="btn-hint" onclick="useHint()">💡 İPUCU (-5sn)</button>
+        </div>
 
-            // --- UZMAN ---
-            { type: "quote", difficulty: "expert", text: "All those moments will be lost in time, like tears in rain.", hint: "Roy Batty", correct: "Blade Runner", options: ["Blade Runner", "2001: A Space Odyssey", "Alien", "Dune"] },
-            { type: "quote", difficulty: "expert", text: "I have always depended on the kindness of strangers.", hint: "Blanche DuBois", correct: "A Streetcar Named Desire", options: ["A Streetcar Named Desire", "Cat on a Hot Tin Roof", "Gone with the Wind", "Rebel Without a Cause"] },
-            { type: "quote", difficulty: "expert", text: "Forget it, Jake. It's Chinatown.", hint: "Dedektif", correct: "Chinatown", options: ["Chinatown", "L.A. Confidential", "The Maltese Falcon", "Double Indemnity"] },
-            { type: "quote", difficulty: "expert", text: "Open the pod bay doors, HAL.", hint: "Yapay Zeka", correct: "2001: A Space Odyssey", options: ["2001: A Space Odyssey", "Solaris", "Moon", "Ex Machina"] },
-            { type: "quote", difficulty: "expert", text: "I'm as mad as hell, and I'm not going to take this anymore!", hint: "Howard Beale", correct: "Network", options: ["Network", "Dog Day Afternoon", "Taxi Driver", "All the President's Men"] },
-            { type: "quote", difficulty: "expert", text: "Attica! Attica!", hint: "Banka Soygunu", correct: "Dog Day Afternoon", options: ["Dog Day Afternoon", "Serpico", "The French Connection", "Mean Streets"] },
-            { type: "quote", difficulty: "expert", text: "I am big. It's the pictures that got small.", hint: "Norma Desmond", correct: "Sunset Boulevard", options: ["Sunset Boulevard", "All About Eve", "Double Indemnity", "Some Like It Hot"] },
-            { type: "quote", difficulty: "expert", text: "Gentlemen, you can't fight in here! This is the War Room!", hint: "Dr. Strangelove", correct: "Dr. Strangelove", options: ["Dr. Strangelove", "Full Metal Jacket", "Paths of Glory", "The Great Dictator"] },
-            { type: "quote", difficulty: "expert", text: "Get busy living, or get busy dying.", hint: "Andy Dufresne", correct: "The Shawshank Redemption", options: ["The Shawshank Redemption", "The Green Mile", "Stand by Me", "Forrest Gump"] },
-            { type: "quote", difficulty: "expert", text: "Keep your friends close, but your enemies closer.", hint: "Michael Corleone", correct: "The Godfather Part II", options: ["The Godfather Part II", "The Godfather", "Goodfellas", "Scarface"] },
+        <div class="hint-text" id="hint-display"></div>
 
-       
-       
-       
+        <div class="options-grid" id="options-box"></div>
+    </div>
+
+    <div id="screen-result" class="screen">
+        <h2 style="text-align:center; font-family:'Bebas Neue'">FİNAL</h2>
+        <table id="result-table" style="width:100%; text-align:left; color:#aaa;">
+            <thead><tr><th>#</th><th>İsim</th><th>Puan</th></tr></thead>
+            <tbody></tbody>
+        </table>
+        <button class="start-btn" style="background:#333" onclick="location.reload()">MENÜYE DÖN</button>
+    </div>
+
+    <div id="screen-leaderboard" class="screen">
+        <h2 style="text-align:center; font-family:'Bebas Neue'">LİDERLER</h2>
+        <p style="text-align:center; color:#666;">Global skorlar yükleniyor...</p>
+        <button class="start-btn" style="background:#333" onclick="showScreen('screen-login')">GERİ</button>
+    </div>
+
+    <script>
+        // FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyCKXuqXEtQ_dr1FNw-8NZj0BpeoSDl_mRY", 
+            authDomain: "cinepalette-e7a2b.firebaseapp.com",
+            databaseURL: "https://cinepalette-e7a2b-default-rtdb.firebaseio.com",
+            projectId: "cinepalette-e7a2b",
+            storageBucket: "cinepalette-e7a2b.firebasestorage.app",
+            messagingSenderId: "933599264840",
+            appId: "1:933599264840:web:667563470c4ea338f7187d"
+        };
+        let db; let isMultiplayer = false;
+
+        // VERİTABANI (Yedeklenmiş Tam Liste)
+        const database = [
+            { type: "movie", genre: "cult", difficulty: "expert", hint: "Terence Davies, 1992", correct: "The Long Day Closes", poster: "https://a.ltrbxd.com/resized/film-poster/1/5/6/7/7/15677-the-long-day-closes-0-2000-0-3000-crop.jpg?v=0b103e1bee", colors: ["#1c1c1c", "#3e3e3e", "#7f6a55", "#a38b6d", "#d9c6a5", "#f2e5ce", "#5a4a3a", "#2b221b"], options: ["The Long Day Closes", "Distant Voices, Still Lives", "The Deep Blue Sea", "Sunset Song"] },
+            { type: "movie", genre: "snapshot", hint: "Kore, Çekiç", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "Parasite", "The Handmaiden", "The Chaser"] },
+            { type: "movie", genre: "snapshot", hint: "Uzay, Monolit", correct: "2001: A Space Odyssey", snapshot: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Gravity"] },
+            { type: "quote", text: "I drink your milkshake!", hint: "Petrol", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "Lincoln"] },
+            { type: "quote", text: "May the Force be with you.", hint: "Jedi", correct: "Star Wars", options: ["Star Wars", "Star Trek", "Dune", "Avatar"] },
+            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://m.media-amazon.com/images/M/MV5BMjA1Nzk0OTM2OF5BMl5BanBnXkFtZTgwNjU2NjEwMDE@._V1_.jpg", colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
+            { type: "movie", genre: "scifi", hint: "Kara Delik", correct: "Interstellar", poster: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "Arrival"] },
+            { type: "emoji", text: "🎈🏠👴", hint: "Pixar, Uçan Ev", correct: "Up", options: ["Up", "Inside Out", "Coco", "Soul"] },
+            { type: "emoji", text: "🚢❄️💔", hint: "Buzdağı", correct: "Titanic", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] }
         ];
 
-
-
-        // --- DEĞİŞKENLER ---
+        // VARIABLES
         let myName="", myRoomCode="", myId="", isHost=false;
         let gameQuestions=[], currentQIndex=0, score=0, timerInterval;
         let totalTime=60, isPlaying=false, currentMode="movie";
 
+        // UI FONKSİYONLARI
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
-        
-        function toggleMultiplayer() {
-            const panel = document.getElementById('multiplayer-panel');
-            panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
+
+        function switchTab(tab) {
+            const btns = document.querySelectorAll('.tab-btn');
+            const single = document.getElementById('single-area');
+            const multi = document.getElementById('multi-area');
+
+            if(tab === 'single') {
+                btns[0].classList.add('active'); btns[1].classList.remove('active');
+                single.style.display='block'; multi.style.display='none';
+            } else {
+                btns[0].classList.remove('active'); btns[1].classList.add('active');
+                single.style.display='none'; multi.style.display='flex';
+            }
         }
 
-        function showLeaderboardScreen() { showScreen('screen-leaderboard'); }
+        function selectMode(val, el) {
+            document.getElementById('mode-select').value = val;
+            document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));
+            el.classList.add('selected');
+            uiUpdate();
+        }
+
+        function toggleSettings() {
+            document.getElementById('settings-panel').classList.toggle('open');
+        }
 
         function uiUpdate() {
-            const mode = document.getElementById('mode-select').value;
-            
-            // 1. Tür Seçimi sadece 'classic' veya 'snapshot' modunda mantıklı
-            const showGenre = (mode === 'classic' || mode === 'snapshot');
-            document.getElementById('genre-group').style.display = showGenre ? 'block' : 'none';
-
-            // 2. Görünüm ayarı sadece 'classic' modunda mantıklı
-            const showVisual = (mode === 'classic');
-            document.getElementById('visual-setting').style.display = showVisual ? 'block' : 'none';
+            const g = document.getElementById('mode-select').value;
+            const vis = document.getElementById('visual-setting');
+            vis.style.display = (g === 'quote' || g === 'snapshot' || g === 'emoji') ? 'none' : 'block';
         }
 
-        function startGame(config) {
-            const selectedDiff = config ? config.difficulty : document.getElementById('difficulty-select').value;
-            const selectedMode = config ? config.mode : document.getElementById('mode-select').value;
-            const selectedGenre = config ? config.genre : document.getElementById('genre-select').value;
-            const selectedVisual = config ? config.visual : document.getElementById('visual-select').value;
-
-            // --- FİLTRELEME ---
-            let pool = database;
-
-            // 1. Mod Filtresi
-            if (selectedMode === 'quote') {
-                currentMode = 'quote';
-                pool = pool.filter(q => q.type === 'quote');
-            } else if (selectedMode === 'emoji') {
-                currentMode = 'emoji';
-                pool = pool.filter(q => q.type === 'emoji');
-            } else if (selectedMode === 'snapshot') {
-                currentMode = 'snapshot';
-                pool = pool.filter(q => q.genre === 'snapshot');
-            } else {
-                currentMode = 'movie';
-                pool = pool.filter(q => q.type === 'movie' && q.genre !== 'snapshot');
-            }
-
-            // 2. Tür Filtresi (Sadece Klasik ve Snapshot için)
-            if (selectedGenre !== 'mix' && (selectedMode === 'classic' || selectedMode === 'snapshot')) {
-                 if (currentMode === 'movie' || currentMode === 'snapshot') {
-                    // Veritabanında tür verisi eksikse diye kontrol ekleyebiliriz, şimdilik direkt filtreliyoruz
-                    pool = pool.filter(q => q.genre === selectedGenre || (currentMode==='snapshot' && q.genre==='snapshot')); 
-                }
-            }
-
-            // 3. Zorluk Filtresi
-            if (selectedDiff !== 'all') {
-                pool = pool.filter(q => q.difficulty === selectedDiff);
-            }
-            
-            // Hata Kontrolü
-            if(pool.length === 0) { 
-                alert("Bu kriterlere uygun soru bulunamadı! Veritabanı genişletilmeli veya filtre değiştirilmeli."); 
-                return; 
-            }
-
-            // Başlat
-            gameQuestions = pool.sort(()=>Math.random()-0.5);
-            showScreen('screen-game');
-            currentQIndex=0; score=0; isPlaying=true; totalTime=60;
-
-            // Görünüm Ayarları
-            document.getElementById('quote-view').style.display = (currentMode==='quote')?'flex':'none';
-            document.getElementById('snapshot-view').style.display = (currentMode==='snapshot')?'block':'none';
-            document.getElementById('emoji-view').style.display = (currentMode==='emoji')?'flex':'none';
-
-            const pView = document.getElementById('palette-view');
-            const posView = document.getElementById('poster-view');
-            
-            posView.style.display = 'none'; pView.style.display = 'none';
-
-            if(currentMode === 'movie') {
-                if(selectedVisual === 'both' || selectedVisual === 'poster') posView.style.display = 'block';
-                if(selectedVisual === 'both' || selectedVisual === 'palette') pView.style.display = 'flex';
-            }
-
-            startTimer();
-            loadQuestion();
-        }
-        
         function generateCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
 
+        // OYUN BAŞLATMA
         function startSinglePlayerGame() {
             myName = document.getElementById('username').value.trim() || "Sinefil";
             isMultiplayer = false;
-            const config = {
-                difficulty: document.getElementById('difficulty-select').value,
-                mode: document.getElementById('mode-select').value,
-                genre: document.getElementById('genre-select').value,
-                visual: document.getElementById('visual-select').value
-            };
-            startGame(config);
+            startGame();
         }
 
+        // FIREBASE & MULTIPLAYER
         function initFirebase() {
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             if (!db) db = firebase.database();
@@ -540,16 +475,9 @@
         function createRoom() {
             initFirebase();
             myName = document.getElementById('username').value.trim();
-            if(!myName) return alert("İsim gerekli!");
-            
-            const config = {
-                difficulty: document.getElementById('difficulty-select').value,
-                mode: document.getElementById('mode-select').value,
-                genre: document.getElementById('genre-select').value,
-                visual: document.getElementById('visual-select').value
-            };
+            if(!myName) return alert("İsim gir!");
             myRoomCode = generateCode(); isHost = true; isMultiplayer = true;
-            db.ref('rooms/'+myRoomCode).set({status:"lobby", config:config, createdAt:Date.now()});
+            db.ref('rooms/'+myRoomCode).set({status:"lobby", createdAt:Date.now()});
             joinMyOwnRoom();
         }
 
@@ -559,10 +487,9 @@
             myRoomCode = document.getElementById('room-code-input').value.trim();
             if(!myName || !myRoomCode) return alert("Eksik bilgi!");
             
-            isMultiplayer = true;
             db.ref('rooms/'+myRoomCode).get().then(snap=>{
                 if(snap.exists() && snap.val().status==="lobby") joinMyOwnRoom();
-                else alert("Oda yok veya oyun başladı!");
+                else alert("Oda yok!");
             });
         }
 
@@ -581,163 +508,166 @@
             const roomRef = db.ref('rooms/'+myRoomCode);
             roomRef.child('players').on('value', s=>{
                 const l=document.getElementById('player-list'); l.innerHTML='';
-                if(s.val()) Object.values(s.val()).forEach(p=>l.innerHTML+=`<li>${p.name} <span style="color:#e5c100; float:right">${p.score}</span></li>`);
+                if(s.val()) Object.values(s.val()).forEach(p=>l.innerHTML+=`<li>${p.name} <span style="color:gold">${p.score}</span></li>`);
             });
             roomRef.child('status').on('value', s=>{
-                if(s.val()==='playing') roomRef.once('value').then(snap=>startGame(snap.val().config));
-                else if(s.val()==='finished') showResults();
+                if(s.val()==='playing') startGame();
             });
         }
         function startGameByHost() { db.ref('rooms/'+myRoomCode).update({status:"playing"}); }
 
+        // OYUN MANTIĞI
+        function startGame() {
+            const mode = document.getElementById('mode-select').value;
+            const genre = document.getElementById('genre-select').value;
+            const visual = document.getElementById('visual-select').value;
+
+            // Filtreleme
+            let pool = database;
+            if(mode === 'quote') { currentMode = 'quote'; pool = pool.filter(q=>q.type==='quote'); }
+            else if(mode === 'emoji') { currentMode = 'emoji'; pool = pool.filter(q=>q.type==='emoji'); }
+            else if(mode === 'snapshot') { currentMode = 'snapshot'; pool = pool.filter(q=>q.genre==='snapshot'); }
+            else { 
+                currentMode = 'movie'; 
+                pool = pool.filter(q=>q.type==='movie' && q.genre!=='snapshot');
+                if(genre!=='mix') pool = pool.filter(q=>q.genre===genre);
+            }
+
+            gameQuestions = pool.sort(()=>Math.random()-0.5);
+            if(gameQuestions.length===0) { alert("Soru yok!"); return; }
+
+            showScreen('screen-game');
+            currentQIndex=0; score=0; isPlaying=true; totalTime=60;
+
+            // Görünüm Ayarı
+            document.getElementById('quote-view').style.display = (currentMode==='quote')?'block':'none';
+            document.getElementById('emoji-view').style.display = (currentMode==='emoji')?'flex':'none';
+            
+            const pImg = document.getElementById('game-poster');
+            const sImg = document.getElementById('game-snapshot');
+            const pView = document.getElementById('palette-view');
+
+            pImg.style.display='none'; sImg.style.display='none'; pView.style.display='none';
+
+            if(currentMode==='movie') {
+                if(visual==='both' || visual==='poster') pImg.style.display='block';
+                if(visual==='both' || visual==='palette') pView.style.display='flex';
+            } else if(currentMode==='snapshot') {
+                sImg.style.display='block';
+            }
+
+            startTimer();
+            loadQuestion();
+        }
+
         function startTimer() {
-            const t = document.getElementById('timer-display');
-            t.innerText = totalTime; t.classList.remove('danger');
             clearInterval(timerInterval);
+            const t = document.getElementById('timer-display');
             timerInterval = setInterval(()=>{
                 totalTime--; t.innerText=totalTime;
                 if(totalTime<=10) t.classList.add('danger');
                 if(totalTime<=0) finishGame();
             },1000);
         }
-        
-        function stopTimer() { clearInterval(timerInterval); }
 
-        function exitGame() {
-            if(confirm("Çıkmak istediğine emin misin?")) location.reload();
-        }
-function useHint() {
-            // Eğer süre 5 saniyeden azsa ipucu verip oyunu bitirmesin diye kontrol ediyoruz
-            if (totalTime > 5) {
-                totalTime -= 5; // Süreden 5 saniye düş
-                
-                // Yeni süreyi hemen ekrana yaz (Gecikme olmasın)
-                document.getElementById('timer-display').innerText = totalTime;
-                
-                // Görsel ceza efekti (Kırmızı yanıp sönsün)
-                const tBox = document.getElementById('timer-display');
-                tBox.classList.add('danger');
-                setTimeout(() => tBox.classList.remove('danger'), 500);
-
-                // İpucu metnini göster
-                document.getElementById('hint-display').innerText = gameQuestions[currentQIndex].hint;
-                
-                // Butonu devre dışı bırak
-                document.getElementById('btn-hint').disabled = true;
-
-                // NOT: Burada stopTimer() veya clearInterval() YOK.
-                // Sayaç arka planda tıkır tıkır işlemeye devam eder.
+        function useHint() {
+            if(totalTime>5) {
+                totalTime-=5; 
+                document.getElementById('timer-display').innerText=totalTime;
+                document.getElementById('hint-display').innerText=gameQuestions[currentQIndex].hint;
+                document.getElementById('btn-hint').disabled=true;
             }
         }
-        
 
         function loadQuestion() {
-            if(isPlaying) startTimer();
-            if(currentQIndex >= gameQuestions.length) currentQIndex = 0;
+            if(currentQIndex>=gameQuestions.length) currentQIndex=0;
             const q = gameQuestions[currentQIndex];
             
-            // UI Reset
-            document.getElementById('hint-display').innerText = "";
-            document.getElementById('btn-hint').disabled = false;
-            const optBox = document.getElementById('options-box'); optBox.innerHTML='';
-            document.getElementById('feedback-display').innerText = "";
-            document.getElementById('feedback-display').className = "";
+            // Reset UI
+            document.getElementById('hint-display').innerText="";
+            document.getElementById('btn-hint').disabled=false;
+            document.getElementById('options-box').innerHTML="";
+            document.getElementById('feedback').style.display="none";
 
             const pImg = document.getElementById('game-poster');
             const sImg = document.getElementById('game-snapshot');
+
+            // GÖRSEL SIFIRLAMA VE PİKSEL MODU
+            pImg.src=""; sImg.src="";
+            pImg.className="pixel-mode"; sImg.className="pixel-mode";
             
-            pImg.className = ""; sImg.className = "";
-            pImg.classList.remove('loaded'); sImg.classList.remove('loaded');
-            pImg.src = ""; sImg.src = "";
+            if(currentMode==='movie') pImg.src=q.poster;
+            if(currentMode==='snapshot') sImg.src=q.snapshot;
+            if(currentMode==='quote') document.getElementById('game-quote').innerText=`"${q.text}"`;
+            if(currentMode==='emoji') document.getElementById('game-emoji').innerText=q.text;
 
-            const onLoad = (e) => e.target.classList.add('loaded');
-            pImg.onload = onLoad; sImg.onload = onLoad;
-
-            // İçerik Doldurma
-            if(currentMode === 'quote') {
-                document.getElementById('game-quote').innerText = `"${q.text}"`;
-            } else if (currentMode === 'emoji') {
-                document.getElementById('game-emoji').innerText = q.text;
-            } else if (currentMode === 'snapshot') {
-                sImg.src = q.snapshot;
-            } else {
-                pImg.src = q.poster;
-                const pView = document.getElementById('palette-view'); pView.innerHTML='';
-                if(q.colors) q.colors.forEach(c=>{
-                    const d=document.createElement('div'); d.className='color-strip'; d.style.backgroundColor=c;
-                    pView.appendChild(d);
+            // Palet
+            if(q.colors) {
+                const pal = document.getElementById('palette-view'); pal.innerHTML="";
+                q.colors.forEach(c=>{
+                    let d=document.createElement('div'); d.className='color-strip'; d.style.backgroundColor=c;
+                    pal.appendChild(d);
                 });
             }
-            
-            // Şıkları Karıştır
-            let shuffledOptions = [...q.options];
-            shuffledOptions.sort(() => Math.random() - 0.5);
 
-            shuffledOptions.forEach(opt=>{
-                const btn=document.createElement('div'); 
-                btn.className='opt-btn'; 
-                btn.innerText=opt;
-                btn.onclick = ()=>checkAnswer(opt, q.correct, btn);
-                optBox.appendChild(btn);
+            // Şıklar
+            let opts = [...q.options].sort(()=>Math.random()-0.5);
+            opts.forEach(o=>{
+                let btn = document.createElement('div'); btn.className='opt-btn'; btn.innerText=o;
+                btn.onclick=()=>checkAnswer(o, q.correct, btn);
+                document.getElementById('options-box').appendChild(btn);
             });
+
+            if(isPlaying) startTimer();
         }
 
         function checkAnswer(sel, corr, btn) {
             if(!isPlaying) return;
-            stopTimer();
+            clearInterval(timerInterval);
             
+            document.querySelectorAll('.opt-btn').forEach(b=>b.style.pointerEvents='none');
+            const fb = document.getElementById('feedback');
             const allBtns = document.querySelectorAll('.opt-btn');
-            allBtns.forEach(b=>b.style.pointerEvents='none');
-
-            const fb = document.getElementById('feedback-display');
 
             if(sel===corr) {
                 score+=10; document.getElementById('score-display').innerText=score;
-                btn.classList.add('btn-correct');
-                fb.innerText = "DOĞRU";
-                fb.className = "status-correct";
+                btn.classList.add('correct');
+                fb.innerText="DOĞRU"; fb.className="fb-green";
+                
+                // Netleştir
+                if(currentMode==='movie') document.getElementById('game-poster').className="reveal-mode";
+                if(currentMode==='snapshot') document.getElementById('game-snapshot').className="reveal-mode";
             } else {
-                btn.classList.add('btn-wrong');
-                fb.innerText = "YANLIŞ";
-                fb.className = "status-wrong";
-                allBtns.forEach(b => { if(b.innerText === corr) b.classList.add('btn-correct'); });
+                btn.classList.add('wrong');
+                fb.innerText="YANLIŞ"; fb.className="fb-red";
+                // Doğruyu göster
+                allBtns.forEach(b=>{ if(b.innerText===corr) b.classList.add('correct'); });
+                
+                // Yanlışta da resmi göster
+                if(currentMode==='movie') document.getElementById('game-poster').className="reveal-mode";
+                if(currentMode==='snapshot') document.getElementById('game-snapshot').className="reveal-mode";
             }
             
-            if(currentMode==='movie') document.getElementById('game-poster').className = "revealed loaded";
-            if(currentMode==='snapshot') document.getElementById('game-snapshot').className = "revealed loaded";
-
-            setTimeout(()=>{ if(isPlaying){ currentQIndex++; loadQuestion(); } }, 4000);
+            fb.style.display="block";
+            
+            setTimeout(()=>{
+                if(isPlaying){ currentQIndex++; loadQuestion(); }
+            }, 3000);
         }
 
         function finishGame() {
             isPlaying=false; clearInterval(timerInterval);
             if(isMultiplayer) {
                 db.ref(`rooms/${myRoomCode}/players/${myId}`).update({score:score, status:"finished"});
-                const r = db.ref(`rooms/${myRoomCode}/players`);
-                r.on('value', s=>{
-                    const arr=Object.values(s.val());
-                    if(isHost && arr.every(p=>p.status==="finished")) setTimeout(()=>db.ref('rooms/'+myRoomCode).update({status:"finished"}),2000);
-                });
-                document.getElementById('options-box').innerHTML = '<h3 style="grid-column:span 2; text-align:center; color:#D81F26">FİLM BİTTİ! BEKLENİYOR...</h3>';
-            } else {
-                showLocalResults();
             }
+            // Lokal gösterim
+            const t = document.querySelector('#result-table tbody'); t.innerHTML=`<tr><td>1</td><td>${myName}</td><td>${score}</td></tr>`;
+            showScreen('screen-result');
         }
 
-        function showResults() {
-            showScreen('screen-result');
-            const t=document.querySelector('#result-table tbody'); t.innerHTML='';
-            db.ref(`rooms/${myRoomCode}/players`).once('value').then(s=>{
-                const arr=Object.values(s.val()).sort((a,b)=>b.score-a.score);
-                arr.forEach((p,i)=>t.innerHTML+=`<tr><td>${i+1}</td><td>${p.name}</td><td style="color:#e5c100; font-weight:bold">${p.score}</td></tr>`);
-            });
-        }
+        function showLeaderboardScreen() { showScreen('screen-leaderboard'); }
+        function exitGame() { if(confirm("Çıkmak istediğine emin misin?")) location.reload(); }
 
-        function showLocalResults() {
-            showScreen('screen-result');
-            const t=document.querySelector('#result-table tbody'); t.innerHTML='';
-            t.innerHTML=`<tr><td>1</td><td>${myName}</td><td style="color:#e5c100; font-weight:bold">${score}</td></tr>`;
-        }
     </script>
 </body>
 </html>
