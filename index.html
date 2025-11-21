@@ -9,166 +9,65 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- TASARIM (CINEPHILE DARK) --- */
-        :root {
-            --primary-red: #D81F26;
-            --bg-dark: #0a0a0a;
-            --glass-panel: rgba(20, 20, 20, 0.98);
-            --border-color: rgba(255, 255, 255, 0.15);
-            --text-gold: #e5c100;
-            --correct-green: #46d369;
-            --wrong-red: #ff4b4b;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at top, #1f1f1f 0%, #000000 100%);
-            color: #fff; margin: 0; min-height: 100vh;
-            display: flex; flex-direction: column; align-items: center; overflow-x: hidden;
-        }
-
-        h1 {
-            font-family: 'Bebas Neue', sans-serif; color: var(--primary-red);
-            font-size: 3rem; margin: 15px 0 0 0; letter-spacing: 3px;
-            text-shadow: 0 0 20px rgba(216, 31, 38, 0.4);
-        }
-        .tagline { color: #666; font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 15px; line-height: 1; }
-
-        /* KART YAPISI */
-        .screen {
-            display: none; width: 90%; max-width: 600px; padding: 25px;
-            background: var(--glass-panel); border: 1px solid var(--border-color);
-            border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            animation: slideIn 0.4s ease-out; position: relative;
-        }
-        .active { display: flex; flex-direction: column; align-items: center; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* INPUT & BUTONLAR */
-        input, select {
-            width: 100%; padding: 12px; background: #141414; border: 1px solid #333;
-            color: #fff; font-family: inherit; margin-bottom: 10px; outline: none;
-            border-radius: 8px; font-size: 1rem; box-sizing: border-box;
-        }
-        input:focus, select:focus { border-color: var(--primary-red); background: #1a1a1a; }
+        /* --- YENİ GİRİŞ EKRANI TASARIMI --- */
+        .login-container { width: 100%; display: flex; flex-direction: column; gap: 15px; }
         
-        button {
-            width: 100%; padding: 16px; background: var(--primary-red); color: #fff;
-            border: none; border-radius: 8px; font-weight: 800; font-size: 1rem;
-            cursor: pointer; transition: 0.2s; letter-spacing: 1px; text-transform: uppercase;
-            margin-top: 5px;
+        /* Sekmeler (Tabs) */
+        .tabs { display: flex; background: #111; border-radius: 10px; padding: 5px; margin-bottom: 15px; border: 1px solid #333; }
+        .tab-btn { 
+            flex: 1; padding: 12px; border: none; background: transparent; color: #666; 
+            font-weight: bold; cursor: pointer; border-radius: 8px; transition: 0.3s;
         }
-        button:hover { background: #b00e15; transform: scale(1.02); }
+        .tab-btn.active-tab { background: #222; color: var(--primary-red); box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+
+        /* Mod Seçici (Yatay Butonlar) */
+        .mode-selector { 
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; 
+            scrollbar-width: none; /* Firefox */
+        }
+        .mode-selector::-webkit-scrollbar { display: none; } /* Chrome */
         
-        .btn-secondary { background: #333; margin-top: 10px; font-size: 0.9rem; }
-        .btn-secondary:hover { background: #444; }
-        
-        .btn-multiplayer-toggle { background: transparent; border: 1px solid #444; color: #888; margin-top: 20px; font-size: 0.8rem; }
-        .btn-multiplayer-toggle:hover { border-color: #fff; color: #fff; background: transparent; }
-
-        #multiplayer-panel {
-            display: none; width: 100%; border-top: 1px solid #333; 
-            margin-top: 20px; padding-top: 20px; flex-direction: column; gap: 10px;
+        .mode-card {
+            min-width: 80px; flex: 1; padding: 15px 10px; 
+            background: rgba(255,255,255,0.05); border: 1px solid transparent; 
+            border-radius: 12px; cursor: pointer; text-align: center; transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
         }
-
-        .top-hud { display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px; align-items: center; }
-        .btn-exit { background: transparent; border: 1px solid #444; padding: 5px 15px; font-size: 0.8rem; width: auto; margin: 0; }
-        .score-badge { background: #222; padding: 5px 15px; border-radius: 20px; border: 1px solid #333; font-weight: bold; color: var(--text-gold); }
-
-        /* --- GERİ BİLDİRİM ALANI --- */
-        #feedback-display {
-            width: 100%; text-align: center; font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem; height: 50px; margin-bottom: 5px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-            opacity: 0; transition: opacity 0.2s;
+        .mode-card:hover { background: rgba(255,255,255,0.1); }
+        .mode-card.selected { 
+            border-color: var(--primary-red); background: rgba(216, 31, 38, 0.1); 
+            color: var(--primary-red); transform: translateY(-2px);
         }
-        .status-correct { color: var(--correct-green); opacity: 1 !important; letter-spacing: 2px; }
-        .status-wrong { color: var(--wrong-red); opacity: 1 !important; letter-spacing: 2px; }
+        .mode-icon { font-size: 1.5rem; margin-bottom: 5px; display: block; }
+        .mode-name { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
 
-        /* --- GÖRSEL ALANI --- */
-        .media-container {
-            width: 100%; background: #000; border: 1px solid #333; border-radius: 12px;
-            overflow: hidden; margin-bottom: 10px; position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
-            min-height: 30vh; /* Esnek yükseklik */
+        /* Gizli Ayarlar Paneli */
+        .settings-toggle {
+            background: transparent; color: #888; border: 1px dashed #444; 
+            padding: 10px; font-size: 0.8rem; width: 100%; margin-top: 10px;
         }
-        
-        #poster-view, #snapshot-view { 
-            width: 100%; 
-            height: 40vh; 
-            max-height: 400px; 
-            display: none; position: relative; background: black; overflow: hidden;
+        .settings-panel {
+            display: none; background: #0f0f0f; padding: 15px; 
+            border-radius: 10px; margin-top: 10px; border: 1px solid #333;
+        }
+        .settings-panel.open { display: block; animation: fadeIn 0.3s; }
+
+        /* Input ve Büyük Buton */
+        .main-input { 
+            font-size: 1.1rem; text-align: center; letter-spacing: 1px; 
+            background: #1a1a1a; border: 2px solid #333; padding: 15px;
+        }
+        .main-input:focus { border-color: var(--primary-red); }
+
+        .play-btn { 
+            font-size: 1.2rem; padding: 20px; background: var(--primary-red); 
+            box-shadow: 0 5px 20px rgba(216, 31, 38, 0.4); 
+            margin-top: 10px;
         }
 
-        /* --- BLUR EFEKTİ --- */
-        #game-poster, #game-snapshot { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: contain;
-            filter: blur(20px) brightness(0.6); 
-            transform: scale(1.1);
-            opacity: 0; 
-            transition: opacity 0.3s ease-in; 
-        }
-        
-        .loaded { opacity: 1 !important; }
-
-        .revealed { 
-            filter: blur(0) brightness(1) !important;
-            transform: scale(1) !important;
-            transition: filter 0.8s ease-out, transform 0.8s ease-out;
-        }
-
-        #palette-view { width: 100%; height: 60px; display: none; }
-        .color-strip { flex: 1; height: 100%; transition: transform 0.2s; }
-
-        #quote-view { display: none; padding: 30px 20px; text-align: center; background: radial-gradient(circle, #1a1a1a 0%, #000000 100%); width: 100%; height: 100%; justify-content: center; align-items: center; }
-        .quote-text { font-family: 'Georgia', serif; font-size: 1.2rem; font-style: italic; line-height: 1.4; color: #e0e0e0; }
-        
-        /* --- EMOJI MODU --- */
-        #emoji-view { 
-            display: none; 
-            width: 100%; 
-            height: 100%; 
-            justify-content: center; 
-            align-items: center; 
-            background: radial-gradient(circle, #222 0%, #000 100%);
-            min-height: 200px;
-        }
-        .emoji-text { 
-            font-size: 4rem; 
-            letter-spacing: 10px; 
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .timer-display { font-family: 'Bebas Neue'; font-size: 2.5rem; line-height: 1; }
-        .timer-display.danger { color: #ff0000; animation: pulse 0.5s infinite; }
-        .hint-btn { background: #e5c1001a; color: var(--text-gold); border: 1px solid var(--text-gold); width: auto; padding: 6px 10px; font-size: 0.75rem; margin: 0; }
-        
-        .hint-text { 
-            width: 100%; text-align: center; color: #aaa; font-size: 1rem; 
-            font-style: italic; margin-bottom: 10px; min-height: 20px; 
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
-        .opt-btn { 
-            padding: 15px; background: #181818; border: 1px solid #333; color: #ccc; border-radius: 8px; 
-            cursor: pointer; transition: 0.1s; font-size: 0.9rem; 
-            display: flex; align-items: center; justify-content: center; text-align: center; 
-        }
-        .opt-btn:hover { background: #252525; color: #fff; }
-        
-        .btn-correct { background: var(--correct-green) !important; border-color: var(--correct-green) !important; color: #000 !important; font-weight: bold; }
-        .btn-wrong { background: var(--wrong-red) !important; border-color: var(--wrong-red) !important; color: #fff !important; opacity: 0.5; }
-        
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        /* Multiplayer Alanı */
+        .multi-area { display: none; flex-direction: column; gap: 10px; animation: fadeIn 0.3s; }
+        .join-row { display: flex; gap: 10px; }
     </style>
 </head>
 <body>
@@ -177,131 +76,139 @@
     <div class="tagline">ACTION!</div>
 
     <div id="screen-login" class="screen active">
-        <input type="text" id="username" placeholder="Sinefil Adın">
         
-       <div style="width:100%; margin-bottom: 20px; display:flex; flex-direction:column; gap:15px;">
+        <input type="text" id="username" class="main-input" placeholder="OYUNCU İSMİ">
+
+        <div class="login-container">
             
-            <div>
-                <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">ZORLUK DERECESİ</label>
-                <select id="difficulty-select">
+            <div class="tabs">
+                <button class="tab-btn active-tab" onclick="switchTab('single')">TEK KİŞİLİK</button>
+                <button class="tab-btn" onclick="switchTab('multi')">ONLİNE OYNA</button>
+            </div>
+
+            <label style="font-size:0.7rem; color:#666; margin-left:5px;">OYUN MODUNU SEÇ</label>
+            <div class="mode-selector">
+                <input type="hidden" id="mode-select" value="mix">
+                
+                <div class="mode-card selected" onclick="selectMode('mix', this)">
+                    <span class="mode-icon">🎲</span>
+                    <span class="mode-name">Karışık</span>
+                </div>
+                <div class="mode-card" onclick="selectMode('snapshot', this)">
+                    <span class="mode-icon">🖼️</span>
+                    <span class="mode-name">Tek Kare</span>
+                </div>
+                <div class="mode-card" onclick="selectMode('quote', this)">
+                    <span class="mode-icon">💬</span>
+                    <span class="mode-name">Replik</span>
+                </div>
+                <div class="mode-card" onclick="selectMode('palettes', this)">
+                    <span class="mode-icon">🎨</span>
+                    <span class="mode-name">Palet</span>
+                </div>
+                <div class="mode-card" onclick="selectMode('emoji', this)">
+                    <span class="mode-icon">🧩</span>
+                    <span class="mode-name">Emoji</span>
+                </div>
+            </div>
+
+            <button class="settings-toggle" onclick="toggleSettings()">⚙️ ZORLUK VE TÜR AYARLARI</button>
+            
+            <div id="settings-panel" class="settings-panel">
+                <label style="font-size:0.7rem; color:#aaa;">ZORLUK</label>
+                <select id="difficulty-select" style="margin-bottom:10px;">
                     <option value="all">KARIŞIK (Hepsi)</option>
                     <option value="easy">KOLAY (Popüler)</option>
                     <option value="hard">ZOR (Sinefil)</option>
                     <option value="expert">ÇOK ZOR (Uzman)</option>
                 </select>
-            </div>
 
-            <div>
-                <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">OYUN MODU</label>
-                <select id="mode-select" onchange="uiUpdate()">
-                    <option value="classic">KLASİK (Poster & Palet)</option>
-                    <option value="snapshot">TEK KARE (Snapshot)</option>
-                    <option value="quote">REPLİK BULMACA</option>
-                    <option value="emoji">EMOJİ BULMACA</option>
-                </select>
-            </div>
-
-            <div id="genre-group">
-                <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">FİLM TÜRÜ</label>
-                <select id="genre-select">
-                    <option value="mix">KARIŞIK TÜR</option>
+                <label style="font-size:0.7rem; color:#aaa;">FİLM TÜRÜ</label>
+                <select id="genre-select" style="margin-bottom:10px;">
+                    <option value="mix">TÜM TÜRLER</option>
                     <option value="scifi">BİLİM KURGU</option>
-                    <option value="horror">KORKU & GERİLİM</option>
-                    <option value="cult">KÜLT & ARTHOUSE</option>
-                    <option value="action">AKSİYON</option>
+                    <option value="horror">KORKU</option>
+                    <option value="cult">KÜLT</option>
                 </select>
-            </div>
-            
-            <div id="visual-setting">
-                <label style="font-size:0.75rem; color:#666; font-weight:bold; display:block; margin-bottom:5px;">GÖRÜNÜM TİPİ</label>
+
+                <label style="font-size:0.7rem; color:#aaa;">GÖRÜNÜM</label>
                 <select id="visual-select">
-                    <option value="both">Palet + Flu Poster</option>
-                    <option value="palette">Sadece Renk Paleti</option>
-                    <option value="poster">Sadece Flu Poster</option>
+                    <option value="both">Palet + Poster</option>
+                    <option value="palette">Sadece Palet</option>
+                    <option value="poster">Sadece Poster</option>
                 </select>
             </div>
-        </div>
 
-        <button onclick="startSinglePlayerGame()">TEK KİŞİLİK FİLM KEYFİ</button>
-        <button class="btn-multiplayer-toggle" onclick="toggleMultiplayer()">ARKADAŞLARLA OYNA</button>
-
-        <div id="multiplayer-panel">
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="room-code-input" placeholder="Oda Kodu" style="margin:0">
-                <button class="btn-secondary" style="width:40%; margin:0" onclick="joinRoom()">KATIL</button>
+            <div id="single-area">
+                <button class="play-btn" onclick="startSinglePlayerGame()">BAŞLAT</button>
             </div>
-            <button class="btn-secondary" style="width:100%" onclick="createRoom()">YENİ ODA KUR</button>
-        </div>
 
-        <button class="btn-exit" style="margin-top:20px; width:100%; border:none; color:#666;" onclick="showLeaderboardScreen()">🏆 LİDERLER TABLOSU</button>
-    </div>
-
-    <div id="screen-lobby" class="screen">
-        <h2>KULİS</h2>
-        <div id="display-room-code" style="font-size:3rem; color:var(--primary-red); font-family:'Bebas Neue'; letter-spacing:5px;">---</div>
-        <ul id="player-list" style="list-style:none; padding:0; width:100%; margin-top:20px;"></ul>
-        <div id="host-controls" style="display:none; width:100%"><button onclick="startGameByHost()">KAYIT!</button></div>
-        <p id="guest-msg" style="color:#666; font-size:0.9rem; margin-top:20px;">Yönetmen bekleniyor...</p>
-    </div>
-
-    <div id="screen-game" class="screen">
-        <div class="top-hud">
-            <button class="btn-exit" onclick="exitGame()">✕ Çıkış</button>
-            <div class="score-badge">PUAN: <span id="score-display">0</span></div>
-        </div>
-
-        <div id="feedback-display"></div>
-
-        <div class="media-container">
-            <div id="emoji-view"><div class="emoji-text" id="game-emoji"></div></div>
-            <div id="poster-view"><img id="game-poster" src=""></div>
-            <div id="snapshot-view"><img id="game-snapshot" src=""></div> 
-            <div id="quote-view"><div class="quote-text" id="game-quote"></div></div>
-            <div id="palette-view"></div>
-        </div>
-
-        <div class="top-hud" style="margin-bottom:5px;">
-            <div class="timer-display" id="timer-display">60</div>
-            <div style="text-align:right;">
-                <button class="hint-btn" id="btn-hint" onclick="useHint()">💡 İPUCU (-5sn)</button>
+            <div id="multi-area" class="multi-area">
+                <button class="btn-secondary" style="background:var(--primary-red); color:white;" onclick="createRoom()">YENİ ODA KUR</button>
+                <div style="text-align:center; color:#666; font-size:0.8rem;">- VEYA -</div>
+                <div class="join-row">
+                    <input type="text" id="room-code-input" placeholder="Oda Kodu" style="margin:0; text-align:center;">
+                    <button class="btn-secondary" style="width:40%; margin:0;" onclick="joinRoom()">KATIL</button>
+                </div>
             </div>
+
         </div>
 
-        <div class="hint-text" id="hint-display"></div>
-
-        <div class="options-grid" id="options-box"></div>
+        <button class="btn-exit" style="margin-top:20px; border:none; color:#666;" onclick="showLeaderboardScreen()">🏆 LİDERLER TABLOSU</button>
     </div>
-
-    <div id="screen-result" class="screen">
-        <h2 style="font-family:'Bebas Neue'; font-size:3rem;">KAST LİSTESİ</h2>
-        <table id="result-table" style="width:100%; border-collapse:collapse; text-align:left;">
-            <thead><tr style="color:#666; border-bottom:1px solid #333;"><th>#</th><th>Oyuncu</th><th>Puan</th></tr></thead>
-            <tbody></tbody>
-        </table>
-        <button class="btn-secondary" onclick="location.reload()" style="margin-top:20px;">ANA MENÜ</button>
-    </div>
-
-    <div id="screen-leaderboard" class="screen">
-        <h2 style="font-family:'Bebas Neue'; font-size:3rem;">LİDERLER</h2>
-        <p style="color:#666">Global skorlar yükleniyor...</p>
-        <button class="btn-secondary" onclick="showScreen('screen-login')" style="margin-top:20px;">GERİ DÖN</button>
-    </div>
-
     <script>
-        // FIREBASE AYARLARI (KENDİ PROJENİZİ BURAYA GİRİN)
-        const firebaseConfig = {
-            apiKey: "AIzaSyCKXuqXEtQ_dr1FNw-8NZj0BpeoSDl_mRY", 
-            authDomain: "cinepalette-e7a2b.firebaseapp.com",
-            databaseURL: "https://cinepalette-e7a2b-default-rtdb.firebaseio.com",
-            projectId: "cinepalette-e7a2b",
-            storageBucket: "cinepalette-e7a2b.firebasestorage.app",
-            messagingSenderId: "933599264840",
-            appId: "1:933599264840:web:667563470c4ea338f7187d"
-        };
+        // --- YENİ UI FONKSİYONLARI ---
 
-        let db; 
-        let isMultiplayer = false;
+        function switchTab(tab) {
+            const btns = document.querySelectorAll('.tab-btn');
+            const singleArea = document.getElementById('single-area');
+            const multiArea = document.getElementById('multi-area');
 
+            if(tab === 'single') {
+                btns[0].classList.add('active-tab');
+                btns[1].classList.remove('active-tab');
+                singleArea.style.display = 'block';
+                multiArea.style.display = 'none';
+            } else {
+                btns[0].classList.remove('active-tab');
+                btns[1].classList.add('active-tab');
+                singleArea.style.display = 'none';
+                multiArea.style.display = 'flex';
+            }
+        }
+
+        function selectMode(modeValue, cardElement) {
+            // Gizli inputu güncelle
+            document.getElementById('mode-select').value = modeValue;
+            
+            // Görsel seçimi güncelle
+            document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+            cardElement.classList.add('selected');
+
+            // Ayarları tetikle (Gerekirse görünümü gizlemek için)
+            uiUpdate();
+        }
+
+        function toggleSettings() {
+            const panel = document.getElementById('settings-panel');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+            }
+        }
+
+        // Mevcut uiUpdate fonksiyonunu buna göre uyarla:
+        function uiUpdate() {
+            // Artık değer gizli inputtan veya görsel seçimden geliyor
+            const mode = document.getElementById('mode-select').value; 
+            
+            // Görünüm ayarını bazı modlarda gizle
+            const visualSetting = document.getElementById('visual-select').parentElement; // Select'in label'ı ile beraber
+            // (Basitlik için direkt select'i gizleyebiliriz veya üst divi)
+             
+            // İsteğe bağlı: Belli modlarda bazı ayarları deaktif et
+        }
         // --- VERİTABANI ---
         const database = [
             
