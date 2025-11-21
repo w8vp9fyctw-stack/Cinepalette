@@ -38,7 +38,7 @@
             font-family: 'Bebas Neue', sans-serif;
             color: var(--primary-red);
             font-size: 3.5rem;
-            margin: 20px 0 5px 0;
+            margin: 15px 0 5px 0;
             letter-spacing: 2px;
             text-shadow: 0 4px 15px rgba(229, 9, 20, 0.6);
         }
@@ -48,17 +48,18 @@
             font-size: 1rem;
             letter-spacing: 5px;
             text-transform: uppercase;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .screen {
             display: none;
-            width: 90%;
+            width: 95%; /* Mobilde daha geniş */
             max-width: 500px;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px; /* Elemanlar arası genel boşluk azaltıldı */
             animation: fadeIn 0.5s ease;
-            padding-bottom: 40px;
+            padding: 15px; /* İç boşluk azaltıldı (Sıkılaştırma) */
+            padding-bottom: 30px;
         }
         .screen.active { display: flex; }
 
@@ -66,33 +67,32 @@
 
         /* --- GİRİŞ EKRANI --- */
         .input-box {
-            width: 100%; padding: 15px; background: #000; border: 2px solid #333;
+            width: 100%; padding: 12px; background: #000; border: 2px solid #333;
             color: #fff; font-family: 'Montserrat', sans-serif; font-weight: bold;
-            font-size: 1.2rem; text-align: center; border-radius: 10px;
+            font-size: 1.1rem; text-align: center; border-radius: 10px;
         }
         .input-box:focus { border-color: var(--primary-red); outline: none; }
 
-        .tabs { display: flex; background: #000; border-radius: 10px; padding: 5px; border: 1px solid #333; }
+        .tabs { display: flex; background: #000; border-radius: 10px; padding: 4px; border: 1px solid #333; }
         .tab-btn {
-            flex: 1; padding: 12px; border: none; background: transparent;
+            flex: 1; padding: 10px; border: none; background: transparent;
             color: #666; font-weight: bold; cursor: pointer; border-radius: 8px; transition: 0.3s;
         }
         .tab-btn.active { background: #222; color: #fff; }
 
         .mode-scroll {
-            display: flex; gap: 10px; overflow-x: auto; padding: 5px;
+            display: flex; gap: 8px; overflow-x: auto; padding: 5px;
             scrollbar-width: none; 
         }
         .mode-scroll::-webkit-scrollbar { display: none; }
 
         .mode-card {
-            min-width: 90px; height: 90px;
+            min-width: 85px; height: 85px;
             background: var(--card-bg);
             border: 2px solid transparent; 
             border-radius: 12px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; transition: 0.2s;
-            overflow: visible; 
         }
         .mode-card:hover { background: #2a2a2a; }
         .mode-card.selected {
@@ -100,47 +100,50 @@
             border-color: var(--primary-red);
             color: var(--primary-red);
         }
-        .mode-icon { font-size: 2rem; margin-bottom: 5px; }
-        .mode-name { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+        .mode-icon { font-size: 1.8rem; margin-bottom: 5px; }
+        .mode-name { font-size: 0.65rem; font-weight: bold; text-transform: uppercase; }
 
         .settings-toggle {
             background: transparent; border: 1px dashed #444; color: #888;
-            padding: 12px; font-size: 0.8rem; cursor: pointer; width: 100%; border-radius: 10px;
+            padding: 10px; font-size: 0.8rem; cursor: pointer; width: 100%; border-radius: 10px;
         }
         .settings-panel {
             display: none; background: #0f0f0f; padding: 15px;
-            border-radius: 10px; border: 1px solid #333; flex-direction: column; gap: 10px;
+            border-radius: 10px; border: 1px solid #333; flex-direction: column; gap: 8px;
         }
         .settings-panel.open { display: flex; }
-        .settings-panel select { width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; }
+        .settings-panel select { width: 100%; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; }
 
         #single-area, #multi-area { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .start-btn {
             background: var(--primary-red); color: white; border: none;
-            padding: 15px 40px; font-size: 1.2rem; font-weight: 800;
-            border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
+            padding: 14px 30px; font-size: 1.1rem; font-weight: 800;
+            border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
             box-shadow: 0 5px 20px rgba(229, 9, 20, 0.3); transition: 0.2s;
             display: block; width: 100%; 
         }
         .start-btn:hover { transform: translateY(-2px); }
 
-        /* --- OYUN ALANI --- */
-        .top-hud { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px; }
-        .btn-exit { background: transparent; border: 1px solid #444; color: #aaa; padding: 5px 15px; border-radius: 20px; cursor: pointer; }
-        .score-box { background: #222; padding: 5px 15px; border-radius: 20px; font-weight: bold; color: var(--text-gold); border: 1px solid #333; }
+        /* --- OYUN ALANI (SIKILAŞTIRILMIŞ) --- */
+        .top-hud { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 5px; }
+        .btn-exit { background: transparent; border: 1px solid #444; color: #aaa; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; }
+        .score-box { background: #222; padding: 5px 12px; border-radius: 20px; font-weight: bold; color: var(--text-gold); border: 1px solid #333; font-size: 0.9rem; }
 
         #feedback-display {
             width: 100%; text-align: center; font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem; height: 40px; margin-bottom: 5px; opacity: 0; transition: opacity 0.2s;
+            font-size: 2rem; height: 35px; margin-bottom: 0; opacity: 0; transition: opacity 0.2s;
         }
         .status-correct { color: var(--correct-green); opacity: 1 !important; }
         .status-wrong { color: var(--wrong-red); opacity: 1 !important; }
 
+        /* Medya Kutusu */
         .media-container {
-            width: 100%; height: 40vh; max-height: 400px;
+            width: 100%; 
+            height: 40vh; max-height: 380px; /* Maksimum yükseklik biraz kısıldı */
             background: #000; border: 1px solid #333; border-radius: 12px;
             overflow: hidden; position: relative; 
             display: flex; justify-content: center; align-items: center;
+            margin-bottom: 5px; /* Alt boşluk azaltıldı */
         }
 
         #poster-view, #snapshot-view { width: 100%; height: 100%; display: none; }
@@ -161,12 +164,12 @@
             width: 100%; height: 100%; 
             display: none; 
             flex-direction: column; justify-content: center; align-items: center;
-            padding: 20px; text-align: center;
+            padding: 15px; text-align: center;
             background: radial-gradient(circle, #1a1a1a 0%, #000000 100%);
         }
         
-        .quote-text { font-family: 'Georgia', serif; font-size: 1.3rem; font-style: italic; color: #eee; line-height: 1.5; }
-        .emoji-text { font-size: 4.5rem; letter-spacing: 5px; animation: float 3s infinite ease-in-out; }
+        .quote-text { font-family: 'Georgia', serif; font-size: 1.2rem; font-style: italic; color: #eee; line-height: 1.4; }
+        .emoji-text { font-size: 4rem; letter-spacing: 5px; animation: float 3s infinite ease-in-out; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
         #palette-view {
@@ -174,22 +177,31 @@
         }
         .color-strip { flex: 1; height: 100%; }
 
-        .controls { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; width: 100%; }
-        .timer-display { font-family: 'Bebas Neue'; font-size: 2.5rem; }
+        /* Kontroller (Sıkılaştırıldı) */
+        .controls { display: flex; justify-content: space-between; align-items: center; margin: 5px 0; width: 100%; }
+        .timer-display { font-family: 'Bebas Neue'; font-size: 2.2rem; line-height: 1; }
         .timer-display.danger { color: #ff4b4b; animation: pulse 0.5s infinite; }
-        .hint-btn { background: rgba(255,215,0,0.1); border: 1px solid gold; color: gold; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+        .hint-btn { background: rgba(255,215,0,0.1); border: 1px solid gold; color: gold; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; }
         
         .hint-text { 
-            width: 100%; text-align: center; color: #aaa; font-size: 1rem; 
-            font-style: italic; margin-bottom: 10px; min-height: 20px; 
+            width: 100%; text-align: center; color: #aaa; font-size: 0.9rem; 
+            font-style: italic; margin-bottom: 8px; min-height: 18px; 
             display: flex; align-items: center; justify-content: center;
         }
 
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        /* Cevap Butonları (Daha Yakın ve Kompakt) */
+        .options-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 8px; /* Butonlar arası boşluk azaltıldı */
+            width: 100%; 
+        }
         .opt-btn { 
-            background: #1a1a1a; border: 1px solid #333; color: #ccc; padding: 15px; 
-            border-radius: 8px; cursor: pointer; font-size: 0.9rem; 
+            background: #1a1a1a; border: 1px solid #333; color: #ccc; 
+            padding: 12px; /* Buton içi boşluk azaltıldı */
+            border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;
             display: flex; align-items: center; justify-content: center; text-align: center;
+            min-height: 50px;
         }
         .opt-btn:hover { background: #2a2a2a; color: #fff; }
         
@@ -208,6 +220,7 @@
     <div class="tagline">ACTION!</div>
 
     <div id="screen-login" class="screen active">
+        
         <input type="text" id="username" class="input-box" placeholder="OYUNCU İSMİ">
 
         <div class="tabs">
@@ -235,7 +248,6 @@
         </div>
 
         <div class="settings-toggle" onclick="toggleSettings()">⚙️ ZORLUK VE TÜR AYARLARI</div>
-        
         <div class="settings-panel" id="settings-panel">
             <label style="color:#666; font-size:0.8rem;">ZORLUK</label>
             <select id="difficulty-select">
@@ -264,19 +276,19 @@
             </div>
         </div>
 
-        <div id="single-area" style="margin-top:20px;">
+        <div id="single-area" style="margin-top:15px;">
             <button class="start-btn" onclick="startSinglePlayerGame()">BAŞLAT</button>
         </div>
 
-        <div id="multi-area" style="display:none; margin-top:20px; width:100%; flex-direction:column; gap:10px;">
+        <div id="multi-area" style="display:none; margin-top:15px; width:100%; flex-direction:column; gap:10px;">
             <button class="start-btn" style="background:#333;" onclick="createRoom()">YENİ ODA KUR</button>
             <div style="display:flex; gap:10px;">
-                <input type="text" id="room-code-input" class="input-box" style="font-size:1rem; padding:12px;" placeholder="Oda Kodu">
-                <button class="start-btn" style="width:40%; font-size:1rem; padding:12px;" onclick="joinRoom()">KATIL</button>
+                <input type="text" id="room-code-input" class="input-box" style="font-size:1rem; padding:10px;" placeholder="Oda Kodu">
+                <button class="start-btn" style="width:40%; font-size:1rem; padding:10px;" onclick="joinRoom()">KATIL</button>
             </div>
         </div>
 
-        <button class="btn-exit" style="margin-top:20px; border:none; color:#666; width:100%;" onclick="showLeaderboardScreen()">🏆 LİDERLER TABLOSU</button>
+        <button class="btn-exit" style="margin-top:15px; border:none; color:#666; width:100%;" onclick="showLeaderboardScreen()">🏆 LİDERLER TABLOSU</button>
     </div>
 
     <div id="screen-lobby" class="screen">
@@ -298,6 +310,7 @@
         <div class="media-container">
             <div id="poster-view"><img id="game-poster" src=""></div>
             <div id="snapshot-view"><img id="game-snapshot" src=""></div> 
+            
             <div id="quote-view"><div class="quote-text" id="game-quote"></div></div>
             <div id="emoji-view"><div class="emoji-text" id="game-emoji"></div></div>
             <div id="palette-view"></div>
@@ -329,6 +342,7 @@
     </div>
 
     <script>
+        // FIREBASE AYARLARI
         const firebaseConfig = {
             apiKey: "AIzaSyCKXuqXEtQ_dr1FNw-8NZj0BpeoSDl_mRY", 
             authDomain: "cinepalette-e7a2b.firebaseapp.com",
@@ -338,33 +352,181 @@
             messagingSenderId: "933599264840",
             appId: "1:933599264840:web:667563470c4ea338f7187d"
         };
-        let db; let isMultiplayer = false;
 
-        // DEVASA VERİTABANI (FULL)
+        let db; 
+        let isMultiplayer = false;
+
+        // --- VERİTABANI ---
         const database = [
-            // SNAPSHOTS (TEK KARE)
-            { type: "movie", genre: "snapshot", hint: "Kore, Çekiç", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
-            { type: "movie", genre: "snapshot", hint: "Uzay, Monolit", correct: "2001: A Space Odyssey", snapshot: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Gravity"] },
-            { type: "movie", genre: "snapshot", hint: "Reality Show, Merdiven", correct: "The Truman Show", snapshot: "https://m.media-amazon.com/images/M/MV5BMDIzODcyY2EtMmY2MC00ZWVlLTgwMzAtMjQwOWUyNmJjNTYyXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_.jpg", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Yes Man"] },
-            { type: "movie", genre: "snapshot", hint: "Western, Düello", correct: "The Good, the Bad and the Ugly", snapshot: "https://m.media-amazon.com/images/M/MV5BNjgyMTM1YjAtOGMxYS00NWRlLTk4ZmItY2Q2M2RkOTY3MTQ2XkEyXkFqcGdeQXVyMTA3MDExNDEw._V1_.jpg", options: ["The Good, the Bad and the Ugly", "Django", "Unforgiven", "Once Upon a Time in the West"] },
-            { type: "movie", genre: "snapshot", hint: "Sarı Eşofman, Motor", correct: "Kill Bill: Vol. 1", snapshot: "https://m.media-amazon.com/images/M/MV5BNzM3NDFhYTAtYmU5Mi00NGRmLTljYjgtMDkyODQ4MjNkMGY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Death Proof", "Sin City"] },
-            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Gemi, Aşk", correct: "Titanic", snapshot: "https://m.media-amazon.com/images/M/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
-            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Aslan", correct: "The Lion King", snapshot: "https://m.media-amazon.com/images/M/MV5BMjIwMjE1Nzc4NV5BMl5BanBnXkFtZTgwNDg4OTA1NzM@._V1_.jpg", options: ["The Lion King", "Madagascar", "Jungle Book", "Tarzan"] },
-            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Mavi İnsanlar", correct: "Avatar", snapshot: "https://m.media-amazon.com/images/M/MV5BMTYwOTEwNjAzMl5BMl5BanBnXkFtZTcwODc5MTUwMw@@._V1_.jpg", options: ["Avatar", "Guardians of the Galaxy", "Valerian", "Warcraft"] },
-            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Kırmızı Balon", correct: "It", snapshot: "https://m.media-amazon.com/images/M/MV5BM2Q1ZWUxZjItM2YxZC00NTQxLTgzNmQtYTAxZWM3YjU5NDY2XkEyXkFqcGdeQXVyMTAxNzQ1NzI@._V1_.jpg", options: ["It", "Stranger Things", "Poltergeist", "Annabelle"] },
-            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Mermi, Matrix", correct: "The Matrix", snapshot: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg", options: ["The Matrix", "John Wick", "Constantine", "Equilibrium"] },
-            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Duş, Bıçak", correct: "Psycho", snapshot: "https://m.media-amazon.com/images/M/MV5BNTQwNDM1YzItNDAxZC00NWY2LTk0M2UtNDIwNWI5OGUyNWUxXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Psycho", "The Birds", "Vertigo", "Rear Window"] },
-            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Dans", correct: "Grease", snapshot: "https://m.media-amazon.com/images/M/MV5BZWJlNzkyZmEtZjQxYi00OTExLWE4MTQtM2I1ZTIxNDRhODQzXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", options: ["Grease", "Dirty Dancing", "Footloose", "Hairspray"] },
-            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Satranç", correct: "The Seventh Seal", snapshot: "https://m.media-amazon.com/images/M/MV5BNjYzYWRjNDYtNDMwOS00MTVkLTgzMWMtNWZkODlmNmFjMTQ2XkEyXkFqcGdeQXVyMDc2NTEzMw@@._V1_.jpg", options: ["The Seventh Seal", "Persona", "Wild Strawberries", "8½"] },
-            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Helikopter", correct: "Apocalypse Now", snapshot: "https://m.media-amazon.com/images/M/MV5BMDdhODhmZmItYTMwZC00ZGI5LWFkYjMtOTM2NThkNWFlYmNiXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_.jpg", options: ["Apocalypse Now", "Platoon", "Full Metal Jacket", "The Deer Hunter"] },
-            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Bisiklet", correct: "E.T. the Extra-Terrestrial", snapshot: "https://m.media-amazon.com/images/M/MV5BMTQ2ODFlMDAtNzdhOC00ZDYzLWE3YTMtNDU4ZGFmZmJmYTczXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", options: ["E.T.", "Close Encounters", "Super 8", "The Iron Giant"] },
             
-            // REPLİKLER
-            { type: "quote", text: "I drink your milkshake!", hint: "Petrol Arayışı", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "Lincoln"] },
-            { type: "quote", text: "Tears in rain.", hint: "Replikant", correct: "Blade Runner", options: ["Blade Runner", "Dune", "Alien", "Total Recall"] },
-            { type: "quote", text: "I'm gonna make him an offer he can't refuse.", hint: "Mafya", correct: "The Godfather", options: ["The Godfather", "Goodfellas", "Scarface", "Casino"] },
-            { type: "quote", text: "Here's looking at you, kid.", hint: "Savaş, Aşk", correct: "Casablanca", options: ["Casablanca", "Citizen Kane", "Gone with the Wind", "Roman Holiday"] },
-            { type: "quote", text: "You talkin' to me?", hint: "Taksi Şoförü", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Joker", "King of Comedy"] },
+            // ============================================================
+            // 🖼️ KATEGORİ: SNAPSHOT (TEK KARE) - YENİLER EKLENDİ
+            // ============================================================
+            
+            // --- KOLAY ---
+            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Gemi, Buzdağı", correct: "Titanic", snapshot: "https://m.media-amazon.com/images/M/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
+            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Aslan, Kaya", correct: "The Lion King", snapshot: "https://m.media-amazon.com/images/M/MV5BMjIwMjE1Nzc4NV5BMl5BanBnXkFtZTgwNDg4OTA1NzM@._V1_.jpg", options: ["The Lion King", "Madagascar", "Jungle Book", "Tarzan"] },
+            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Mavi İnsanlar, Pandora", correct: "Avatar", snapshot: "https://m.media-amazon.com/images/M/MV5BMTYwOTEwNjAzMl5BMl5BanBnXkFtZTcwODc5MTUwMw@@._V1_.jpg", options: ["Avatar", "Guardians of the Galaxy", "Valerian", "Warcraft"] },
+            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Kırmızı Balon", correct: "It", snapshot: "https://a.ltrbxd.com/resized/sm/upload/w3/47/76/am/6uDpMsdn8bbZScDptbika5JEtSH-0-2000-0-3000-crop.jpg?v=ee603d8e3b", options: ["It", "Stranger Things", "Poltergeist", "Annabelle"] },
+            { type: "movie", genre: "snapshot", difficulty: "easy", hint: "Mermi, Matrix", correct: "The Matrix", snapshot: "img/matrix.png", options: ["The Matrix", "John Wick", "Constantine", "Equilibrium"] },
+
+            // --- ZOR ---
+            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Kore, Çekiç, Koridor", correct: "Oldboy", snapshot: "https://m.media-amazon.com/images/M/MV5BMTI3NTQyMzU5M15BMl5BanBnXkFtZTcwMTM2MjgyMQ@@._V1_.jpg", options: ["Oldboy", "I Saw the Devil", "Parasite", "The Handmaiden"] },
+            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Sarı Eşofman, Motor", correct: "Kill Bill: Vol. 1", snapshot: "https://m.media-amazon.com/images/M/MV5BNzM3NDFhYTAtYmU5Mi00NGRmLTljYjgtMDkyODQ4MjNkMGY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Kill Bill: Vol. 1", "Pulp Fiction", "Death Proof", "Sin City"] },
+            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Merdiven, Reality Show", correct: "The Truman Show", snapshot: "https://m.media-amazon.com/images/M/MV5BMDIzODcyY2EtMmY2MC00ZWVlLTgwMzAtMjQwOWUyNmJjNTYyXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_.jpg", options: ["The Truman Show", "Eternal Sunshine", "Liar Liar", "Yes Man"] },
+            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Duş, Bıçak", correct: "Psycho", snapshot: "https://m.media-amazon.com/images/M/MV5BNTQwNDM1YzItNDAxZC00NWY2LTk0M2UtNDIwNWI5OGUyNWUxXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["Psycho", "The Birds", "Vertigo", "Rear Window"] },
+            { type: "movie", genre: "snapshot", difficulty: "hard", hint: "Dans, Araba", correct: "Grease", snapshot: "https://a.ltrbxd.com/resized/sm/upload/uw/jl/ie/y3/grease-0-2000-0-3000-crop.jpg?v=1e90cafd49", options: ["Grease", "Dirty Dancing", "Footloose", "Hairspray"] },
+
+            // --- UZMAN ---
+            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Monolit, Uzay", correct: "2001: A Space Odyssey", snapshot: "https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", options: ["2001: A Space Odyssey", "Solaris", "Interstellar", "Moon"] },
+            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Satranç, Ölüm", correct: "The Seventh Seal", snapshot: "https://a.ltrbxd.com/resized/film-poster/5/1/6/2/0/51620-the-seventh-seal-0-2000-0-3000-crop.jpg?v=fa1963f0b2", options: ["The Seventh Seal", "Persona", "Wild Strawberries", "8½"] },
+            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Mezarlık, Üçlü Düello", correct: "The Good, the Bad and the Ugly", snapshot: "https://a.ltrbxd.com/resized/film-poster/5/1/6/6/6/51666-the-good-the-bad-and-the-ugly-0-2000-0-3000-crop.jpg?v=9474a84e63", options: ["The Good, the Bad and the Ugly", "Django", "Unforgiven", "Once Upon a Time in the West"] },
+            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Helikopter, Savaş", correct: "Apocalypse Now", snapshot: "https://a.ltrbxd.com/resized/film-poster/2/6/9/0/2690-apocalypse-now-0-2000-0-3000-crop.jpg?v=d4f99c09a3", options: ["Apocalypse Now", "Platoon", "Full Metal Jacket", "The Deer Hunter"] },
+            { type: "movie", genre: "snapshot", difficulty: "expert", hint: "Bisiklet, Ay", correct: "E.T. the Extra-Terrestrial", snapshot: "https://m.media-amazon.com/images/M/MV5BMTQ2ODFlMDAtNzdhOC00ZDYzLWE3YTMtNDU4ZGFmZmJmYTczXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", options: ["E.T.", "Close Encounters", "Super 8", "The Iron Giant"] },
+
+            // ============================================================
+            // 🧩 KATEGORİ: EMOJI BULMACA
+            // ============================================================
+            { type: "emoji", difficulty: "easy", text: "🎈🏠👴", hint: "Pixar, Uçan Ev", correct: "Up", options: ["Up", "Inside Out", "Coco", "Soul"] },
+            { type: "emoji", difficulty: "easy", text: "🚢❄️💔", hint: "Buzdağı, 1997", correct: "Titanic", options: ["Titanic", "The Notebook", "Romeo + Juliet", "Pearl Harbor"] },
+            { type: "emoji", difficulty: "easy", text: "🤡🕺🔫", hint: "Merdiven Dansı", correct: "Joker", options: ["Joker", "The Dark Knight", "Batman", "Suicide Squad"] },
+            { type: "emoji", difficulty: "easy", text: "🦁👑🐗", hint: "Hakuna Matata", correct: "The Lion King", options: ["The Lion King", "Madagascar", "Jungle Book", "Tarzan"] },
+            { type: "emoji", difficulty: "easy", text: "🍫🏃🍤", hint: "Run Forrest Run", correct: "Forrest Gump", options: ["Forrest Gump", "Big", "Cast Away", "Rain Man"] },
+            { type: "emoji", difficulty: "easy", text: "🕶️👽🔫", hint: "Hafıza Silici, Ajanlar", correct: "Men in Black", options: ["Men in Black", "Alien", "Mars Attacks!", "E.T."] },
+            { type: "emoji", difficulty: "easy", text: "🎸💀🌼", hint: "Meksika, Ölüler Günü", correct: "Coco", options: ["Coco", "Book of Life", "Encanto", "Soul"] },
+            { type: "emoji", difficulty: "easy", text: "🎲🦁🐒", hint: "Tehlikeli Masa Oyunu", correct: "Jumanji", options: ["Jumanji", "Zathura", "Jungle Cruise", "Night at the Museum"] },
+            { type: "emoji", difficulty: "easy", text: "🚗⚡🕰️", hint: "88 Mil, Doktor", correct: "Back to the Future", options: ["Back to the Future", "Ferris Bueller's Day Off", "Ghostbusters", "Teen Wolf"] },
+            { type: "emoji", difficulty: "easy", text: "👻🚫🚙", hint: "Kimi arayacaksın?", correct: "Ghostbusters", options: ["Ghostbusters", "Beetlejuice", "Casper", "Gremlins"] },
+            { type: "emoji", difficulty: "easy", text: "🐍🤠👢", hint: "Oyuncağımın altında yılan var!", correct: "Toy Story", options: ["Toy Story", "Cars", "Monsters Inc.", "Finding Nemo"] },
+            { type: "emoji", difficulty: "easy", text: "🐀👨‍🍳🍲", hint: "Herkes yemek yapabilir", correct: "Ratatouille", options: ["Ratatouille", "Flushed Away", "Stuart Little", "Garfield"] },
+            { type: "emoji", difficulty: "easy", text: "👸🍎😴", hint: "Yedi Cüceler", correct: "Snow White and the Seven Dwarfs", options: ["Snow White", "Cinderella", "Sleeping Beauty", "Tangled"] },
+            { type: "emoji", difficulty: "easy", text: "🧙‍♂️💍🌋", hint: "Orta Dünya, Kardeşlik", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "The Hobbit", "Harry Potter", "Narnia"] },
+            { type: "emoji", difficulty: "easy", text: "🕷️🕸️🏙️", hint: "Büyük güç büyük sorumluluk", correct: "Spider-Man", options: ["Spider-Man", "Batman", "Superman", "Iron Man"] },
+
+
+
+            { type: "emoji", difficulty: "hard", text: "💊🕶️💻", hint: "Kırmızı Hap", correct: "The Matrix", options: ["The Matrix", "John Wick", "Inception", "Blade Runner"] },
+            { type: "emoji", difficulty: "hard", text: "👻🚫lz", hint: "Kimi arayacaksın?", correct: "Ghostbusters", options: ["Ghostbusters", "Casper", "Beetlejuice", "Men in Black"] },
+            { type: "emoji", difficulty: "hard", text: "🦖🦕🚙", hint: "Bir Park", correct: "Jurassic Park", options: ["Jurassic Park", "Godzilla", "King Kong", "Jumanji"] },
+            { type: "emoji", difficulty: "hard", text: "🥊🐯👀", hint: "Adrian!", correct: "Rocky", options: ["Rocky", "Raging Bull", "Creed", "Million Dollar Baby"] },
+            { type: "emoji", difficulty: "hard", text: "🦈🏖️🩸", hint: "Daaaa-dum...", correct: "Jaws", options: ["Jaws", "The Meg", "Deep Blue Sea", "Piranha"] },
+            { type: "emoji", difficulty: "hard", text: "🏐🏝️📦", hint: "Wilson!", correct: "Cast Away", options: ["Cast Away", "Robinson Crusoe", "Life of Pi", "The Blue Lagoon"] },
+            { type: "emoji", difficulty: "hard", text: "📦😵🌧️", hint: "Kutuda ne var?", correct: "Se7en", options: ["Se7en", "Zodiac", "Fight Club", "Prisoners"] },
+            { type: "emoji", difficulty: "hard", text: "📺👱‍♂️⛵️", hint: "Sahte Hayat, Günaydın!", correct: "The Truman Show", options: ["The Truman Show", "Eternal Sunshine", "Edtv", "Pleasantville"] },
+            { type: "emoji", difficulty: "hard", text: "🧼👊🤫", hint: "İlk kural: Bahsetmek yok", correct: "Fight Club", options: ["Fight Club", "American Psycho", "Snatch", "Pulp Fiction"] },
+            { type: "emoji", difficulty: "hard", text: "👔🪓🎵", hint: "Kartvizit, Huey Lewis", correct: "American Psycho", options: ["American Psycho", "Fight Club", "Nightcrawler", "Joker"] },
+            { type: "emoji", difficulty: "hard", text: "🤫🐑🦋", hint: "Kuzuların Çığlığı", correct: "The Silence of the Lambs", options: ["The Silence of the Lambs", "Hannibal", "Se7en", "Zodiac"] },
+            { type: "emoji", difficulty: "hard", text: "💊🕶️🐇", hint: "Tavşanı izle", correct: "The Matrix", options: ["The Matrix", "Inception", "Blade Runner", "Equilibrium"] },
+            { type: "emoji", difficulty: "hard", text: "🤠⛺️🏔️", hint: "Kovboylar, Yasak Aşk", correct: "Brokeback Mountain", options: ["Brokeback Mountain", "Power of the Dog", "No Country for Old Men", "Moonlight"] },
+            { type: "emoji", difficulty: "hard", text: "👵🚿🔪", hint: "Motel, Anne", correct: "Psycho", options: ["Psycho", "The Birds", "Vertigo", "Halloween"] },
+            { type: "emoji", difficulty: "hard", text: "🌹🥀👹", hint: "Bir masal kadar eski", correct: "Beauty and the Beast", options: ["Beauty and the Beast", "Cinderella", "The Little Mermaid", "Aladdin"] },
+
+
+
+
+            { type: "emoji", difficulty: "expert", text: "🥯👀🪨", hint: "Her Şey, Her Yerde", correct: "Everything Everywhere All At Once", options: ["EEAAO", "Doctor Strange", "The Matrix", "Inception"] },
+            { type: "emoji", difficulty: "expert", text: "🥄☕️🦌", hint: "Hipnoz, Batık Yer", correct: "Get Out", options: ["Get Out", "Us", "Nope", "Candyman"] },
+            { type: "emoji", difficulty: "expert", text: "👽🐙🗣️", hint: "Dilbilimci, Zaman", correct: "Arrival", options: ["Arrival", "Contact", "Interstellar", "Dune"] },
+            { type: "emoji", difficulty: "expert", text: "🥛👁️🎩", hint: "Ludovico Tekniği", correct: "A Clockwork Orange", options: ["A Clockwork Orange", "The Shining", "Full Metal Jacket", "Trainspotting"] },
+            { type: "emoji", difficulty: "expert", text: "👨🏻💻❤️📱", hint: "İşletim Sistemi Aşkı", correct: "Her", options: ["Her", "Ex Machina", "Lost in Translation", "Eternal Sunshine"] },
+            { type: "emoji", difficulty: "expert", text: "🍑🏠🌳", hint: "İtalya, Yaz, Şeftali", correct: "Call Me by Your Name", options: ["Call Me by Your Name", "Moonlight", "Brokeback Mountain", "Love, Simon"] },
+            { type: "emoji", difficulty: "expert", text: "💃🕺🎹", hint: "Los Angeles, Caz", correct: "La La Land", options: ["La La Land", "Whiplash", "A Star Is Born", "Chicago"] },
+            { type: "emoji", difficulty: "expert", text: "👮‍♂️🚗🚕", hint: "Taksi Şoförü, Mohawk", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Joker", "Drive"] },
+            { type: "emoji", difficulty: "expert", text: "🎹🪖Nazi", hint: "Piyanist, Savaş", correct: "The Pianist", options: ["The Pianist", "Schindler's List", "Life is Beautiful", "Downfall"] },
+            { type: "emoji", difficulty: "expert", text: "👨‍🚀🥔🚀", hint: "Mars'ta Patates", correct: "The Martian", options: ["The Martian", "Interstellar", "Gravity", "Ad Astra"] },
+            { type: "emoji", difficulty: "expert", text: "👴💍🌋", hint: "Kıymetli", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "Harry Potter", "The Hobbit", "Narnia"] },
+            { type: "emoji", difficulty: "expert", text: "🐼👊🍜", hint: "Ejderha Savaşçısı", correct: "Kung Fu Panda", options: ["Kung Fu Panda", "Shrek", "Ice Age", "Madagascar"] },
+            { type: "emoji", difficulty: "expert", text: "🛁🔪🚿", hint: "Motel", correct: "Psycho", options: ["Psycho", "The Shining", "Halloween", "Scream"] },
+            { type: "emoji", difficulty: "expert", text: "🌹🥀👹", hint: "Dans", correct: "Beauty and the Beast", options: ["Beauty and the Beast", "Cinderella", "Sleeping Beauty", "Aladdin"] },
+       
+       // REPLİKLER
+            
+            // ============================================================
+            // 💬 EK REPLİKLER (LETTERBOXD LİSTESİNDEN UYARLAMA)
+            // ============================================================
+
+            // --- 🟢 KOLAY (EASY) ---
+            { type: "quote", difficulty: "easy", text: "Great Scott!", hint: "Doktor, 88 Mil", correct: "Back to the Future", options: ["Back to the Future", "Rick and Morty", "Ghostbusters", "Star Wars"] },
+            { type: "quote", difficulty: "easy", text: "Anyone can cook.", hint: "Fare, Paris", correct: "Ratatouille", options: ["Ratatouille", "Burnt", "Chef", "The Menu"] },
+            { type: "quote", difficulty: "easy", text: "With great power comes great responsibility.", hint: "Ben Amca", correct: "Spider-Man", options: ["Spider-Man", "Batman", "Superman", "Iron Man"] },
+            { type: "quote", difficulty: "easy", text: "Run, Forrest! Run!", hint: "Jenny", correct: "Forrest Gump", options: ["Forrest Gump", "Saving Private Ryan", "Cast Away", "Big"] },
+            { type: "quote", difficulty: "easy", text: "You are a sad, strange little man and you have my pity.", hint: "Uzay Polisi, Kovboy", correct: "Toy Story", options: ["Toy Story", "Shrek", "Monsters Inc.", "Finding Nemo"] },
+            { type: "quote", difficulty: "easy", text: "I make this look good.", hint: "Ajan J, Takım Elbise", correct: "Men in Black", options: ["Men in Black", "Bad Boys", "Independence Day", "Wild Wild West"] },
+            { type: "quote", difficulty: "easy", text: "Wilson! I'm sorry, Wilson!", hint: "Issız Ada, Voleybol Topu", correct: "Cast Away", options: ["Cast Away", "The Terminal", "Forrest Gump", "Captain Phillips"] },
+            { type: "quote", difficulty: "easy", text: "You shall not pass!", hint: "Gandalf, Köprü", correct: "The Lord of the Rings: The Fellowship of the Ring", options: ["The Lord of the Rings", "The Hobbit", "Harry Potter", "Game of Thrones"] },
+            { type: "quote", difficulty: "easy", text: "I'm the king of the world!", hint: "Gemi, Okyanus", correct: "Titanic", options: ["Titanic", "The Great Gatsby", "Romeo + Juliet", "Avatar"] },
+            { type: "quote", difficulty: "easy", text: "Mirror mirror on the wall, who is the fairest of them all?", hint: "Kötü Kraliçe", correct: "Snow White and the Seven Dwarfs", options: ["Snow White", "Cinderella", "Maleficent", "Tangled"] },
+
+            // --- 🟡 ZOR (HARD) ---
+            { type: "quote", difficulty: "hard", text: "I have to return some videotapes.", hint: "Patrick Bateman, Kartvizit", correct: "American Psycho", options: ["American Psycho", "Nightcrawler", "Fight Club", "Joker"] },
+            { type: "quote", difficulty: "hard", text: "Seize your moment.", hint: "Meksika, Müzik", correct: "Coco", options: ["Coco", "Soul", "Inside Out", "Book of Life"] },
+            { type: "quote", difficulty: "hard", text: "In case I don't see you... good afternoon, good evening, and good night!", hint: "Sahte Dünya", correct: "The Truman Show", options: ["The Truman Show", "Eternal Sunshine", "Bruce Almighty", "Yes Man"] },
+            { type: "quote", difficulty: "hard", text: "A census taker once tried to test me. I ate his liver with some fava beans and a nice Chianti.", hint: "Hannibal Lecter", correct: "The Silence of the Lambs", options: ["The Silence of the Lambs", "Se7en", "Zodiac", "Red Dragon"] },
+            { type: "quote", difficulty: "hard", text: "Ernest Hemingway once wrote, 'The world is a fine place and worth fighting for.' I agree with the second part.", hint: "Dedektif Somerset", correct: "Se7en", options: ["Se7en", "Fight Club", "Zodiac", "The Game"] },
+            { type: "quote", difficulty: "hard", text: "Here's to the ones who dream, foolish as they may seem.", hint: "Emma Stone, Audition", correct: "La La Land", options: ["La La Land", "Whiplash", "A Star Is Born", "Moulin Rouge!"] },
+            { type: "quote", difficulty: "hard", text: "Tale as old as time.", hint: "Çaydanlık", correct: "Beauty and the Beast", options: ["Beauty and the Beast", "Cinderella", "The Little Mermaid", "Aladdin"] },
+            { type: "quote", difficulty: "hard", text: "A boy's best friend is his mother.", hint: "Norman Bates", correct: "Psycho", options: ["Psycho", "The Birds", "Halloween", "Friday the 13th"] },
+            { type: "quote", difficulty: "hard", text: "I wish I knew how to quit you.", hint: "Kovboylar, Çadır", correct: "Brokeback Mountain", options: ["Brokeback Mountain", "Call Me by Your Name", "Moonlight", "God's Own Country"] },
+            { type: "quote", difficulty: "hard", text: "In the jungle, you must wait, until the dice read five or eight.", hint: "Davul sesi", correct: "Jumanji", options: ["Jumanji", "Zathura", "Indiana Jones", "Jungle Cruise"] },
+
+            // --- 🔴 UZMAN (EXPERT) ---
+            { type: "quote", difficulty: "expert", text: "Be kind, for everyone you meet is fighting a hard battle.", hint: "Çoklu Evren, Çamaşırhane", correct: "Everything Everywhere All At Once", options: ["EEAAO", "The Matrix", "Doctor Strange", "Eternal Sunshine"] },
+            { type: "quote", difficulty: "expert", text: "I think anybody who falls in love is a freak. It's a crazy thing to do.", hint: "Yapay Zeka Aşkı", correct: "Her", options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
+            { type: "quote", difficulty: "expert", text: "Is it better to be feared or respected? I say, is it too much to ask for both?", hint: "Tony Stark", correct: "Iron Man", options: ["Iron Man", "The Avengers", "Captain America", "Batman Begins"] },
+            { type: "quote", difficulty: "expert", text: "Now you're in the Sunken Place.", hint: "Hipnoz, Kaşık Sesi", correct: "Get Out", options: ["Get Out", "Us", "Nope", "Midsommar"] },
+            { type: "quote", difficulty: "expert", text: "Despite knowing the journey... and where it leads... I embrace it.", hint: "Dilbilimci, Uzaylılar", correct: "Arrival", options: ["Arrival", "Interstellar", "Contact", "Dune"] },
+            { type: "quote", difficulty: "expert", text: "I was cured all right!", hint: "Alex DeLarge", correct: "A Clockwork Orange", options: ["A Clockwork Orange", "Trainspotting", "The Shining", "Full Metal Jacket"] },
+            { type: "quote", difficulty: "expert", text: "Call me by your name and I'll call you by mine.", hint: "İtalya, Yaz, Elio", correct: "Call Me by Your Name", options: ["Call Me by Your Name", "Moonlight", "Portrait of a Lady on Fire", "Love, Simon"] },
+            { type: "quote", difficulty: "expert", text: "Music was my refuge. I could crawl into the space between the notes and curl my back to loneliness.", hint: "Soykırım, Piyano", correct: "The Pianist", options: ["The Pianist", "Schindler's List", "Life is Beautiful", "The Green Mile"] },
+            { type: "quote", difficulty: "expert", text: "Loneliness has followed me my whole life, everywhere.", hint: "Taksi Şoförü", correct: "Taxi Driver", options: ["Taxi Driver", "Joker", "Nightcrawler", "Drive"] },
+            { type: "quote", difficulty: "expert", text: "We came, we saw, we kicked its ass!", hint: "Hayalet Avcıları", correct: "Ghostbusters", options: ["Ghostbusters", "Men in Black", "Beetlejuice", "Zombieland"] },
+
+            // FİLMLER
+
+           // ==============================================
+        // 🎬 CINEPALETTE: DEVASA VERİTABANI (FULL PACK)
+        // ==============================================
+        
+            // ============================================================
+            // 👻 MEVCUT KORKU & GERİLİM (SENİN LİSTEN - KORUNANLAR)
+            // ============================================================
+           
+            { type: "movie", genre: "horror", difficulty: "easy", hint: "Jack Nicholson, Balta, Otel", correct: "The Shining", poster: "https://m.media-amazon.com/images/M/MV5BZWFlYmY2MGEtZjVkYS00YzU4LTg0YjQtYzY1ZGE3NTA5NGQxXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", colors: ["#F4D03F", "#D35400", "#17202A", "#641E16", "#922B21", "#FDFEFE", "#000000", "#B03A2E"], options: ["The Shining", "Doctor Sleep", "Misery", "1408"] },
+            { type: "movie", genre: "horror", difficulty: "easy", hint: "Alfred Hitchcock, Duş Sahnesi", correct: "Psycho", poster: "https://m.media-amazon.com/images/M/MV5BNTQwNDM1YzItNDAxZC00NWY2LTk0M2UtNDIwNWI5OGUyNWUxXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#4D4D4D", "#666666", "#808080", "#999999", "#FFFFFF"], options: ["Psycho", "The Birds", "Vertigo", "Rear Window"] },
+            { type: "movie", genre: "horror", difficulty: "easy", hint: "Uzaylı, Ripley, Kedi", correct: "Alien", poster: "https://m.media-amazon.com/images/M/MV5BOGQzZTBjMjQtOTVmMS00NGE5LWEyYmMtOGQ1ZGZjNmRkYjFhXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_.jpg", colors: ["#000000", "#0B1808", "#142510", "#1E3319", "#294223", "#D4E157", "#CDDC39", "#FFFFFF"], options: ["Alien", "Aliens", "Prometheus", "The Thing"] },
+            { type: "movie", genre: "horror", difficulty: "easy", hint: "Maskeli Katil, Telefon Şakası", correct: "Scream", poster: "https://m.media-amazon.com/images/M/MV5BMjA2NjU5MTg5OF5BMl5BanBnXkFtZTgwOTkyMzQxMDE@._V1_.jpg", colors: ["#000000", "#1C1C1C", "#FFFFFF", "#E74C3C", "#C0392B", "#5D6D7E", "#2E4053", "#17202A"], options: ["Scream", "I Know What You Did Last Summer", "Halloween", "Friday the 13th"] },
+            { type: "movie", genre: "horror", difficulty: "easy", hint: "Küçük Kız, Şeytan Çıkarma", correct: "The Exorcist", poster: "https://a.ltrbxd.com/resized/film-poster/4/7/0/4/8/47048-the-exorcist-0-2000-0-3000-crop.jpg?v=897c9aa211", colors: ["#000000", "#120815", "#2C162E", "#4A235A", "#6C3483", "#884EA0", "#D2B4DE", "#FFFFFF"], options: ["The Exorcist", "The Omen", "Rosemary's Baby", "Poltergeist"] },
+            { type: "movie", genre: "horror", difficulty: "easy", hint: "Kukla, Bisiklet, Oyun", correct: "Saw", poster: "https://m.media-amazon.com/images/M/MV5BMjE4MDYzNDE1OV5BMl5BanBnXkFtZTcwNDY2OTYwNA@@._V1_.jpg", colors: ["#000000", "#1A1A1A", "#FFFFFF", "#99A3A4", "#5DADE2", "#3498DB", "#2874A6", "#1B4F72"], options: ["Saw", "Hostel", "Final Destination", "The Collector"] },
+            { type: "movie", genre: "horror", difficulty: "easy", hint: "Anthony Hopkins, Maske", correct: "The Silence of the Lambs", poster: "https://m.media-amazon.com/images/M/MV5BNjNhZTk0ZmEtNjJhMi00YzFlLWE1MmEtYzM1M2ZmMGMwMTU4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg", colors: ["#000000", "#3E2723", "#6D4C41", "#A1887F", "#D7CCC8", "#880E4F", "#C2185B", "#FFFFFF"], options: ["The Silence of the Lambs", "Hannibal", "Red Dragon", "Se7en"] },
+            { type: "movie", genre: "horror", difficulty: "easy", hint: "Köpekbalığı, Yaz", correct: "Jaws", poster: "https://m.media-amazon.com/images/M/MV5BMmVmODY1MzEtYTMwZC00MzNhLWFkNDMtZjAwM2EwODUxZTA5XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg", colors: ["#000000", "#154360", "#1F618D", "#2980B9", "#5499C7", "#AED6F1", "#FDFEFE", "#C0392B"], options: ["Jaws", "The Meg", "Deep Blue Sea", "Piranha"] },
+            { type: "movie", genre: "horror", difficulty: "easy", hint: "Palyaço Pennywise", correct: "It", poster: "https://m.media-amazon.com/images/M/MV5BZDVkZmI0YzAtNzdjYi00ZjhhLWE1ODEtMWMzMWMzNDA0NmQ4XkEyXkFqcGdeQXVyNzYzODM3Mzg@._V1_.jpg", colors: ["#000000", "#17202A", "#FFFFFF", "#FDFEFE", "#C0392B", "#922B21", "#F1C40F", "#D35400"], options: ["It", "Joker", "Poltergeist", "Annabelle"] },
+            { type: "movie", genre: "horror", difficulty: "easy", hint: "Elektrikli Testere, Teksas", correct: "The Texas Chain Saw Massacre", poster: "https://a.ltrbxd.com/resized/film-poster/3/1/9/8/5/31985-the-texas-chain-saw-massacre-0-2000-0-3000-crop.jpg?v=c63b3f1958", colors: ["#F9E79F", "#F7DC6F", "#F1C40F", "#D35400", "#BA4A00", "#6E2C00", "#000000", "#FFFFFF"], options: ["The Texas Chain Saw Massacre", "Halloween", "Friday the 13th", "Hostel"] },
+            { type: "movie", genre: "horror", difficulty: "hard", hint: "Antarktika, Köpek, Taklitçi", correct: "The Thing", poster: "https://a.ltrbxd.com/resized/sm/upload/t3/qn/vs/p5/s5fH3GqFcHbi2F0NSBSh4KRNTc0-0-2000-0-3000-crop.jpg?v=01880125bb", colors: ["#000000", "#17202A", "#212F3C", "#283747", "#2E86C1", "#3498DB", "#85C1E9", "#FFFFFF"], options: ["The Thing", "The Fly", "Alien", "Invasion of the Body Snatchers"] },
+            { type: "movie", genre: "horror", difficulty: "hard", hint: "Ari Aster, Aile, Minyatür", correct: "Hereditary", poster: "https://a.ltrbxd.com/resized/film-poster/4/2/4/3/4/8/424348-hereditary-0-2000-0-3000-crop.jpg?v=470e48b681", colors: ["#000000", "#2E1611", "#502318", "#6E2C00", "#873600", "#A04000", "#D35400", "#F5B041"], options: ["Hereditary", "Midsommar", "The Witch", "Sinister"] },
+            { type: "movie", genre: "horror", difficulty: "hard", hint: "Jordan Peele, Hipnoz, Çay", correct: "Get Out", poster: "https://a.ltrbxd.com/resized/film-poster/3/5/3/1/1/7/353117-get-out-0-2000-0-3000-crop.jpg?v=136acec030", colors: ["#000000", "#1C1C1C", "#333333", "#999999", "#FFFFFF", "#2E4053", "#17202A", "#5D6D7E"], options: ["Get Out", "Us", "Nope", "Candyman"] },
+            { type: "movie", genre: "horror", difficulty: "hard", hint: "Isveç, Vampir Çocuk", correct: "Let the Right One In", poster: "https://a.ltrbxd.com/resized/film-poster/4/3/9/8/9/43989-let-the-right-one-in-0-2000-0-3000-crop.jpg?v=c738641b77", colors: ["#FDFEFE", "#ECF0F1", "#D7DBDD", "#BDC3C7", "#A93226", "#922B21", "#641E16", "#000000"], options: ["Let the Right One In", "Let Me In", "A Girl Walks Home Alone at Night", "Only Lovers Left Alive"] },
+            { type: "movie", genre: "horror", difficulty: "hard", hint: "Orman, Cadı, Keçi", correct: "The Witch", poster: "https://a.ltrbxd.com/resized/sm/upload/y2/i8/9s/h1/tNr2KYytArZNSh0K8PUcHU3JnX4-0-2000-0-3000-crop.jpg?v=45f739a242", colors: ["#000000", "#1B2631", "#2E4053", "#566573", "#808B96", "#ABB2B9", "#D5D8DC", "#FDFEFE"], options: ["The Witch", "The Lighthouse", "Hereditary", "Midsommar"] },
+            { type: "movie", genre: "horror", difficulty: "hard", hint: "Tren, Zombi, Kore", correct: "Train to Busan", poster: "https://m.media-amazon.com/images/M/MV5BMTkwOTQ4OTg0OV5BMl5BanBnXkFtZTgwMzQyOTM0OTE@._V1_.jpg", colors: ["#17202A", "#1C2833", "#2E86C1", "#3498DB", "#5D6D7E", "#85929E", "#D6EAF8", "#FFFFFF"], options: ["Train to Busan", "World War Z", "Peninsula", "The Host"] },
+            { type: "movie", genre: "horror", difficulty: "hard", hint: "İspanyol, Virüs, Apartman", correct: "REC", poster: "https://a.ltrbxd.com/resized/sm/upload/wc/8v/37/hl/cOW5Oc3vnjD2QgK68BUvm6GGLZ4-0-2000-0-3000-crop.jpg?v=afc2876405", colors: ["#000000", "#1A1A1A", "#145A32", "#1E8449", "#2ECC71", "#F1C40F", "#F4D03F", "#FFFFFF"], options: ["REC", "Quarantine", "28 Days Later", "Cloverfield"] },
+            { type: "movie", genre: "horror", difficulty: "hard", hint: "Gündüz Korkusu, Çiçekler", correct: "Midsommar", poster: "https://a.ltrbxd.com/resized/film-poster/4/5/9/5/6/4/459564-midsommar-0-2000-0-3000-crop.jpg?v=ed7b8ded1f", colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Ritual"] },
+            { type: "movie", genre: "horror", difficulty: "hard", hint: "Kulübe, Kitap, Elektrikli Testere", correct: "The Evil Dead", poster: "https://a.ltrbxd.com/resized/sm/upload/c7/4g/ae/zn/7cpSdCrBY7UhiygkcP57dpixXsW-0-2000-0-3000-crop.jpg?v=1525e98692", colors: ["#000000", "#1A1A1A", "#641E16", "#922B21", "#C0392B", "#E74C3C", "#F1948A", "#FFFFFF"], options: ["The Evil Dead", "Evil Dead 2", "Army of Darkness", "Drag Me to Hell"] },
+            { type: "movie", genre: "horror", difficulty: "hard", hint: "Japonya, Kaset, Kuyu", correct: "Ringu", poster: "https://a.ltrbxd.com/resized/sm/upload/fi/eb/jh/ni/the-ring-0-2000-0-3000-crop.jpg?v=e9d1f52d16", colors: ["#000000", "#17202A", "#283747", "#5D6D7E", "#AEB6BF", "#2ECC71", "#145A32", "#FFFFFF"], options: ["Ringu", "The Ring", "Ju-on", "Dark Water"] },
+            { type: "movie", genre: "horror", difficulty: "expert", hint: "Dario Argento, Cadı Okulu, Neon", correct: "Suspiria", poster: "https://m.media-amazon.com/images/M/MV5BMjM0NjMzMTRjMF5BMl5BanBnXkFtZTgwOTY3Mzc3MjI@._V1_.jpg", colors: ["#4A235A", "#6C3483", "#8E44AD", "#C0392B", "#E74C3C", "#2E86C1", "#3498DB", "#000000"], options: ["Suspiria", "Inferno", "Deep Red", "Black Swan"] },
+            { type: "movie", genre: "horror", difficulty: "expert", hint: "Roman Polanski, Hamilelik", correct: "Rosemary's Baby", poster: "https://m.media-amazon.com/images/M/MV5BODJkZTZhMWItMDI3Yy00ZWZlLTk4NjQtOTI1ZjIyM2ZlYzQwXkEyXkFqcGdeQXVyMTA0MjU0Ng@@._V1_.jpg", colors: ["#000000", "#111111", "#1E3319", "#2D4A22", "#3D612D", "#4E7939", "#FFFFFF", "#D5D8DC"], options: ["Rosemary's Baby", "The Omen", "The Exorcist", "Hereditary"] },
+            { type: "movie", genre: "horror", difficulty: "expert", hint: "Fransız, Vejetaryen, Yamyam", correct: "Raw", poster: "https://m.media-amazon.com/images/M/MV5BMGRjYjY2ZTMtZWNkNy00YzUzLTk2NzQtZGFhYmY5NmY5NzcxXkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg", colors: ["#000000", "#17202A", "#641E16", "#922B21", "#C0392B", "#1E8449", "#27AE60", "#FFFFFF"], options: ["Raw", "Titane", "Martyrs", "Climax"] },
+            { type: "movie", genre: "horror", difficulty: "expert", hint: "Japonya, Samuray, Maske", correct: "Onibaba", poster: "https://m.media-amazon.com/images/M/MV5BMTQzMzgzMjU4M15BMl5BanBnXkFtZTgwNDgwOTIwMjE@._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#4D4D4D", "#666666", "#808080", "#999999", "#FFFFFF"], options: ["Onibaba", "Kuroneko", "Kwaidan", "Harakiri"] },
+            { type: "movie", genre: "horror", difficulty: "expert", hint: "Fransız, Yüzsüz Kadın", correct: "Eyes Without a Face", poster: "https://m.media-amazon.com/images/M/MV5BMDY0MzI2MGYtMDk2MC00NGE4LThkMDItMDYwYzQxM2RiN2FiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", colors: ["#000000", "#1A1A1A", "#333333", "#CCCCCC", "#E0E0E0", "#F2F2F2", "#FFFFFF", "#FFD700"], options: ["Eyes Without a Face", "Diabolique", "The Skin I Live In", "Repulsion"] },
+            { type: "movie", genre: "horror", difficulty: "expert", hint: "Isabelle Adjani, Metro, Delilik", correct: "Possession", poster: "https://m.media-amazon.com/images/M/MV5BMTY5MjI3MTQxMF5BMl5BanBnXkFtZTgwNjU1MTY3MjE@._V1_.jpg", colors: ["#000000", "#17202A", "#1B4F72", "#2874A6", "#3498DB", "#85C1E9", "#D6EAF8", "#FFFFFF"], options: ["Possession", "Repulsion", "The Tenant", "Antichrist"] },
+            { type: "movie", genre: "horror", difficulty: "expert", hint: "Siyah Beyaz, Deniz Feneri", correct: "The Lighthouse", poster: "https://m.media-amazon.com/images/M/MV5BZmE0MGJhNmYtOWRmNS00YjUxLTg4NmItOWMyY2QzZTAzMTEwXkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#4D4D4D", "#666666", "#808080", "#999999", "#FFFFFF"], options: ["The Lighthouse", "The Witch", "A Field in England", "Nosferatu"] },
+            { type: "movie", genre: "horror", difficulty: "expert", hint: "David Lynch, Bebek, Radyatör", correct: "Eraserhead", poster: "https://m.media-amazon.com/images/M/MV5BMzQxNzQzOTQ5Nl5BMl5BanBnXkFtZTgwMjE5MzIxNzE@._V1_.jpg", colors: ["#000000", "#0F0F0F", "#1F1F1F", "#2F2F2F", "#3F3F3F", "#4F4F4F", "#5F5F5F", "#FFFFFF"], options: ["Eraserhead", "Blue Velvet", "Mulholland Drive", "Pi"] },
+            { type: "movie", genre: "horror", difficulty: "expert", hint: "Avusturya, Aile Tatili, Kumanda", correct: "Funny Games", poster: "https://m.media-amazon.com/images/M/MV5BMTg4NjE1MDM2N15BMl5BanBnXkFtZTgwODM2NTM0MzE@._V1_.jpg", colors: ["#FFFFFF", "#FDFEFE", "#F7F9F9", "#E5E8E8", "#D7DBDD", "#BDC3C7", "#A93226", "#922B21"], options: ["Funny Games", "The Strangers", "Eden Lake", "Martyrs"] },
+            { type: "movie", genre: "horror", difficulty: "expert", hint: "Bebek Bakıcısı, Telefon", correct: "Black Christmas", poster: "https://m.media-amazon.com/images/M/MV5BMTU4MzYwMjQ3Nl5BMl5BanBnXkFtZTgwMTgwNTk0NjE@._V1_.jpg", colors: ["#000000", "#17202A", "#641E16", "#922B21", "#C0392B", "#F1948A", "#FFFFFF", "#27AE60"], options: ["Black Christmas", "Halloween", "Scream", "When a Stranger Calls"] },
+
+            // ============================================================
+            // 💬 KATEGORİ: REPLİKLER (QUOTES) - YENİLER EKLENDİ
+            // ============================================================
+            
+            // --- KOLAY ---
             { type: "quote", difficulty: "easy", text: "I'll be back.", hint: "Terminator", correct: "The Terminator", options: ["The Terminator", "Predator", "Commando", "Total Recall"] },
             { type: "quote", difficulty: "easy", text: "May the Force be with you.", hint: "Star Wars", correct: "Star Wars", options: ["Star Wars", "Star Trek", "Dune", "Avatar"] },
             { type: "quote", difficulty: "easy", text: "My precious.", hint: "Gollum", correct: "The Lord of the Rings", options: ["The Lord of the Rings", "The Hobbit", "Harry Potter", "Narnia"] },
@@ -375,13 +537,21 @@
             { type: "quote", difficulty: "easy", text: "Bond. James Bond.", hint: "Ajan 007", correct: "Dr. No", options: ["Dr. No", "Goldfinger", "Casino Royale", "Skyfall"] },
             { type: "quote", difficulty: "easy", text: "Houston, we have a problem.", hint: "Uzay", correct: "Apollo 13", options: ["Apollo 13", "Gravity", "The Martian", "First Man"] },
             { type: "quote", difficulty: "easy", text: "There's no place like home.", hint: "Dorothy", correct: "The Wizard of Oz", options: ["The Wizard of Oz", "Mary Poppins", "Alice in Wonderland", "Sound of Music"] },
+
+            // --- ZOR ---
+            { type: "quote", difficulty: "hard", text: "I drink your milkshake!", hint: "Petrol", correct: "There Will Be Blood", options: ["There Will Be Blood", "No Country for Old Men", "Gangs of New York", "The Master"] },
             { type: "quote", difficulty: "hard", text: "Say hello to my little friend!", hint: "Tony Montana", correct: "Scarface", options: ["Scarface", "The Godfather", "Goodfellas", "Carlito's Way"] },
+            { type: "quote", difficulty: "hard", text: "You talking to me?", hint: "Travis Bickle", correct: "Taxi Driver", options: ["Taxi Driver", "Raging Bull", "Mean Streets", "The King of Comedy"] },
             { type: "quote", difficulty: "hard", text: "Here's Johnny!", hint: "Jack Torrance", correct: "The Shining", options: ["The Shining", "Misery", "Psycho", "One Flew Over the Cuckoo's Nest"] },
+            { type: "quote", difficulty: "hard", text: "I'm gonna make him an offer he can't refuse.", hint: "Don Corleone", correct: "The Godfather", options: ["The Godfather", "Goodfellas", "Casino", "A Bronx Tale"] },
             { type: "quote", difficulty: "hard", text: "The first rule of Fight Club is: You do not talk about Fight Club.", hint: "Tyler Durden", correct: "Fight Club", options: ["Fight Club", "Se7en", "Snatch", "American History X"] },
             { type: "quote", difficulty: "hard", text: "Frankly, my dear, I don't give a damn.", hint: "Rhett Butler", correct: "Gone with the Wind", options: ["Gone with the Wind", "Casablanca", "Citizen Kane", "Ben-Hur"] },
             { type: "quote", difficulty: "hard", text: "You can't handle the truth!", hint: "Mahkeme", correct: "A Few Good Men", options: ["A Few Good Men", "Top Gun", "Rain Man", "Born on the Fourth of July"] },
             { type: "quote", difficulty: "hard", text: "I love the smell of napalm in the morning.", hint: "Vietnam", correct: "Apocalypse Now", options: ["Apocalypse Now", "Full Metal Jacket", "Platoon", "The Deer Hunter"] },
             { type: "quote", difficulty: "hard", text: "What's in the box?", hint: "Brad Pitt", correct: "Se7en", options: ["Se7en", "Fight Club", "Zodiac", "Prisoners"] },
+
+            // --- UZMAN ---
+            { type: "quote", difficulty: "expert", text: "All those moments will be lost in time, like tears in rain.", hint: "Roy Batty", correct: "Blade Runner", options: ["Blade Runner", "2001: A Space Odyssey", "Alien", "Dune"] },
             { type: "quote", difficulty: "expert", text: "I have always depended on the kindness of strangers.", hint: "Blanche DuBois", correct: "A Streetcar Named Desire", options: ["A Streetcar Named Desire", "Cat on a Hot Tin Roof", "Gone with the Wind", "Rebel Without a Cause"] },
             { type: "quote", difficulty: "expert", text: "Forget it, Jake. It's Chinatown.", hint: "Dedektif", correct: "Chinatown", options: ["Chinatown", "L.A. Confidential", "The Maltese Falcon", "Double Indemnity"] },
             { type: "quote", difficulty: "expert", text: "Open the pod bay doors, HAL.", hint: "Yapay Zeka", correct: "2001: A Space Odyssey", options: ["2001: A Space Odyssey", "Solaris", "Moon", "Ex Machina"] },
@@ -390,52 +560,13 @@
             { type: "quote", difficulty: "expert", text: "I am big. It's the pictures that got small.", hint: "Norma Desmond", correct: "Sunset Boulevard", options: ["Sunset Boulevard", "All About Eve", "Double Indemnity", "Some Like It Hot"] },
             { type: "quote", difficulty: "expert", text: "Gentlemen, you can't fight in here! This is the War Room!", hint: "Dr. Strangelove", correct: "Dr. Strangelove", options: ["Dr. Strangelove", "Full Metal Jacket", "Paths of Glory", "The Great Dictator"] },
             { type: "quote", difficulty: "expert", text: "Get busy living, or get busy dying.", hint: "Andy Dufresne", correct: "The Shawshank Redemption", options: ["The Shawshank Redemption", "The Green Mile", "Stand by Me", "Forrest Gump"] },
-            { type: "quote", difficulty: "expert", text: "Keep your friends close, but your enemies closer.", hint: "Michael Corleone", correct: "The Godfather Part II", options: ["The Godfather Part II", "The Godfather", "Scarface", "Goodfellas"] },
-            
-            // FİLMLER (Poster + Renk) - Amazon Linkleri
-            { type: "movie", genre: "scifi", hint: "Yapay Zeka Aşkı", correct: "Her", poster: "https://m.media-amazon.com/images/M/MV5BMjA1Nzk0OTM2OF5BMl5BanBnXkFtZTgwNjU2NjEwMDE@._V1_.jpg", colors: ["#FF4500", "#FF6347", "#E9967A", "#FA8072", "#B22222", "#8B0000", "#FFD700", "#FFF5EE"], options: ["Her", "Lost in Translation", "Ex Machina", "Eternal Sunshine"] },
-            { type: "movie", genre: "scifi", hint: "Kara Delik", correct: "Interstellar", poster: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", colors: ["#000000", "#101820", "#1C2833", "#2C3E50", "#566573", "#F1C40F", "#D4AC0D", "#FFFFFF"], options: ["Interstellar", "Gravity", "Ad Astra", "Arrival"] },
-            { type: "movie", genre: "cult", hint: "Miami, Büyüme", correct: "Moonlight", poster: "https://m.media-amazon.com/images/M/MV5BNzQxNTIyODAxMV5BMl5BanBnXkFtZTgwNzQyMDA3OTE@._V1_.jpg", colors: ["#000000", "#0B0B3B", "#101050", "#1A237E", "#303F9F", "#3F51B5", "#283593", "#C5CAE9"], options: ["Moonlight", "Pariah", "Boyz n the Hood", "Green Book"] },
-            { type: "movie", genre: "palettes", hint: "Çöl, Meteor", correct: "Asteroid City", poster: "https://m.media-amazon.com/images/M/MV5BNDJjZTZhOXEtZSEyYi00MzJlLWEwNTAtM2JjOTg5ODg0NDExXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg", colors: ["#FAD7A0", "#F8C471", "#F5B041", "#F39C12", "#5DADE2", "#3498DB", "#2E86C1", "#D6EAF8"], options: ["Asteroid City", "Moonrise Kingdom", "The Royal Tenenbaums", "Nope"] },
-            { type: "movie", genre: "horror", hint: "Gündüz Korkusu", correct: "Midsommar", poster: "https://m.media-amazon.com/images/M/MV5BM2Q1ZWUxZjItM2YxZC00NTQxLTgzNmQtYTAxZWM3YjU5NDY2XkEyXkFqcGdeQXVyMTAxNzQ1NzI@._V1_.jpg", colors: ["#FFFFFF", "#FEF9E7", "#F9E79F", "#F7DC6F", "#2ECC71", "#58D68D", "#F1948A", "#E74C3C"], options: ["Midsommar", "Hereditary", "The Wicker Man", "The Witch"] },
-            { type: "movie", genre: "scifi", hint: "Neon, Cyberpunk", correct: "Blade Runner 2049", poster: "https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_.jpg", colors: ["#F28C0F", "#D35400", "#E67E22", "#003B59", "#000000", "#A67A53", "#5E6C6F", "#17202A"], options: ["Blade Runner 2049", "Tron: Legacy", "Dune", "Oblivion"] },
-            { type: "movie", genre: "cult", hint: "Dans, Ucuz Roman", correct: "Pulp Fiction", poster: "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg", colors: ["#000000", "#17202A", "#B03A2E", "#E74C3C", "#F1C40F", "#F39C12", "#F4D03F", "#FFFFFF"], options: ["Pulp Fiction", "Reservoir Dogs", "Kill Bill", "Jackie Brown"] },
-            { type: "movie", genre: "action", difficulty: "easy", hint: "Joker, Batman, Gotham", correct: "The Dark Knight", poster: "https://image.tmdb.org/t/p/original/qJ2tW6WMUDux911r6m7haRef0WH.jpg", colors: ["#000000", "#0B1013", "#1C2833", "#2E4053", "#3498DB", "#2874A6", "#5D6D7E", "#FFFFFF"], options: ["The Dark Knight", "Batman Begins", "Joker", "The Batman"] },
-            { type: "movie", genre: "action", difficulty: "easy", hint: "Yüzük, Orta Dünya, Gandalf", correct: "The Lord of the Rings: The Fellowship of the Ring", poster: "https://image.tmdb.org/t/p/original/6oom5QYQ2yQTMJIbnvbkBL9c0B.jpg", colors: ["#000000", "#3E2723", "#6D4C41", "#A04000", "#D68910", "#F1C40F", "#F39C12", "#FDFEFE"], options: ["The Fellowship of the Ring", "The Two Towers", "Return of the King", "The Hobbit"] },
-            { type: "movie", genre: "action", difficulty: "easy", hint: "Maximus, Roma, İntikam", correct: "Gladiator", poster: "https://image.tmdb.org/t/p/original/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg", colors: ["#2E1606", "#5D4037", "#8D6E63", "#A1887F", "#D7CCC8", "#F39C12", "#D35400", "#000000"], options: ["Gladiator", "Troy", "300", "Spartacus"] },
-            { type: "movie", genre: "action", difficulty: "easy", hint: "Çöl, Gitar Çalan Adam, Kamyonlar", correct: "Mad Max: Fury Road", poster: "https://image.tmdb.org/t/p/original/8tZYtuWezp8JbcsvHYO0O46tFbo.jpg", colors: ["#D35400", "#E67E22", "#F39C12", "#F5B041", "#873600", "#A04000", "#5D6D7E", "#000000"], options: ["Mad Max: Fury Road", "Dune", "Book of Eli", "Furiosa"] },
-            { type: "movie", genre: "action", difficulty: "easy", hint: "Profesyonel Tetikçi, Çiçek, Süt", correct: "Léon: The Professional", poster: "https://image.tmdb.org/t/p/original/wHqGb8dy6WiYT9XOPK8hBfO3kTA.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#555555", "#808080", "#A9A9A9", "#D3D3D3", "#FFFFFF"], options: ["Léon: The Professional", "Nikita", "Taxi Driver", "John Wick"] },
-            { type: "movie", genre: "action", difficulty: "hard", hint: "Banka Soygunu, Al Pacino, Robert De Niro", correct: "Heat", poster: "https://image.tmdb.org/t/p/original/rrIn5D5FqM0c4Y92nL04u087N2o.jpg", colors: ["#000000", "#0B1523", "#1B2631", "#2E86C1", "#5DADE2", "#85C1E9", "#D6EAF8", "#FFFFFF"], options: ["Heat", "Goodfellas", "The Town", "Scarface"] },
-            { type: "movie", genre: "action", difficulty: "hard", hint: "Kule, Teröristler, Çıplak Ayak", correct: "Die Hard", poster: "https://image.tmdb.org/t/p/original/yFihWxQcm37OEDRwYe5Wors8oK7.jpg", colors: ["#000000", "#1C1C1C", "#B03A2E", "#E74C3C", "#F1C40F", "#F39C12", "#FFFFFF", "#7F8C8D"], options: ["Die Hard", "Lethal Weapon", "Speed", "The Terminator"] },
-            { type: "movie", genre: "action", difficulty: "hard", hint: "Endonezya, Apartman Baskını", correct: "The Raid", poster: "https://image.tmdb.org/t/p/original/57k9d03Sn8o22F3dF2qQeO9z6QW.jpg", colors: ["#000000", "#1A1A1A", "#333333", "#4D4D4D", "#666666", "#808080", "#999999", "#FFFFFF"], options: ["The Raid", "The Raid 2", "Ong Bak", "Dredd"] },
-            { type: "movie", genre: "action", difficulty: "hard", hint: "Hız, Otobüs, Bomba", correct: "Speed", poster: "https://image.tmdb.org/t/p/original/o7jA7c4k6e1T3g4h8t5u9q2w0.jpg", colors: ["#B03A2E", "#C0392B", "#E74C3C", "#F1C40F", "#F39C12", "#FFFFFF", "#000000", "#2E4053"], options: ["Speed", "Die Hard", "Point Break", "The Matrix"] },
-            { type: "movie", genre: "action", difficulty: "expert", hint: "Akira Kurosawa, 7 Savaşçı", correct: "Seven Samurai", poster: "https://image.tmdb.org/t/p/original/8OKmBV5BUFzqzBqeX5ktDeDTlYO.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#555555", "#777777", "#999999", "#CCCCCC", "#FFFFFF"], options: ["Seven Samurai", "Yojimbo", "Ran", "Rashomon"] },
-            { type: "movie", genre: "action", difficulty: "expert", hint: "Hong Kong, Polis, Köstebek", correct: "Infernal Affairs", poster: "https://image.tmdb.org/t/p/original/q125R6F1Z1W1W1W1.jpg", colors: ["#000000", "#0B1523", "#1B2631", "#2E86C1", "#5DADE2", "#85C1E9", "#FFFFFF", "#D5D8DC"], options: ["Infernal Affairs", "The Departed", "Hard Boiled", "Oldboy"] },
-            { type: "movie", genre: "action", difficulty: "expert", hint: "Fransız, Araba Takibi, Soygun", correct: "Ronin", poster: "https://image.tmdb.org/t/p/original/8w8w8w8w8w8.jpg", colors: ["#17202A", "#2C3E50", "#566573", "#808B96", "#D5D8DC", "#F1C40F", "#F39C12", "#000000"], options: ["Ronin", "Heat", "The French Connection", "Bullitt"] },
-            { type: "movie", genre: "cult", difficulty: "easy", hint: "Mafya Babası, At Kafası", correct: "The Godfather", poster: "https://image.tmdb.org/t/p/original/3bhkrj58Vtu7enYsRolD1fZdja1.jpg", colors: ["#000000", "#1C1C1C", "#3E2723", "#4E342E", "#6D4C41", "#8D6E63", "#D7CCC8", "#FFFFFF"], options: ["The Godfather", "Goodfellas", "Scarface", "The Irishman"] },
-            { type: "movie", genre: "cult", difficulty: "easy", hint: "Hapishane, Kaçış, Yağmur", correct: "The Shawshank Redemption", poster: "https://image.tmdb.org/t/p/original/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg", colors: ["#000000", "#17202A", "#2C3E50", "#566573", "#808B96", "#ABB2B9", "#D5D8DC", "#FFFFFF"], options: ["The Shawshank Redemption", "The Green Mile", "Forrest Gump", "12 Angry Men"] },
-            { type: "movie", genre: "cult", difficulty: "hard", hint: "Jüri, 12 Adam", correct: "12 Angry Men", poster: "https://image.tmdb.org/t/p/original/ppd84D2i9W8jXmsyInGyiU4zjtW.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#666666", "#999999", "#CCCCCC", "#EEEEEE", "#FFFFFF"], options: ["12 Angry Men", "To Kill a Mockingbird", "Rear Window", "Casablanca"] },
-            { type: "movie", genre: "cult", difficulty: "expert", hint: "Rusya, Bölge, Dilek", correct: "Stalker", poster: "https://image.tmdb.org/t/p/original/lQXg0l6qQZ7aJzG3B1pX6qQZ7aJ.jpg", colors: ["#1B2631", "#2E4053", "#5D6D7E", "#85929E", "#AAB7B8", "#D5DBDB", "#F4D03F", "#9A7D0A"], options: ["Stalker", "Solaris", "Mirror", "Come and See"] },
-            { type: "movie", genre: "cult", difficulty: "expert", hint: "Fransız, Gazete Satıcısı, Aşk", correct: "Breathless", poster: "https://image.tmdb.org/t/p/original/9Q5h2d7d7d7d7d7d.jpg", colors: ["#000000", "#333333", "#666666", "#999999", "#FFFFFF", "#E74C3C", "#C0392B", "#17202A"], options: ["Breathless", "The 400 Blows", "Jules and Jim", "Band of Outsiders"] },
-            { type: "movie", genre: "scifi", hint: "Geçmişe Dönüş, Araba", difficulty: "easy", correct: "Back to the Future", poster: "https://image.tmdb.org/t/p/original/fNOH9f1aA7XRTzl1sAOx9iF553Q.jpg", colors: ["#F39C12", "#D35400", "#E67E22", "#3498DB", "#2E86C1", "#FFFFFF", "#000000", "#17202A"], options: ["Back to the Future", "Ghostbusters", "E.T.", "Ferris Bueller's Day Off"] },
-            { type: "movie", genre: "scifi", difficulty: "expert", hint: "Alman Dışavurumculuk, Robot Kadın", correct: "Metropolis", poster: "https://image.tmdb.org/t/p/original/rxFl5gqvs6fq525G7I5i0sU.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#666666", "#999999", "#CCCCCC", "#E5E7E9", "#F7DC6F"], options: ["Metropolis", "M", "Nosferatu", "The Cabinet of Dr. Caligari"] },
-            { type: "movie", genre: "scifi", difficulty: "expert", hint: "Rusya, Uzay İstasyonu, Halüsinasyon", correct: "Solaris", poster: "https://image.tmdb.org/t/p/original/j1qp6p6.jpg", colors: ["#1B2631", "#283747", "#2E86C1", "#3498DB", "#5DADE2", "#85C1E9", "#D6EAF8", "#FFFFFF"], options: ["Solaris", "Stalker", "2001: A Space Odyssey", "Moon"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Antarktika, Köpek, Taklitçi", correct: "The Thing", poster: "https://m.media-amazon.com/images/M/MV5BNGViZWZmM2EtNGYzZi00ZDAyLTk3YjYtRJk4NDpnYzE3NzI3XkEyXkFqcGdeQXVyMjg2MTMyNTM@._V1_.jpg", colors: ["#000000", "#17202A", "#212F3C", "#283747", "#2E86C1", "#3498DB", "#85C1E9", "#FFFFFF"], options: ["The Thing", "The Fly", "Alien", "Invasion of the Body Snatchers"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Ari Aster, Aile, Minyatür", correct: "Hereditary", poster: "https://m.media-amazon.com/images/M/MV5BOTU5MDg3NzYyN15BMl5BanBnXkFtZTgwMDI3MzQ2NTM@._V1_.jpg", colors: ["#000000", "#2E1611", "#502318", "#6E2C00", "#873600", "#A04000", "#D35400", "#F5B041"], options: ["Hereditary", "Midsommar", "The Witch", "Sinister"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "Jordan Peele, Hipnoz, Çay", correct: "Get Out", poster: "https://m.media-amazon.com/images/M/MV5BMjUxMDQwNjcyNl5BMl5BanBnXkFtZTgwNzE4MTE3MTI@._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#999999", "#FFFFFF", "#2E4053", "#17202A", "#5D6D7E"], options: ["Get Out", "Us", "Nope", "Candyman"] },
-            { type: "movie", genre: "horror", difficulty: "hard", hint: "İsveç, Vampir Çocuk", correct: "Let the Right One In", poster: "https://m.media-amazon.com/images/M/MV5BOWM4NTY2NTMtZGZlYy00NTcwLThlZGMtODdiNTgyMDNjY2RjXkEyXkFqcGdeQXVyMTAyOTE2ODg0._V1_.jpg", colors: ["#FDFEFE", "#ECF0F1", "#D7DBDD", "#BDC3C7", "#A93226", "#922B21", "#641E16", "#000000"], options: ["Let the Right One In", "Let Me In", "A Girl Walks Home Alone at Night", "Only Lovers Left Alive"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Dario Argento, Cadı Okulu, Neon", correct: "Suspiria", poster: "https://m.media-amazon.com/images/M/MV5BMjM0NjMzMTRjMF5BMl5BanBnXkFtZTgwOTY3Mzc3MjI@._V1_.jpg", colors: ["#4A235A", "#6C3483", "#8E44AD", "#C0392B", "#E74C3C", "#2E86C1", "#3498DB", "#000000"], options: ["Suspiria", "Inferno", "Deep Red", "Black Swan"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Roman Polanski, Hamilelik", correct: "Rosemary's Baby", poster: "https://m.media-amazon.com/images/M/MV5BODJkZTZhMWItMDI3Yy00ZWZlLTk4NjQtOTI1ZjIyM2ZlYzQwXkEyXkFqcGdeQXVyMTA0MjU0Ng@@._V1_.jpg", colors: ["#000000", "#111111", "#1E3319", "#2D4A22", "#3D612D", "#4E7939", "#FFFFFF", "#D5D8DC"], options: ["Rosemary's Baby", "The Omen", "The Exorcist", "Hereditary"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Fransız, Vejetaryen, Yamyam", correct: "Raw", poster: "https://m.media-amazon.com/images/M/MV5BMGRjYjY2ZTMtZWNkNy00YzUzLTk2NzQtZGFhYmY5NmY5NzcxXkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg", colors: ["#000000", "#17202A", "#641E16", "#922B21", "#C0392B", "#1E8449", "#27AE60", "#FFFFFF"], options: ["Raw", "Titane", "Martyrs", "Climax"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Japonya, Samuray, Maske", correct: "Onibaba", poster: "https://m.media-amazon.com/images/M/MV5BMTQzMzgzMjU4M15BMl5BanBnXkFtZTgwNDgwOTIwMjE@._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#4D4D4D", "#666666", "#808080", "#999999", "#FFFFFF"], options: ["Onibaba", "Kuroneko", "Kwaidan", "Harakiri"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Fransız, Yüzsüz Kadın", correct: "Eyes Without a Face", poster: "https://m.media-amazon.com/images/M/MV5BMDY0MzI2MGYtMDk2MC00NGE4LThkMDItMDYwYzQxM2RiN2FiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg", colors: ["#000000", "#1A1A1A", "#333333", "#CCCCCC", "#E0E0E0", "#F2F2F2", "#FFFFFF", "#FFD700"], options: ["Eyes Without a Face", "Diabolique", "The Skin I Live In", "Repulsion"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Isabelle Adjani, Metro, Delilik", correct: "Possession", poster: "https://m.media-amazon.com/images/M/MV5BMTY5MjI3MTQxMF5BMl5BanBnXkFtZTgwNjU1MTY3MjE@._V1_.jpg", colors: ["#000000", "#17202A", "#1B4F72", "#2874A6", "#3498DB", "#85C1E9", "#D6EAF8", "#FFFFFF"], options: ["Possession", "Repulsion", "The Tenant", "Antichrist"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Siyah Beyaz, Deniz Feneri", correct: "The Lighthouse", poster: "https://m.media-amazon.com/images/M/MV5BZmE0MGJhNmYtOWRmNS00YjUxLTg4NmItOWMyY2QzZTAzMTEwXkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg", colors: ["#000000", "#1C1C1C", "#333333", "#4D4D4D", "#666666", "#808080", "#999999", "#FFFFFF"], options: ["The Lighthouse", "The Witch", "A Field in England", "Nosferatu"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "David Lynch, Bebek, Radyatör", correct: "Eraserhead", poster: "https://m.media-amazon.com/images/M/MV5BMzQxNzQzOTQ5Nl5BMl5BanBnXkFtZTgwMjE5MzIxNzE@._V1_.jpg", colors: ["#000000", "#0F0F0F", "#1F1F1F", "#2F2F2F", "#3F3F3F", "#4F4F4F", "#5F5F5F", "#FFFFFF"], options: ["Eraserhead", "Blue Velvet", "Mulholland Drive", "Pi"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Avusturya, Aile Tatili, Kumanda", correct: "Funny Games", poster: "https://m.media-amazon.com/images/M/MV5BMTg4NjE1MDM2N15BMl5BanBnXkFtZTgwODM2NTM0MzE@._V1_.jpg", colors: ["#FFFFFF", "#FDFEFE", "#F7F9F9", "#E5E8E8", "#D7DBDD", "#BDC3C7", "#A93226", "#922B21"], options: ["Funny Games", "The Strangers", "Eden Lake", "Martyrs"] },
-            { type: "movie", genre: "horror", difficulty: "expert", hint: "Bebek Bakıcısı, Telefon", correct: "Black Christmas", poster: "https://m.media-amazon.com/images/M/MV5BMTU4MzYwMjQ3Nl5BMl5BanBnXkFtZTgwMTgwNTk0NjE@._V1_.jpg", colors: ["#000000", "#17202A", "#641E16", "#922B21", "#C0392B", "#F1948A", "#FFFFFF", "#27AE60"], options: ["Black Christmas", "Halloween", "Scream", "When a Stranger Calls"] }
-        ];
+            { type: "quote", difficulty: "expert", text: "Keep your friends close, but your enemies closer.", hint: "Michael Corleone", correct: "The Godfather Part II", options: ["The Godfather Part II", "The Godfather", "Goodfellas", "Scarface"] },
 
+       
+       
+       
+        ];
+        
         // VARIABLES
         let myName="", myRoomCode="", myId="", isHost=false;
         let gameQuestions=[], currentQIndex=0, score=0, timerInterval;
